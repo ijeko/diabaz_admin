@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Sevices\MaterialService;
+use App\Http\Sevices\ProducedService;
+use App\Http\Sevices\ProductService;
+use App\Models\Material;
+use App\Models\Produced;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Type;
 
 class HomeController extends Controller
 {
@@ -14,6 +21,9 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->material = new MaterialService(new Material());
+        $this->produced = new ProducedService(new Produced());
+        $this->product = new ProductService(new Product());
     }
 
     /**
@@ -23,6 +33,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $prodList=$this->product->get();
+        $matList=$this->material->get();
+        $produced=$this->produced->get();
+//        dd(gettype($matList));
+        return view('home')->with(['materials' => $matList, 'products' => $prodList, 'produced' => $produced]);
     }
 }
