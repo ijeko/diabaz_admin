@@ -2181,6 +2181,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddMatNorm",
@@ -39255,16 +39261,72 @@ var render = function() {
     _vm._v(" "),
     _c("input", {
       staticClass: "form-control",
-      attrs: { type: "text", id: "title" }
+      attrs: { disabled: "", type: "text", id: "title" },
+      domProps: { value: _vm.selectProd }
     }),
-    _vm._v(" "),
-    _c("label", { attrs: { for: "material" } }, [_vm._v("Выбирите материал")]),
-    _vm._v(" "),
-    _vm._m(0),
     _vm._v(" "),
     _c("label", { attrs: { for: "product" } }, [_vm._v("Выбирите продукцию")]),
     _vm._v(" "),
-    _vm._m(1),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selectProd,
+            expression: "selectProd"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { name: "product", id: "product" },
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.selectProd = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { value: "" } }),
+        _vm._v(" "),
+        _vm._l(_vm.PRODUCTS, function(product) {
+          return _c("option", { key: product.id }, [
+            _vm._v(_vm._s(product.title))
+          ])
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c("label", { attrs: { for: "material" } }, [_vm._v("Выбирите материал")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        staticClass: "form-control",
+        attrs: { name: "material", id: "material" }
+      },
+      [
+        _c("option", { attrs: { value: "" } }),
+        _vm._v(" "),
+        _vm._l(_vm.MATERIALS, function(material) {
+          return _c("option", { key: material.id }, [
+            _vm._v(_vm._s(material.title))
+          ])
+        })
+      ],
+      2
+    ),
     _vm._v(" "),
     _c("label", { attrs: { for: "title" } }, [_vm._v("Норма расхода")]),
     _vm._v(" "),
@@ -39280,34 +39342,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "select",
-      {
-        staticClass: "form-control",
-        attrs: { name: "material", id: "material" }
-      },
-      [_c("option", { attrs: { value: "" } })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "select",
-      {
-        staticClass: "form-control",
-        attrs: { name: "product", id: "product" }
-      },
-      [_c("option", { attrs: { value: "" } })]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

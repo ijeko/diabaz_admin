@@ -3,14 +3,20 @@
     <div class="text-right" @click="closeAddForm">&times;</div>
     <h3 class="text-center mb-4">Добавить норму расхода</h3>
     <label for="title">Название</label>
-    <input class="form-control" type="text" id="title">
+    <input class="form-control" disabled type="text" id="title" :value="selectProd">
+    <label for="product">Выбирите продукцию</label>
+    <select v-model="selectProd" class="form-control" name="product" id="product">
+        <option value=""></option>
+        <option v-for="product in PRODUCTS"
+                :key="product.id"
+        >{{product.title}}</option>
+    </select>
     <label for="material">Выбирите материал</label>
     <select class="form-control" name="material" id="material">
         <option value=""></option>
-    </select>
-    <label for="product">Выбирите продукцию</label>
-    <select class="form-control" name="product" id="product">
-        <option value=""></option>
+        <option v-for="material in MATERIALS"
+        :key="material.id"
+        >{{material.title}}</option>
     </select>
     <label for="title">Норма расхода</label>
     <input class="form-control" type="number" id="title">
