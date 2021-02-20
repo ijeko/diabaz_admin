@@ -1,4 +1,3 @@
-
 export default {
     state: {
         materials: [],
@@ -35,30 +34,73 @@ export default {
         }
     },
     actions: {
-        GET_MATERIALS: () => {
-            axios.get('products/get', {
+        GET_MATERIALS: ({commit}) => {
+            axios.get('http://127.0.0.1:8000/api/materials/get', {
+                headers: {'Content-Type': 'application/json'}
             })
                 .then(function (response) {
-                    // handle success
-                    console.log(response);
+                    commit('SET_MATERIALS', response.data);
+                    return response.data
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
                 })
-                .then(function () {
-                    // always executed
-                });
-            // context.commit('SET_MATERIALS', data);
         },
-        GET_PRODUCTS: (context, data) => {
-            context.commit('SET_PRODUCTS', data);
+        GET_PRODUCTS: ({commit}) => {
+            axios.get('http://127.0.0.1:8000/api/products/get', {
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(function (response) {
+                    commit('SET_PRODUCTS', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
         },
-        GET_PRODUCED: (context, data) => {
-            context.commit('SET_PRODUCED', data)
+        GET_PRODUCED: ({commit}, data) => {
+            axios.get('http://127.0.0.1:8000/api/produced/get',
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
+                })
+                .then(function (response) {
+                    commit('SET_PRODUCED', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
         },
-        GET_MACHINES: (context, data) => {
-            context.commit('SET_MACHINES', data)
+        ADD_PRODUCED: ({commit}, data) => {
+            axios.post('http://127.0.0.1:8000/api/produced/add',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(function (response) {
+                    return data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
         },
-    },
+        GET_MACHINES: ({commit}) => {
+            axios.get('http://127.0.0.1:8000/api/machines/get', {
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(function (response) {
+                    commit('SET_MACHINES', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
+    }
 };

@@ -19,6 +19,7 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('home-wrapper-component', require('./components/HomeWrapperComponent.vue').default);
 Vue.component('materials-component', require('./components/MaterialsComponent.vue').default);
 Vue.component('motor-component', require('./components/MotorComponent.vue').default);
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);

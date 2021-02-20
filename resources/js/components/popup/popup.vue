@@ -4,19 +4,21 @@
         <div class="container">
             <div class="mt-5">
                 <form class="" action="">
+                    <input v-model="inputDate" type="date" class="form-control">
 
-                    <select name="product" id="product" class="form-control m-2">
+                    <select  v-model="selectedProduct" name="product" id="product" class="form-control">
                         <option value="asd" disabled>Продукция</option>
                         <option
+                            :value="product.id"
                             v-for="(product, index) in products"
-                            v-model="selectedProduct">{{product.title}}</option>
+                           >{{product.title}}</option>
                     </select>
-                    <input v-model="qty" class="form-control m-2" type="number">
+                    <input v-model="qty" class="form-control" type="number">
                 </form>
             </div>
 
             <div class="">
-                <button class="btn btn-dark mt-30" @click="closePopup">Сохранить</button>
+                <button class="btn btn-dark mt-30" @click="sendProduced">Сохранить</button>
             </div>
         </div>
     </div>
@@ -26,21 +28,28 @@
 export default {
     name: "popup",
     props: {
-        products: []
+        products: {
+            type: Array,
+            default: [],
+        },
+        user: ''
+
     },
     methods: {
         closePopup () {
             this.$emit('closePopup')
         },
-        save () {
-            var data = {product: this.selectedProduct, produced: this.qty}
-            return data
+        sendProduced () {
+
+            var data = {product_id: this.selectedProduct, qty: this.qty, date: this.inputDate, user_id: this.user}
+            this.$emit('sendProduced', data)
         }
     },
     data () {
         return {
             qty: 0,
-            selectedProduct: ''
+            selectedProduct: [],
+            inputDate: new Date().toISOString().slice(0,10)
         }
     }
 }

@@ -1,7 +1,8 @@
 <template>
     <div class="card">
-        <div class="card-header">Произведенная продукция</div>
+        <div class="card-header">Произведенная продукция на {{ dateFormated }}</div>
         <div class="card-body">
+            {{currentDate}}
             <table>
                 <tr>
                     <th>Продукция</th>
@@ -12,7 +13,7 @@
                     :key="index">
                     <td>{{ product.title }}</td>
                     <td>1</td>
-                    <td>{{  }}</td>
+                    <td>{{ producedOf(product.id) }}</td>
                 </tr>
             </table>
             <div>
@@ -22,8 +23,10 @@
         <enter-produced
             v-if="isEnterVisible"
             class="popup"
-            :products="products"
+            :products="PRODUCTS"
+            :user="user"
             @closePopup="closePopup"
+            @sendProduced="sendProduced"
         ></enter-produced>
     </div>
 </template>
@@ -33,25 +36,27 @@
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-    name: 'MaterialsComponent',
+    name: 'ProductionComponent',
     components: {},
     mounted() {
-        this.GET_PRODUCTS(this.products)
-        console.log('this.test')
+        this.GET_PRODUCTS()
+        this.GET_PRODUCED(this.currentDate)
     },
     data: function () {
         return {
-            date: new Date(),
-            isEnterVisible: ''
+            isEnterVisible: '',
+            produced: {}
         }
     },
     props: {
-        products: {
-            default: []
-        },
-        test: {
+        user: {
             default: ''
-        }
+        },
+        dateFormated: {
+            type: Object,
+            default: ''
+        },
+        date:''
 
     },
     computed: {
@@ -59,28 +64,38 @@ export default {
             'PRODUCTS',
             'PRODUCED'
         ]),
-        dateFormated() {
-            var day = this.date.getDate()
-            var mnths = ['января', 'февраля', 'марта', 'апреля', 'июля', 'июня', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-            var month = mnths[this.date.getMonth()]
-            var year = this.date.getFullYear()
-            return {day: day, month: month, year: year}
-        },
-        localProduced () {
-            for (produced of this.PRODUCED) {
-            }
+        currentDate () {
+            var  date = {date: this.date}
+            this.GET_PRODUCED(date)
+            return date
         }
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS',
-            'GET_PRODUCED'
+            'GET_PRODUCED',
+            'ADD_PRODUCED'
         ]),
         showPopup() {
             this.isEnterVisible = true
         },
         closePopup() {
             this.isEnterVisible = ''
+        },
+        sendProduced(data) {
+            this.ADD_PRODUCED(JSON.stringify(data))
+            console.log(data)
+            this.GET_PRODUCED(this.currentDate)
+            this.closePopup()
+        },
+        producedOf: function (prd_id) {
+            var p = []
+
+            for (var prod of this.PRODUCED) {
+                if (prod.product_id === prd_id) {
+                    return prod.qty
+                }
+            }
         }
     }
 }
@@ -91,6 +106,7 @@ export default {
     justify-content: space-between;
     border-bottom: 1px dotted silver;
 }
+
 td {
     width: 25%;
 }

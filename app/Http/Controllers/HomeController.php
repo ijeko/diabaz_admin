@@ -33,10 +33,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $prodList=$this->product->get();
-        $matList=$this->material->get();
-        $produced=$this->produced->get();
+//        $prodList=$this->product->get();
+//        $matList=$this->material->get();
+//        $produced=$this->produced->get();
 //        dd(gettype($matList));
-        return view('home')->with(['materials' => $matList, 'products' => $prodList, 'produced' => $produced]);
+        return view('home');
     }
 }

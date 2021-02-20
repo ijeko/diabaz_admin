@@ -8,10 +8,9 @@ use App\Models\Material;
 
 class MaterialService
 {
-    private $material;
-    public function __construct(Material $material)
+    public function __construct()
     {
-        $this->material=$material;
+        $this->material=new Material();
     }
     public function getInfo($id, $param)
     {

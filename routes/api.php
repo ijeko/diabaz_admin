@@ -17,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::middleware('auth:api')->get('/products/get', [App\Http\Controllers\ProductionController::class, 'getProducts'])->name('products');
+// Products
+Route::get('/products/get', [App\Http\Controllers\ProductionController::class, 'index']);
+
+// Materials
+Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, 'index']);
+
+// Machines
+
+// Produced
+Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'index']);
+Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);

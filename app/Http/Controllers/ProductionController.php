@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Sevices\ProductService;
-use http\Env\Request;
-use Illuminate\Http\Response;
 
 class ProductionController extends Controller
 {
-    public function getProducts()
+    public function __construct () {
+        $this->products = new ProductService();
+    }
+    public function index()
     {
 
-        return Response::HTTP_ACCEPTED;
+        return  $this->products->get()->toJson();;
     }
 
 }
