@@ -16,9 +16,7 @@
                     <td>{{ producedOf(product.id) }}</td>
                 </tr>
             </table>
-            <div>
-                <button class="btn btn-dark" @click="showPopup">Внести данные</button>
-            </div>
+
         </div>
         <enter-produced
             v-if="isEnterVisible"
@@ -28,6 +26,7 @@
             @closePopup="closePopup"
             @sendProduced="sendProduced"
         ></enter-produced>
+        <button class="btn btn-dark" @click="showPopup">Внести данные</button>
     </div>
 </template>
 

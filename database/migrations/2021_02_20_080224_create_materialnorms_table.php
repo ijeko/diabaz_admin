@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMaterialsTable extends Migration
+class CreateMaterialnormsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateMaterialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('materials', function (Blueprint $table) {
+        Schema::create('materialnorms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('title');
-            $table->float('qty');
-            $table->string('unit');
-            $table->integer('materialnorm_id');
+            $table->integer('material_id');
+            $table->integer('product_id');
+            $table->float('norma');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateMaterialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('materials');
+        Schema::dropIfExists('materialnorms');
     }
 }

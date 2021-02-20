@@ -12,6 +12,10 @@
                 <div class="material-qty">{{ material.qty }} {{ material.unit }}</div>
             </div>
         </div>
+        <button class="btn btn-dark" @click="showAddForm">Нормы расхода</button>
+        <add-mat-norm v-if="isAddFormVisible"
+        @closeAddForm="closeAddForm"
+        ></add-mat-norm>
     </div>
 </template>
 
@@ -26,7 +30,8 @@ export default {
     },
     data: function () {
         return {
-            date: new Date()
+            date: new Date(),
+            isAddFormVisible: false
         }
     },
     props: {
@@ -41,7 +46,13 @@ export default {
     methods: {
         ...mapActions([
             'GET_MATERIALS'
-        ])
+        ]),
+        showAddForm () {
+            return this.isAddFormVisible = true
+        },
+        closeAddForm () {
+            return this.isAddFormVisible = false
+        }
     }
 }
 </script>
