@@ -3,7 +3,8 @@ export default {
         materials: [],
         products: [],
         produced: [],
-        machines: ['zilok']
+        machines: ['zilok'],
+        selectedNorm: []
     },
     getters: {    // Fetch the total number of items in the cart
         MACHINES: state => {
@@ -17,6 +18,9 @@ export default {
         },
         PRODUCED: state => {
             return state.produced
+        },
+        SELECTED_NORM: state => {
+            return state.selectedNorm
         }
     },
     mutations: {
@@ -31,6 +35,9 @@ export default {
         },
         SET_MACHINES: (state, data) => {
             state.machines = data;
+        },
+        SET_SELECTED_NORM: (state, data) => {
+            state.selectedNorm = data;
         }
     },
     actions: {
@@ -102,5 +109,21 @@ export default {
                     console.log(error);
                 })
         },
+        GET_NORM_BY_MATERIAL: ({commit}, data) => {
+            axios.get('http://127.0.0.1:8000/api/matnorm/get',
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
+                })
+                .then(function (response) {
+                    commit('SET_SELECTED_NORM', response.data);
+                    console.log(response.data)
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        }
     }
 };

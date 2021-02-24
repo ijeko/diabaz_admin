@@ -12,17 +12,19 @@
                 <div class="material-qty">{{ material.qty }} {{ material.unit }}</div>
             </div>
         </div>
-        <button class="btn btn-dark" @click="showAddForm">Нормы расхода</button>
-        <add-mat-norm v-if="isAddFormVisible"
-        @closeAddForm="closeAddForm"
-        ></add-mat-norm>
+        <button class="btn btn-dark" @click="showShowNorm">Нормы расхода</button>
+        <show-norm v-if="isShowNormVisible"
+        @closeShowNorm="closeShowNorm"
+        ></show-norm>
     </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import ShowNorm from "./popup/ShowNorm";
 export default {
     name: 'MaterialsComponent',
+    components: {ShowNorm},
     mounted() {
         console.log('Component mounted.')
         this.GET_MATERIALS()
@@ -31,7 +33,7 @@ export default {
     data: function () {
         return {
             date: new Date(),
-            isAddFormVisible: false
+            isShowNormVisible: false
         }
     },
     props: {
@@ -47,11 +49,11 @@ export default {
         ...mapActions([
             'GET_MATERIALS'
         ]),
-        showAddForm () {
-            return this.isAddFormVisible = true
+        showShowNorm () {
+            return this.isShowNormVisible = true
         },
-        closeAddForm () {
-            return this.isAddFormVisible = false
+        closeShowNorm () {
+            return this.isShowNormVisible = false
         }
     }
 }

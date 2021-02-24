@@ -25,6 +25,7 @@ Vue.component('motor-component', require('./components/MotorComponent.vue').defa
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);
 Vue.component('enter-produced', require('./components/popup/popup.vue').default);
 Vue.component('add-mat-norm', require('./components/popup/AddMatNorm.vue').default);
+Vue.component('show-norm-norm', require('./components/popup/ShowNorm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -1,40 +1,42 @@
 <template>
-<div class="wrapper">
-    <div class="text-right" @click="closeAddForm">&times;</div>
-    <h3 class="text-center mb-4">Добавить норму расхода</h3>
-    <label for="title">Название</label>
-    <input class="form-control" disabled type="text" id="title" :value="selectProd">
-    <label for="product">Выбирите продукцию</label>
-    <select v-model="selectProd" class="form-control" name="product" id="product">
-        <option value=""></option>
-        <option v-for="product in PRODUCTS"
-                :key="product.id"
-        >{{product.title}}</option>
-    </select>
-    <label for="material">Выбирите материал</label>
-    <select class="form-control" name="material" id="material">
-        <option value=""></option>
-        <option v-for="material in MATERIALS"
-        :key="material.id"
-        >{{material.title}}</option>
-    </select>
-    <label for="title">Норма расхода</label>
-    <input class="form-control" type="number" id="title">
-    <button class="btn btn-success mt-4" style="width: 100%">Добавить</button>
-</div>
+    <div class="wrapper">
+        <div class="text-right" @click="closeAddForm">&times;</div>
+        <h3 class="text-center mb-4">Расход материалов:</h3>
+        <div class="normItem" v-for="item in selectedNorm"
+             :key="item.id"
+        >
+            <div class="normTitle">{{ item.title }}</div>
+            <div class="normValue"><input type="number" :value="item.norma"> {{ item.unit }}</div>
+        </div>
+        <select class="form-control" name="material" id="material">
+            <option value=""></option>
+            <option v-for="material in MATERIALS"
+                    :key="material.id"
+                    :value="material.id"
+            >{{ material.title }}
+            </option>
+        </select>
+        <button class="btn btn-success mt-4" style="width: 100%">Изменить</button>
+        <button class="btn btn-danger mt-4" style="width: 100%" @click="closeAddForm">Закрыть</button>
+    </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+
 export default {
     name: "AddMatNorm",
-    data () {
+    data() {
         return {
             title: '',
             selectMat: '',
             selectProd: '',
             norma: ''
         }
+    },
+    props: {
+        selectedNorm: '',
+        selectedProduct: ''
     },
     computed: {
         ...mapGetters([
@@ -43,9 +45,8 @@ export default {
         ])
     },
     methods: {
-        ...mapActions([
-        ]),
-        closeAddForm () {
+        ...mapActions([]),
+        closeAddForm() {
             this.$emit('closeAddForm')
         }
     }
@@ -63,5 +64,11 @@ export default {
     background-color: white;
     border: 2px solid black;
     padding: 10px;
+}
+.normItem {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted silver;
 }
 </style>

@@ -28,3 +28,4 @@ Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, '
 // Produced
 Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'index']);
 Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);
+Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'ShowNorm']);
