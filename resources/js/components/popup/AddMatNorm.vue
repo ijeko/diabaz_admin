@@ -1,5 +1,6 @@
 <template>
     <div class="wrapper">
+        {{selectedNorm}}
         <div class="text-right" @click="closeAddForm">&times;</div>
         <h3 class="text-center mb-4">Расход материалов:</h3>
         <div class="normItem" v-for="item in selectedNorm"
@@ -8,9 +9,9 @@
             <div class="normTitle">{{ item.title }}</div>
             <div class="normValue"><input type="number" :value="item.norma"> {{ item.unit }}</div>
         </div>
-        <select class="form-control" name="material" id="material">
+        <select class="form-control" name="material" id="material" @change="addItem" v-model="selectedMat">
             <option value=""></option>
-            <option v-for="material in MATERIALS"
+            <option v-for="(material, index) in MATERIALS"
                     :key="material.id"
                     :value="material.id"
             >{{ material.title }}
@@ -31,6 +32,7 @@ export default {
             title: '',
             selectMat: '',
             selectProd: '',
+            selectedMat: '',
             norma: ''
         }
     },
@@ -48,6 +50,11 @@ export default {
         ...mapActions([]),
         closeAddForm() {
             this.$emit('closeAddForm')
+        },
+        addItem () {
+
+            let material= this.MATERIALS[this.selectedMat-1]
+            this.selectedNorm.push({title: material.title, norma: 0, unit: material.unit})
         }
     }
 }

@@ -2189,6 +2189,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddMatNorm",
@@ -2197,6 +2198,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: '',
       selectMat: '',
       selectProd: '',
+      selectedMat: '',
       norma: ''
     };
   },
@@ -2208,6 +2210,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)([])), {}, {
     closeAddForm: function closeAddForm() {
       this.$emit('closeAddForm');
+    },
+    addItem: function addItem() {
+      var material = this.MATERIALS[this.selectedMat - 1];
+      this.selectedNorm.push({
+        title: material.title,
+        norma: 0,
+        unit: material.unit
+      });
     }
   })
 });
@@ -39514,6 +39524,7 @@ var render = function() {
     "div",
     { staticClass: "wrapper" },
     [
+      _vm._v("\n    " + _vm._s(_vm.selectedNorm) + "\n    "),
       _c(
         "div",
         { staticClass: "text-right", on: { click: _vm.closeAddForm } },
@@ -39541,13 +39552,39 @@ var render = function() {
       _c(
         "select",
         {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.selectedMat,
+              expression: "selectedMat"
+            }
+          ],
           staticClass: "form-control",
-          attrs: { name: "material", id: "material" }
+          attrs: { name: "material", id: "material" },
+          on: {
+            change: [
+              function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.selectedMat = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              },
+              _vm.addItem
+            ]
+          }
         },
         [
           _c("option", { attrs: { value: "" } }),
           _vm._v(" "),
-          _vm._l(_vm.MATERIALS, function(material) {
+          _vm._l(_vm.MATERIALS, function(material, index) {
             return _c(
               "option",
               { key: material.id, domProps: { value: material.id } },
