@@ -124,6 +124,20 @@ export default {
                     // handle error
                     console.log(error);
                 })
+        },
+        EDIT_SELECTED_NORM: ({commit}, data) => {
+            axios.post('http://127.0.0.1:8000/api/matnorm/edit',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(function (response) {
+                    return data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
         }
     }
 };

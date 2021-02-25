@@ -29,3 +29,5 @@ Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, '
 Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'index']);
 Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);
 Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'ShowNorm']);
+Route::post('/matnorm/edit', [App\Http\Controllers\ProductionController::class, 'EditNorm']);
+Route::post('/matnorm/remove', [App\Http\Controllers\ProductionController::class, 'RemoveNorm']);
