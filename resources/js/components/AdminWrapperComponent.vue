@@ -3,25 +3,12 @@
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="row justify-content-between">
             <div class="col-md-6">
-                <materials-component
-                    class="mt-4"
-                :user="user"
-                :dateFormated="dateFormated"
-                :date="date"
-                ></materials-component>
-            </div>
-            <div class="col-md-6">
-                <production-component
+                <admin-production-component
                     class="mt-4"
                     :user="user"
                     :dateFormated="dateFormated"
                     :date="date"
-                ></production-component>
-                <motor-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                ></motor-component>
+                ></admin-production-component>
             </div>
         </div>
     </div>
@@ -29,7 +16,7 @@
 <!--.toISOString().slice(0,10)-->
 <script>
 export default {
-    name: "HomeWrapperComponent",
+    name: "AdminWrapperComponent",
     data: function () {
         return {
             date: new Date().toISOString().slice(0,10)

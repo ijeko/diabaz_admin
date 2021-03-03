@@ -19,14 +19,22 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+//wrappers
 Vue.component('home-wrapper-component', require('./components/HomeWrapperComponent.vue').default);
+Vue.component('admin-wrapper-component', require('./components/AdminWrapperComponent.vue').default);
+//inputdata
 Vue.component('materials-component', require('./components/MaterialsComponent.vue').default);
 Vue.component('motor-component', require('./components/MotorComponent.vue').default);
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);
 Vue.component('enter-produced', require('./components/popup/popup.vue').default);
 Vue.component('add-mat-norm', require('./components/popup/AddMatNorm.vue').default);
 Vue.component('show-norm-norm', require('./components/popup/ShowNorm.vue').default);
-
+Vue.component('show-incomes', require('./components/popup/ShowIncomes.vue').default);
+Vue.component('add-incomes', require('./components/popup/AddIncomeForm.vue').default);
+//admin
+Vue.component('admin-production-component', require('./components/admin/production.vue').default);
+Vue.component('admin-edit-production-component', require('./components/admin/popup/editProduction.vue').default);
+Vue.component('admin-new-production-component', require('./components/admin/popup/newProduction.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

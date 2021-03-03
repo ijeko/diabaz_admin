@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Materialnorm extends Model
 {
     use HasFactory;
-    protected $fillable = ['norma'];
+    protected $fillable = ['title', 'norma', 'product_id', 'material_id'];
 
     public function product ()
     {

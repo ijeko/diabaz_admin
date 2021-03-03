@@ -4,7 +4,10 @@ export default {
         products: [],
         produced: [],
         machines: ['zilok'],
-        selectedNorm: []
+        selectedNorm: [],
+        incomes: [],
+        materialsQty: [],
+
     },
     getters: {    // Fetch the total number of items in the cart
         MACHINES: state => {
@@ -21,6 +24,12 @@ export default {
         },
         SELECTED_NORM: state => {
             return state.selectedNorm
+        },
+        INCOMES: state => {
+            return state.incomes
+        },
+        MATERIAL_QTY: state => {
+            return state.materialsQty
         }
     },
     mutations: {
@@ -38,6 +47,12 @@ export default {
         },
         SET_SELECTED_NORM: (state, data) => {
             state.selectedNorm = data;
+        },
+        SET_INCOMES: (state, data) => {
+            state.incomes = data;
+        },
+        SET_MATERIALS_QTY: (state, data) => {
+            state.materialsQty = data;
         }
     },
     actions: {
@@ -47,6 +62,20 @@ export default {
             })
                 .then(function (response) {
                     commit('SET_MATERIALS', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
+        GET_MATERIAL_QTY: ({commit}) => {
+            axios.get('http://127.0.0.1:8000/api/materials/qty', {
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(function (response) {
+                    commit('SET_MATERIALS_QTY', response.data);
+                    console.log(response.data)
                     return response.data
                 })
                 .catch(function (error) {
@@ -138,6 +167,36 @@ export default {
                     // handle error
                     console.log(error);
                 })
-        }
+        },
+        GET_INCOMES: ({commit}, data) => {
+            axios.get('http://127.0.0.1:8000/api/incomes/get',
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
+                })
+                .then(function (response) {
+                    commit('SET_INCOMES', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
+        ADD_INCOME: ({commit}, data) => {
+            axios.post('http://127.0.0.1:8000/api/incomes/add',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(function (response) {
+                    return data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
     }
+
 };

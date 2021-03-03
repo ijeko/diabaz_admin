@@ -11,6 +11,12 @@ class Material extends Model
 
     public function norma ()
     {
-        return $this->hasMany(Materialnorm::class);
+//        dd(__METHOD__, $this->hasMany(Materialnorm::class)->get());
+        return $this->hasMany(Materialnorm::class)->get();
+    }
+    public function getIncomeSumm ()
+    {
+        $summ = $this->hasMany(MaterialIncome::class)->sum('qty');
+        return $summ;
     }
 }

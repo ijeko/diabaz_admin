@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Sevices\MaterialService;
 use App\Http\Sevices\ProductService;
+use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
 {
@@ -14,8 +15,19 @@ class MaterialsController extends Controller
     }
     public function index()
     {
+//dd(__METHOD__, $request->data);
+        return  $this->materials->get();
+    }
 
-        return  $this->materials->get()->toJson();;
+    public function GetIncomes (Request $request) {
+        return $this->materials->GetIncomesOnDate($request->date);
+    }
+    public function AddIncome (Request $request)
+    {
+        return $this->materials->SaveNewIncome(json_decode($request->data));
+    }
+    public  function getQty () {
+        return $this->materials->GetMaterialQty();
     }
 
 }

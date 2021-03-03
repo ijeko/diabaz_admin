@@ -19,9 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 // Products
 Route::get('/products/get', [App\Http\Controllers\ProductionController::class, 'index']);
+Route::delete('/products/remove', [App\Http\Controllers\ProductionController::class, 'Remove']);
+Route::post('/products/edit', [App\Http\Controllers\ProductionController::class, 'Edit']);
+Route::post('/products/add', [App\Http\Controllers\ProductionController::class, 'Add']);
+
 
 // Materials
 Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, 'index']);
+Route::get('/materials/qty', [App\Http\Controllers\MaterialsController::class, 'getQty']);
+
 
 // Machines
 
@@ -30,4 +36,6 @@ Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'in
 Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);
 Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'ShowNorm']);
 Route::post('/matnorm/edit', [App\Http\Controllers\ProductionController::class, 'EditNorm']);
-Route::post('/matnorm/remove', [App\Http\Controllers\ProductionController::class, 'RemoveNorm']);
+Route::delete('/matnorm/remove', [App\Http\Controllers\ProductionController::class, 'RemoveNorm']);
+Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetIncomes']);
+Route::post('/incomes/add', [App\Http\Controllers\MaterialsController::class, 'AddIncome']);

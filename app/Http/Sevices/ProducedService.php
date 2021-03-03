@@ -18,6 +18,7 @@ class ProducedService
     public function get($data)
     {
         $today=$data->date;
+
 //        $today = date('Y-m-d');
         return $this->produced->where('date', $today)->get();
 //        dd($this->produced->get()->where('date', '=', $today));
@@ -39,6 +40,10 @@ class ProducedService
             $this->produced->date = $data->date;
             $this->produced->save();
         }
+    }
 
+    public function getProduced ()
+    {
+        return $this->produced->get()->qty;
     }
 }

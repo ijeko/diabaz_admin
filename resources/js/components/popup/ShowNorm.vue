@@ -19,13 +19,15 @@
             <div class="normValue">{{ item.norma }} {{ item.unit }}</div>
         </div>
 
-        <button class="btn btn-success mt-4" style="width: 100%" :disabled="!isSelected" @click="showAddForm">
+        <button class="btn btn-outline-success mt-4" style="width: 100%" :disabled="!isSelected" @click="showAddForm">
             Изменить
         </button>
-        <button class="btn btn-danger mt-4" style="width: 100%" @click="closeShowNorm">Закрыть</button>
+        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeShowNorm">Закрыть</button>
         <add-mat-norm v-if="isAddFormVisible"
                       :selectedNorm="SELECTED_NORM"
                       :selectedProduct="selectProd"
+                      @closeEditForm="closeEditForm"
+                      @update="GET_NORM_BY_MATERIAL"
         ></add-mat-norm>
     </div>
 
@@ -71,6 +73,9 @@ export default {
         showAddForm() {
             this.isAddFormVisible = true
         },
+        closeEditForm() {
+            this.isAddFormVisible = false
+        }
     },
     mounted() {
 
@@ -81,7 +86,7 @@ export default {
 <style scoped>
 .wrapper {
     width: 500px;
-    height: 600px;
+    height: auto;
     position: absolute;
     top: 50px;
     left: 50%;

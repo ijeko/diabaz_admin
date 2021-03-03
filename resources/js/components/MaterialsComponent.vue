@@ -9,13 +9,19 @@
                     <div>{{ material.title }}
                     </div>
                 </div>
-                <div class="material-qty">{{ material.qty }} {{ material.unit }}</div>
+                <div class="material-qty">{{ MATERIAL_QTY.totalIncomes[index].qty - MATERIAL_QTY.totalUsed[index].qty }} {{ material.unit }}</div>
             </div>
         </div>
-        <button class="btn btn-dark" @click="showShowNorm">Нормы расхода</button>
+        <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>
+        <button class="btn btn-outline-dark" @click="showIncomes">Поступления материалов</button>
         <show-norm v-if="isShowNormVisible"
         @closeShowNorm="closeShowNorm"
         ></show-norm>
+        <show-incomes v-if="isIncomesVisible"
+        @closeIncomes="closeIncomes"
+                      :date="date"
+                      :user="user"
+        ></show-incomes>
     </div>
 </template>
 
@@ -28,33 +34,55 @@ export default {
     mounted() {
         console.log('Component mounted.')
         this.GET_MATERIALS()
+        this.GET_MATERIAL_QTY()
+
 
     },
     data: function () {
         return {
-            date: new Date(),
-            isShowNormVisible: false
+            // date: new Date(),
+            isShowNormVisible: false,
+            isIncomesVisible: false
         }
     },
     props: {
         dateFormated: '',
-        user: ''
+        user: '',
+        date:''
     },
     computed: {
         ...mapGetters([
-            'MATERIALS'
-        ])
+            'MATERIALS',
+            'MATERIAL_QTY'
+        ]),
+        qty () {
+            let qty = []
+            let i = 0
+            for (let item in this.MATERIAL_QTY.length) {
+                i++
+                qty.push(item.totalIncomes[i].qty - item.totalUsed[i].qty)
+                console.log(item)
+            }
+            return qty
+        }
     },
     methods: {
         ...mapActions([
-            'GET_MATERIALS'
+            'GET_MATERIALS',
+            'GET_MATERIAL_QTY'
         ]),
         showShowNorm () {
             return this.isShowNormVisible = true
         },
         closeShowNorm () {
             return this.isShowNormVisible = false
-        }
+        },
+        showIncomes () {
+            return this.isIncomesVisible = true
+        },
+        closeIncomes () {
+            return this.isIncomesVisible = false
+        },
     }
 }
 </script>

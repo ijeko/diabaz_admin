@@ -8,6 +8,8 @@ use App\Models\Material;
 use App\Models\Materialnorm;
 use App\Models\Produced;
 use App\Models\Product;
+use Carbon\Carbon;
+use Illuminate\Http\Response;
 
 class ProductService
 {
@@ -45,26 +47,65 @@ class ProductService
         return json_encode($array);
     }
 
+    public function EditProduct($data)
+    {
+//        dd($data);
+        $records = $this->product->find($data->id);
+
+        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
+    }
+
     public function EditProductionNorm($normsFromVue)
     {
+        $now = Carbon::now();
+        $newNorms = [];
         $norm = new Materialnorm();
         foreach ($normsFromVue as $item) {
             // проверяем сушествует ли уже норма
-            if ($item->id) {
+//            if ($item->id) {
+            if ($item->id != null) {
 //                если существует, проверяем внесены ли изменения
                 if ($norm->find($item->id)->norma != $item->norma) {
 //                    если изменения внесены - обновляем запись в БД
                     $norm->find($item->id)->update(['norma' => $item->norma]);
                 } //                Если изменений нет, ничего не выполняется
-                else echo 'без изменений';
             } else {
+
                 //            если записи не существует - создается новый объект и пишется в бд
-                $norm->title = $item->title;
-                $norm->material_id = $item->material_id;
-                $norm->product_id = $item->product_id;
-                $norm->norma = $item->norma;
-                $norm->save();
+                $newNorms[] = [
+                    'title' => $item->title,
+                    'product_id' => $item->product_id,
+                    'material_id' => $item->material_id,
+                    'norma' => $item->norma,
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ];
+//                $norm->fill();
+//                $norm->save($newNorms);
+//                $norm->title = $item->title;
+//                $norm->product_id = $item->product_id;
+//                $norm->material_id = $item->material_id;
+//                $norm->norma = $item->norma;
+
+//                $norm->save();
             }
+
+        }
+
+        Materialnorm::insert($newNorms);
+    }
+
+    public function newProduct($data)
+    {
+        if ($this->product->where('title', $data->title)->exists()) {
+            return response()->json([
+                'error' => 'Запись уже существует',
+            ]);
+        } else {
+            $this->product->title = $data->title;
+            $this->product->name = $data->name;
+            $this->product->unit = $data->unit;
+            dd($this->product);
         }
     }
 

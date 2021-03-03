@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Sevices\MaterialService;
 use App\Http\Sevices\ProductService;
 use App\Models\Materialnorm;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductionController extends Controller
@@ -31,13 +32,36 @@ class ProductionController extends Controller
 
     public function EditNorm(Request $request)
     {
-        $this->products->EditProductionNorm(json_decode($request->data));
+        return $this->products->EditProductionNorm(json_decode($request->data));
+    }
+
+    public function Edit(Request $request)
+    {
+        return $this->products->EditProduct(json_decode($request->data));
     }
 
     public function RemoveNorm(Request $request)
     {
-        $norm = new Materialnorm();
-        $norm->find($request->id)->remove();
+        $model = new Materialnorm();
+        $norm = $model->find($request->id);
+        if ($norm) {
+            $norm->delete();
+        }
+        echo 'Nothing to delete';
+    }
+
+    public function Remove(Request $request)
+    {
+        $model = new Product();
+        $product = $model->find($request->id);
+        if ($product) {
+            $product->delete();
+        }
+        echo 'Nothing to delete';
+    }
+    public function Add (Request $request)
+    {
+        return $this->products->newProduct(json_decode($request->data));
     }
 
 }

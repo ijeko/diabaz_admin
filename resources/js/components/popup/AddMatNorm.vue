@@ -1,8 +1,6 @@
 <template>
     <div class="wrapper">
-        {{selectedNorm}}
-        <button @click="remove(12)"></button>
-        <div class="text-right" @click="closeAddForm">&times;</div>
+        <div class="text-right" @click="closeEditForm">&times;</div>
         <h3 class="text-center mb-4">{{PRODUCTS[selectedProduct-1].title}}</h3>
         <h5 class="text-center mb-4">Ввод расхода материалов</h5>
         <div class="normItem" v-for="item in selectedNorm"
@@ -15,6 +13,7 @@
                 <input type="number" v-model="item.norma">
                 {{ item.unit }}
             </div>
+            <div class="del" @click="remove(item.id)">&times;</div>
         </div>
         <select class="form-control" name="material" id="material" @change="addItem" v-model="selectedMat">
             <option value=""></option>
@@ -24,8 +23,8 @@
             >{{ material.title }}
             </option>
         </select>
-        <button class="btn btn-success mt-4" style="width: 100%" @click="test">Сохранить</button>
-        <button class="btn btn-danger mt-4" style="width: 100%" @click="closeAddForm">Закрыть</button>
+        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="test">Сохранить</button>
+        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeEditForm">Закрыть</button>
     </div>
 </template>
 
@@ -39,7 +38,7 @@ export default {
             title: '',
             selectMat: '',
             selectProd: '',
-            selectedMat: '',
+            selectedMat: [],
             norma: ''
         }
     },
@@ -57,23 +56,25 @@ export default {
         ...mapActions([
             'EDIT_SELECTED_NORM'
         ]),
-        closeAddForm() {
-            this.$emit('closeAddForm')
+        closeEditForm() {
+            this.$emit('closeEditForm')
         },
         addItem () {
-
             let material= this.MATERIALS[this.selectedMat-1]
             this.selectedNorm.push({id:null,title: material.title, norma: 0, unit: material.unit, material_id: material.id, product_id: this.selectedProduct})
+            console.log(this.selectedNorm)
         },
         test() {
-            console.log(this.selectedNorm)
+            // console.log(this.selectedNorm)
             this.EDIT_SELECTED_NORM(JSON.stringify(this.selectedNorm))
+            this.$emit('update', {prodID: this.selectedProduct})
+            this.closeEditForm()
         },
         remove (id) {
-            axios.post('http://127.0.0.1:8000/api/matnorm/remove',
-                {id},
+            axios.delete('http://127.0.0.1:8000/api/matnorm/remove',
                 {
-                    headers: {'Content-Type': 'application/json'}
+                    headers: {'Content-Type': 'application/json'},
+                    params: {id: id}
                 })
                 .then(function (response) {
                     return data
@@ -82,6 +83,7 @@ export default {
                     // handle error
                     console.log(error);
                 })
+            this.$emit('update', {prodID: this.selectedProduct})
         }
     }
 }
@@ -90,7 +92,7 @@ export default {
 <style scoped>
 .wrapper {
     width: 500px;
-    height: 600px;
+    height: auto;
     position: absolute;
     top: 50px;
     left: 50%;
@@ -104,5 +106,22 @@ export default {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px dotted silver;
+}
+.del {
+    background-color: rosybrown;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    /*font-size: 18px;*/
+    vertical-align: middle;
+}
+.del:hover {
+    background-color: red;
+    cursor: pointer;
+}
+.normTitle, .normValue {
+    width: 45%;
 }
 </style>

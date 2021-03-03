@@ -1,19 +1,21 @@
 <template>
     <div class="card">
-        <div class="card-header">Произведенная продукция на {{ dateFormated }}</div>
+        <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
+            {{ dateFormated.year }}
+        </div>
         <div class="card-body">
-            {{currentDate}}
             <table>
                 <tr>
                     <th>Продукция</th>
-                    <th>Остатки??</th>
+                    <!--                    <th>Остатки??</th>-->
                     <th>Произведено сегодня</th>
                 </tr>
                 <tr v-for="(product, index) in PRODUCTS"
                     :key="index">
                     <td>{{ product.title }}</td>
-                    <td>1</td>
-                    <td>{{ producedOf(product.id) }}</td>
+                    <!--                    <td>1</td>-->
+                    <td>{{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
+                    </td>
                 </tr>
             </table>
 
@@ -26,7 +28,7 @@
             @closePopup="closePopup"
             @sendProduced="sendProduced"
         ></enter-produced>
-        <button class="btn btn-dark" @click="showPopup">Внести данные</button>
+        <button class="btn btn-outline-dark" @click="showPopup">Внести данные</button>
     </div>
 </template>
 
@@ -39,7 +41,7 @@ export default {
     components: {},
     mounted() {
         this.GET_PRODUCTS()
-        this.GET_PRODUCED(this.currentDate)
+        this.GET_PRODUCED(this.date)
     },
     data: function () {
         return {
@@ -55,7 +57,7 @@ export default {
             type: Object,
             default: ''
         },
-        date:''
+        date: ''
 
     },
     computed: {
@@ -63,8 +65,8 @@ export default {
             'PRODUCTS',
             'PRODUCED'
         ]),
-        currentDate () {
-            var  date = {date: this.date}
+        currentDate() {
+            var date = {date: this.date}
             this.GET_PRODUCED(date)
             return date
         }
@@ -89,7 +91,7 @@ export default {
         },
         producedOf: function (prd_id) {
             var p = []
-
+            this.currentDate
             for (var prod of this.PRODUCED) {
                 if (prod.product_id === prd_id) {
                     return prod.qty
