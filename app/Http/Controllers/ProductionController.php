@@ -63,5 +63,20 @@ class ProductionController extends Controller
     {
         return $this->products->newProduct(json_decode($request->data));
     }
+    public function GetSoldOnDate (Request $request)
+    {
+        {
+            $data = $request;
+            return  $this->products->getSold($data);
+
+        }
+    }
+    public function AddSold (Request $request)
+    {
+        $data = json_decode($request->data);
+        $this->products->AddSold($data);
+
+        return \Illuminate\Http\Response::HTTP_ACCEPTED;
+    }
 
 }

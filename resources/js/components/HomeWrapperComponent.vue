@@ -21,6 +21,7 @@
                     class="mt-4"
                     :user="user"
                     :dateFormated="dateFormated"
+                    :date="date"
                 ></motor-component>
             </div>
         </div>

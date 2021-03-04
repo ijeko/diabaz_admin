@@ -4,15 +4,15 @@
         <h3 class="text-center mb-4">Новая продукция</h3>
         <label>Название продукции</label> <span v-if="info"
                                                 class="badge bg-danger text-white">{{ info.data.title }}</span>
-        <input v-model="title" class="form-control" list="production">
-        <datalist id="production">
-            <option v-for="product in PRODUCTS">{{ product.title }}</option>
+        <input v-model="title" class="form-control" list="materials">
+        <datalist id="materials">
+            <option v-for="material in MATERIALS">{{ material.title }}</option>
         </datalist>
         <label>Краткое название на английском</label> <span v-if="info" class="badge bg-danger text-white">{{info.data.name }}</span>
         <input v-model="name" class="form-control">
         <label>Единица измерения</label>
         <input type="text" v-model="unit" class="form-control">
-        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addProduct" :disabled="!complete">
+        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMaterial" :disabled="!complete">
             Сохранить
         </button>
         <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
@@ -23,7 +23,7 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-    name: "newProduct",
+    name: "newMaterial",
     data() {
         return {
             title: '',
@@ -34,7 +34,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS'
+            'MATERIALS'
         ]),
         complete() {
             if (this.title && this.name && this.unit) {
@@ -45,18 +45,18 @@ export default {
     },
     methods: {
         ...mapActions([
-            'GET_PRODUCTS'
+            'GET_MATERIALS'
         ]),
         close() {
             this.$emit('close')
         },
-        addProduct() {
+        addMaterial() {
             let data = JSON.stringify({
                 title: this.title,
                 name: this.name,
                 unit: this.unit
             })
-            axios.post('http://127.0.0.1:8000/api/products/add',
+            axios.post('http://127.0.0.1:8000/api/materials/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -76,7 +76,7 @@ export default {
         }
     },
     mounted() {
-        this.GET_PRODUCTS()
+        this.GET_MATERIALS()
     }
 }
 </script>
@@ -87,7 +87,7 @@ export default {
     height: auto;
     position: absolute;
     top: 50px;
-    left: 50%;
+    right: 50%;
     z-index: 1;
     background-color: white;
     border: 2px solid black;

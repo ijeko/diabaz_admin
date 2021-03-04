@@ -2,17 +2,16 @@
     <div class="wrapper">
         <div class="text-right" @click="close">&times;</div>
         <h3 class="text-center mb-4">Новая продукция</h3>
-        <label>Название продукции</label> <span v-if="info"
-                                                class="badge bg-danger text-white">{{ info.data.title }}</span>
-        <input v-model="title" class="form-control" list="production">
-        <datalist id="production">
-            <option v-for="product in PRODUCTS">{{ product.title }}</option>
+        <label>Название техники</label> <span v-if="info" class="badge bg-danger text-white">{{ info.data.title }}</span>
+        <input v-model="title" class="form-control" list="machines">
+        <datalist id="machines">
+            <option v-for="machine in MACHINES">{{ machine.title }}</option>
         </datalist>
         <label>Краткое название на английском</label> <span v-if="info" class="badge bg-danger text-white">{{info.data.name }}</span>
         <input v-model="name" class="form-control">
-        <label>Единица измерения</label>
+        <label>Единица учета</label>
         <input type="text" v-model="unit" class="form-control">
-        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addProduct" :disabled="!complete">
+        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMachine" :disabled="!complete">
             Сохранить
         </button>
         <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
@@ -23,7 +22,7 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-    name: "newProduct",
+    name: "newMachine",
     data() {
         return {
             title: '',
@@ -34,7 +33,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS'
+            'MACHINES'
         ]),
         complete() {
             if (this.title && this.name && this.unit) {
@@ -45,18 +44,18 @@ export default {
     },
     methods: {
         ...mapActions([
-            'GET_PRODUCTS'
+            'GET_MACHINES'
         ]),
         close() {
             this.$emit('close')
         },
-        addProduct() {
+        addMachine() {
             let data = JSON.stringify({
                 title: this.title,
                 name: this.name,
                 unit: this.unit
             })
-            axios.post('http://127.0.0.1:8000/api/products/add',
+            axios.post('http://127.0.0.1:8000/api/machines/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -76,7 +75,7 @@ export default {
         }
     },
     mounted() {
-        this.GET_PRODUCTS()
+        this.GET_MACHINES()
     }
 }
 </script>
@@ -86,7 +85,7 @@ export default {
     width: 500px;
     height: auto;
     position: absolute;
-    top: 50px;
+    bottom: 50px;
     left: 50%;
     z-index: 1;
     background-color: white;

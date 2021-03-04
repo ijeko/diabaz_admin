@@ -1,38 +1,38 @@
 <template>
     <div class="card">
-        <div class="card-header">Производимая продукция
+        <div class="card-header">Техника
         </div>
         <div class="card-body">
             <table>
                 <tr>
                     <th class="text-center">Наименование</th>
                     <!--                    <th>Остатки??</th>-->
-                    <th class="text-center">Ед. изм.</th>
+                    <th class="text-center">Ед. учета</th>
                     <th class="text-center">Действие</th>
                 </tr>
-                <tr v-for="(product, index) in PRODUCTS"
+                <tr v-for="(machine, index) in MACHINES"
                     :key="index">
-                    <td class="text-left"><span>{{ product.title }}</span></td>
+                    <td class="text-left"><span>{{ machine.title }}</span></td>
                     <!--                    <td>1</td>-->
-                    <td class="text-center"><span>{{ product.unit }}</span></td>
-                    <td class="text-center"><span class="btn btn-link m-0" @click="editProduct(index)">Изменить</span></td>
+                    <td class="text-center"><span>{{ machine.unit }}</span></td>
+                    <td class="text-center"><span class="btn btn-link" @click="editMachine(index)">Изменить</span></td>
                 </tr>
             </table>
             <div>
                 <button class="btn btn-outline-dark mt-4" @click="showNewForm">Добавить</button>
             </div>
         </div>
-        <admin-new-production-component
+        <admin-new-machine-component
             v-if="isNewFormVisible"
-            @update="GET_PRODUCTS"
+            @update="GET_MACHINES"
             @close="closeNewForm"
-        ></admin-new-production-component>
-        <admin-edit-production-component
+        ></admin-new-machine-component>
+        <admin-edit-machine-component
             v-if="isEditFormVisible"
-            :selectedProduct="selectedProduct"
-            @update="GET_PRODUCTS"
+            :selectedMachine="selectedMachine"
+            @update="GET_MACHINES"
             @close="closeEditForm"
-        ></admin-edit-production-component>
+        ></admin-edit-machine-component>
     </div>
 </template>
 
@@ -40,26 +40,26 @@
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-    name: "adminProduction",
+    name: "adminMachines",
     props: {},
     data() {
         return {
             isNewFormVisible: false,
             isEditFormVisible: false,
-            selectedProduct: ''
+            selectedMachine: ''
         }
     },
     computed: {
         ...mapGetters([
-            "PRODUCTS"
+            "MACHINES"
         ])
     },
     methods: {
         ...mapActions([
-            'GET_PRODUCTS'
+            'GET_MACHINES'
         ]),
-        editProduct(index) {
-            this.selectedProduct = index
+        editMachine(index) {
+            this.selectedMachine = index
             this.isEditFormVisible = true
         },
         closeEditForm() {
@@ -73,7 +73,7 @@ export default {
         },
     },
     mounted() {
-        this.GET_PRODUCTS()
+        this.GET_MACHINES()
     }
 }
 </script>

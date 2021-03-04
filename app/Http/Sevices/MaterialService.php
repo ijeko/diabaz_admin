@@ -7,6 +7,7 @@ namespace App\Http\Sevices;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use App\Models\Materialnorm;
+use Illuminate\Http\Response;
 
 class MaterialService
 {
@@ -71,6 +72,43 @@ class MaterialService
         $response=['totalIncomes'=>$totalIncomeQty, 'totalUsed' => $totalUsedQty];
 //        dd($response);
         return json_encode($response);
+    }
+
+    public function EditProduct($data)
+    {
+//        dd($data);
+        $records = $this->product->find($data->id);
+
+        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
+    }
+
+    public function newMaterial($data)
+    {
+        if ($this->material->where('title', $data->title)->exists()) {
+            return response()->
+            json([
+                'name' => '',
+                'title' => 'Значение уже используется'
+            ]);
+        }
+        if ($this->material->where('name', $data->name)->exists()) {
+            return response()->
+            json([
+                'name' => 'Значение уже используется',
+                'title' => ''
+            ]);
+        }else {
+            $this->material->title = $data->title;
+            $this->material->name = $data->name;
+            $this->material->unit = $data->unit;
+            $this->material->save();
+            return Response::HTTP_OK;
+//            return response()->json([
+//                'name' => '',
+//                'title' => '',
+//                'message' => 'OK'
+//            ]);
+        }
     }
 
 }

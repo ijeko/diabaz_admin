@@ -27,14 +27,22 @@ Vue.component('materials-component', require('./components/MaterialsComponent.vu
 Vue.component('motor-component', require('./components/MotorComponent.vue').default);
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);
 Vue.component('enter-produced', require('./components/popup/popup.vue').default);
+Vue.component('enter-sold', require('./components/popup/addSold.vue').default);
 Vue.component('add-mat-norm', require('./components/popup/AddMatNorm.vue').default);
 Vue.component('show-norm-norm', require('./components/popup/ShowNorm.vue').default);
 Vue.component('show-incomes', require('./components/popup/ShowIncomes.vue').default);
 Vue.component('add-incomes', require('./components/popup/AddIncomeForm.vue').default);
+Vue.component('enter-motohour', require('./components/popup/addMotohours.vue').default);
 //admin
 Vue.component('admin-production-component', require('./components/admin/production.vue').default);
 Vue.component('admin-edit-production-component', require('./components/admin/popup/editProduction.vue').default);
 Vue.component('admin-new-production-component', require('./components/admin/popup/newProduction.vue').default);
+Vue.component('admin-materials-component', require('./components/admin/materials.vue').default);
+Vue.component('admin-edit-material-component', require('./components/admin/popup/editMaterial.vue').default);
+Vue.component('admin-new-material-component', require('./components/admin/popup/newMaterial.vue').default);
+Vue.component('admin-machines-component', require('./components/admin/machines.vue').default);
+Vue.component('admin-edit-machine-component', require('./components/admin/popup/editMachine.vue').default);
+Vue.component('admin-new-machine-component', require('./components/admin/popup/newMachine.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

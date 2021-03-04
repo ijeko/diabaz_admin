@@ -2,16 +2,16 @@
     <div class="wrapper">
         <div class="text-right" @click="close">&times;</div>
         <h3 class="text-center mb-4">Редактировать</h3>
-        <label>Название продукции</label>
-        <input v-model="newProductName" class="form-control">
+        <label>Название техники</label>
+        <input v-model="newMachineName" class="form-control">
         <label>Краткое название на английском</label>
-        <input v-model="newProductSlug" class="form-control">
+        <input v-model="newMachineSlug" class="form-control">
         <label>Единица измерения</label>
-        <input type="text" v-model="newProductUnit" class="form-control">
-        <button class="btn btn-outline-success mt-4 actions" @click="saveProduct">
+        <input type="text" v-model="newMachineUnit" class="form-control">
+        <button class="btn btn-outline-success mt-4 actions" @click="saveMachine">
             Сохранить
         </button>
-        <button class="btn btn-outline-danger mt-4 actions" @click="deleteProduct(PRODUCTS[selectedProduct].id)">
+        <button class="btn btn-outline-danger mt-4 actions" @click="deleteMachine(MACHINES[selectedMachine].id)">
             Удалить
         </button>
         <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
@@ -22,19 +22,19 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-    name: "newMaterial",
+    name: "editMachine",
     data() {
         return {}
     },
     props: {
-        selectedProduct: '',
-        newProductName: '',
-        newProductSlug: '',
-        newProductUnit: '',
+        selectedMachine: '',
+        newMachineName: '',
+        newMachineSlug: '',
+        newMachineUnit: '',
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS',
+            'MACHINES',
         ]),
 
     },
@@ -43,20 +43,20 @@ export default {
         close() {
             this.$emit('close')
         },
-        productInfo() {
+        machineInfo() {
             // alert(this.PRODUCTS[this.selectedProduct].title)
-            this.newProductName = this.PRODUCTS[this.selectedProduct].title
-            this.newProductSlug = this.PRODUCTS[this.selectedProduct].name
-            this.newProductUnit = this.PRODUCTS[this.selectedProduct].unit
+            this.newMachineName = this.MACHINES[this.selectedMachine].title
+            this.newMachineSlug = this.MACHINES[this.selectedMachine].name
+            this.newMachineUnit = this.MACHINES[this.selectedMachine].unit
         },
-        saveProduct() {
+        saveMachine() {
             let data = JSON.stringify({
-                id: this.PRODUCTS[this.selectedProduct].id,
-                title: this.newProductName,
-                name: this.newProductSlug,
-                unit: this.newProductUnit
+                id: this.MACHINES[this.selectedMachine].id,
+                title: this.newMachineName,
+                name: this.newMachineSlug,
+                unit: this.newMachineUnit
             })
-            axios.post('http://127.0.0.1:8000/api/products/edit',
+            axios.post('http://127.0.0.1:8000/api/machines/edit',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -71,8 +71,8 @@ export default {
             this.$emit('update')
             this.$emit('close')
         },
-        deleteProduct(id) {
-            axios.delete('http://127.0.0.1:8000/api/products/remove',
+        deleteMachine(id) {
+            axios.delete('http://127.0.0.1:8000/api/machines/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}
@@ -89,7 +89,7 @@ export default {
         }
     },
     mounted() {
-        this.productInfo()
+        this.machineInfo()
     }
 }
 </script>
@@ -99,7 +99,7 @@ export default {
     width: 500px;
     height: auto;
     position: absolute;
-    top: 50px;
+    bottom: 50px;
     left: 50%;
     z-index: 1;
     background-color: white;

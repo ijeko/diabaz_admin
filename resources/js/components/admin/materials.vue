@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Производимая продукция
+        <div class="card-header">Используемые материалы
         </div>
         <div class="card-body">
             <table>
@@ -10,29 +10,29 @@
                     <th class="text-center">Ед. изм.</th>
                     <th class="text-center">Действие</th>
                 </tr>
-                <tr v-for="(product, index) in PRODUCTS"
+                <tr v-for="(material, index) in MATERIALS"
                     :key="index">
-                    <td class="text-left"><span>{{ product.title }}</span></td>
+                    <td class="text-left"><span>{{ material.title }}</span></td>
                     <!--                    <td>1</td>-->
-                    <td class="text-center"><span>{{ product.unit }}</span></td>
-                    <td class="text-center"><span class="btn btn-link m-0" @click="editProduct(index)">Изменить</span></td>
+                    <td class="text-center"><span>{{ material.unit }}</span></td>
+                    <td class="text-center"><span class="btn btn-link" @click="editMaterial(index)">Изменить</span></td>
                 </tr>
             </table>
             <div>
                 <button class="btn btn-outline-dark mt-4" @click="showNewForm">Добавить</button>
             </div>
         </div>
-        <admin-new-production-component
+        <admin-new-material-component
             v-if="isNewFormVisible"
-            @update="GET_PRODUCTS"
+            @update="GET_MATERIALS"
             @close="closeNewForm"
-        ></admin-new-production-component>
-        <admin-edit-production-component
+        ></admin-new-material-component>
+        <admin-edit-material-component
             v-if="isEditFormVisible"
-            :selectedProduct="selectedProduct"
-            @update="GET_PRODUCTS"
+            :selectedMaterial="selectedMaterial"
+            @update="GET_MATERIALS"
             @close="closeEditForm"
-        ></admin-edit-production-component>
+        ></admin-edit-material-component>
     </div>
 </template>
 
@@ -40,26 +40,26 @@
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-    name: "adminProduction",
+    name: "adminMaterials",
     props: {},
     data() {
         return {
             isNewFormVisible: false,
             isEditFormVisible: false,
-            selectedProduct: ''
+            selectedMaterial: ''
         }
     },
     computed: {
         ...mapGetters([
-            "PRODUCTS"
+            "MATERIALS"
         ])
     },
     methods: {
         ...mapActions([
-            'GET_PRODUCTS'
+            'GET_MATERIALS'
         ]),
-        editProduct(index) {
-            this.selectedProduct = index
+        editMaterial(index) {
+            this.selectedMaterial = index
             this.isEditFormVisible = true
         },
         closeEditForm() {
@@ -73,7 +73,7 @@ export default {
         },
     },
     mounted() {
-        this.GET_PRODUCTS()
+        this.GET_MATERIALS()
     }
 }
 </script>

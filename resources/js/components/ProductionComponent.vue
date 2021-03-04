@@ -8,13 +8,24 @@
                 <tr>
                     <th>Продукция</th>
                     <!--                    <th>Остатки??</th>-->
-                    <th>Произведено сегодня</th>
+                    <th>Произведено</th>
+                    <th>Отгружено</th>
+                    <th>Склад</th>
                 </tr>
                 <tr v-for="(product, index) in PRODUCTS"
                     :key="index">
-                    <td>{{ product.title }}</td>
+                    <td>
+                        {{ product.title }}
+                    </td>
                     <!--                    <td>1</td>-->
-                    <td>{{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
+                    <td>
+                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
+                    </td>
+                    <td>
+                        {{ soldOf(product.id) }} <span v-if="!soldOf(product.id)">0</span> {{ product.unit }}
+                    </td>
+                    <td>
+<!--                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}-->
                     </td>
                 </tr>
             </table>
@@ -28,7 +39,16 @@
             @closePopup="closePopup"
             @sendProduced="sendProduced"
         ></enter-produced>
-        <button class="btn btn-outline-dark" @click="showPopup">Внести данные</button>
+        <enter-sold
+            v-if="isSoldVisible"
+            class="popup"
+            :products="PRODUCTS"
+            :user="user"
+            @closeSold="closeSold"
+            @sendSold="sendSold"
+        ></enter-sold>
+        <button class="btn btn-outline-dark" @click="showPopup">+ Произведено</button>
+        <button class="btn btn-outline-dark" @click="showSold">+ Отгружено</button>
     </div>
 </template>
 
@@ -40,13 +60,15 @@ export default {
     name: 'ProductionComponent',
     components: {},
     mounted() {
+        this.GET_SOLD(this.date)
         this.GET_PRODUCTS()
         this.GET_PRODUCED(this.date)
     },
     data: function () {
         return {
             isEnterVisible: '',
-            produced: {}
+            produced: {},
+            isSoldVisible: false
         }
     },
     props: {
@@ -63,11 +85,13 @@ export default {
     computed: {
         ...mapGetters([
             'PRODUCTS',
-            'PRODUCED'
+            'PRODUCED',
+            'SOLD'
         ]),
         currentDate() {
             var date = {date: this.date}
             this.GET_PRODUCED(date)
+            this.GET_SOLD(date)
             return date
         }
     },
@@ -75,7 +99,9 @@ export default {
         ...mapActions([
             'GET_PRODUCTS',
             'GET_PRODUCED',
-            'ADD_PRODUCED'
+            'ADD_PRODUCED',
+            'GET_SOLD',
+            'ADD_SOLD'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -83,16 +109,35 @@ export default {
         closePopup() {
             this.isEnterVisible = ''
         },
+        showSold() {
+            this.isSoldVisible = true
+        },
+        closeSold() {
+            this.isSoldVisible = ''
+        },
         sendProduced(data) {
             this.ADD_PRODUCED(JSON.stringify(data))
             console.log(data)
             this.GET_PRODUCED(this.currentDate)
             this.closePopup()
         },
+        sendSold(data) {
+            this.ADD_SOLD(JSON.stringify(data))
+            console.log(data)
+            this.GET_SOLD(this.currentDate)
+            this.closeSold()
+        },
         producedOf: function (prd_id) {
-            var p = []
             this.currentDate
             for (var prod of this.PRODUCED) {
+                if (prod.product_id === prd_id) {
+                    return prod.qty
+                }
+            }
+        },
+        soldOf: function (prd_id) {
+            this.currentDate
+            for (var prod of this.SOLD) {
                 if (prod.product_id === prd_id) {
                     return prod.qty
                 }

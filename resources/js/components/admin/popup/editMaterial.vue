@@ -2,16 +2,16 @@
     <div class="wrapper">
         <div class="text-right" @click="close">&times;</div>
         <h3 class="text-center mb-4">Редактировать</h3>
-        <label>Название продукции</label>
-        <input v-model="newProductName" class="form-control">
+        <label>Название материала</label>
+        <input v-model="newMaterialName" class="form-control">
         <label>Краткое название на английском</label>
-        <input v-model="newProductSlug" class="form-control">
+        <input v-model="newMaterialSlug" class="form-control">
         <label>Единица измерения</label>
-        <input type="text" v-model="newProductUnit" class="form-control">
-        <button class="btn btn-outline-success mt-4 actions" @click="saveProduct">
+        <input type="text" v-model="newMaterialUnit" class="form-control">
+        <button class="btn btn-outline-success mt-4 actions" @click="saveMaterial">
             Сохранить
         </button>
-        <button class="btn btn-outline-danger mt-4 actions" @click="deleteProduct(PRODUCTS[selectedProduct].id)">
+        <button class="btn btn-outline-danger mt-4 actions" @click="deleteMaterial(MATERIALS[selectedMaterial].id)">
             Удалить
         </button>
         <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
@@ -22,19 +22,19 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-    name: "newMaterial",
+    name: "editMaterial",
     data() {
         return {}
     },
     props: {
-        selectedProduct: '',
-        newProductName: '',
-        newProductSlug: '',
-        newProductUnit: '',
+        selectedMaterial: '',
+        newMaterialName: '',
+        newMaterialSlug: '',
+        newMaterialUnit: '',
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS',
+            'MATERIALS',
         ]),
 
     },
@@ -43,20 +43,20 @@ export default {
         close() {
             this.$emit('close')
         },
-        productInfo() {
+        materialInfo() {
             // alert(this.PRODUCTS[this.selectedProduct].title)
-            this.newProductName = this.PRODUCTS[this.selectedProduct].title
-            this.newProductSlug = this.PRODUCTS[this.selectedProduct].name
-            this.newProductUnit = this.PRODUCTS[this.selectedProduct].unit
+            this.newMaterialName = this.MATERIALS[this.selectedMaterial].title
+            this.newMaterialSlug = this.MATERIALS[this.selectedMaterial].name
+            this.newMaterialUnit = this.MATERIALS[this.selectedMaterial].unit
         },
-        saveProduct() {
+        saveMaterial() {
             let data = JSON.stringify({
-                id: this.PRODUCTS[this.selectedProduct].id,
-                title: this.newProductName,
-                name: this.newProductSlug,
-                unit: this.newProductUnit
+                id: this.MATERIALS[this.selectedMaterial].id,
+                title: this.newMaterialName,
+                name: this.newMaterialSlug,
+                unit: this.newMaterialUnit
             })
-            axios.post('http://127.0.0.1:8000/api/products/edit',
+            axios.post('http://127.0.0.1:8000/api/materials/edit',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -71,8 +71,8 @@ export default {
             this.$emit('update')
             this.$emit('close')
         },
-        deleteProduct(id) {
-            axios.delete('http://127.0.0.1:8000/api/products/remove',
+        deleteMaterial(id) {
+            axios.delete('http://127.0.0.1:8000/api/materials/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}
@@ -89,7 +89,7 @@ export default {
         }
     },
     mounted() {
-        this.productInfo()
+        this.materialInfo()
     }
 }
 </script>
@@ -100,7 +100,7 @@ export default {
     height: auto;
     position: absolute;
     top: 50px;
-    left: 50%;
+    right: 50%;
     z-index: 1;
     background-color: white;
     border: 2px solid black;

@@ -3,7 +3,7 @@
 <!--         обновление при смене даты (может через креатед-->
         <div class="text-right" @click="closeIncomes">&times;</div>
         <h3 class="text-center mb-4">Поступление материалов на дату</h3>
-        <input type="date" v-model="localDate" @input="showIncomesOnDate">
+        <input type="date" v-model="localDate" @input="showIncomesOnDate" class="form-control">
         <div class="incomeItem" v-for="item in INCOMES"
              :key="item.id"
         >

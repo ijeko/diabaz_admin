@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Данные по материалам на {{ dateFormated.day }} {{ dateFormated.month }} {{ dateFormated.year }}г.</div>
+        <div class="card-header">Остатки материалов на {{ dateFormated.day }} {{ dateFormated.month }} {{ dateFormated.year }}г.</div>
         <div class="card-body">
             <div class="materials"
                  v-for="(material, index) in MATERIALS"

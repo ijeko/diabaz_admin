@@ -8,6 +8,7 @@ use App\Models\Material;
 use App\Models\Materialnorm;
 use App\Models\Produced;
 use App\Models\Product;
+use App\Models\Sold;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 
@@ -19,6 +20,7 @@ class ProductService
     {
         $this->product = new Product();
         $this->produced = new Produced();
+        $this->sold = new Sold();
     }
 
     public function get()
@@ -98,14 +100,50 @@ class ProductService
     public function newProduct($data)
     {
         if ($this->product->where('title', $data->title)->exists()) {
-            return response()->json([
-                'error' => 'Запись уже существует',
+            return response()->
+            json([
+                'name' => '',
+                'title' => 'Значение уже используется'
             ]);
-        } else {
+        }
+        if ($this->product->where('name', $data->name)->exists()) {
+            return response()->
+            json([
+                'name' => 'Значение уже используется',
+                'title' => ''
+            ]);
+        }else {
             $this->product->title = $data->title;
             $this->product->name = $data->name;
             $this->product->unit = $data->unit;
-            dd($this->product);
+            $this->product->save();
+            return Response::HTTP_OK;
+//            return response()->json([
+//                'name' => '',
+//                'title' => '',
+//                'message' => 'OK'
+//            ]);
+        }
+    }
+    public function getSold($data)
+    {
+        $today=$data->date;
+        return $this->sold->where('date', $today)->get();
+    }
+    public function AddSold($data)
+    {
+        if ($this->sold->where('date', $data->date)->exists() && $this->sold->where('product_id', $data->product_id)->exists())
+        {
+            $records = $this->sold->where('date', $data->date)->get();
+            $record_id=$records->where('product_id', $data->product_id)->first()->id;
+            $this->sold->where('id', $record_id)->update(['qty'=> $data->qty, 'user_id'=>$data->user_id]);
+        }
+        else {
+            $this->sold->user_id = $data->user_id;
+            $this->sold->product_id = $data->product_id;
+            $this->sold->qty = $data->qty;
+            $this->sold->date = $data->date;
+            $this->sold->save();
         }
     }
 
