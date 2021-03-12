@@ -6,7 +6,7 @@ namespace App\Http\Sevices;
 
 use App\Models\Material;
 use App\Models\MaterialIncome;
-use App\Models\Materialnorm;
+use App\Models\Product;
 use Illuminate\Http\Response;
 
 class MaterialService
@@ -28,16 +28,8 @@ class MaterialService
         return $this->material->All();
     }
 
-    public function GetProductionNorm($prodID)
-    {
-        $matNorm = new Materialnorm();
-        $matNorm->product()->get($prodID);
-        dd($matNorm);
-    }
-
     public function GetIncomesOnDate($date)
     {
-//        dd(__METHOD__, $date);
         return $this->income->where('date', $date)->get();
     }
 
@@ -55,22 +47,20 @@ class MaterialService
         $materials = $this->material->get();
         $totalIncomeQty = [];
         $totalUsedQty = [];
-
         foreach ($materials as $material) {
             $used = 0;
             foreach ($material->norma() as $norma) {
                 $used = $used + $norma->product()->find($norma->product_id)->getProducedQty() * $norma->norma;
             }
-//           echo $material->title.' Приехало: '.$material->getIncomeSumm().' потрачено: '.$used.'<br>';
             array_push($totalIncomeQty, [
                 'material_id' => $material->id, 'qty' => $material->getIncomeSumm()
             ]);
+
             array_push($totalUsedQty, [
                 'material_id' => $material->id, 'qty' => $used
             ]);
         }
-        $response=['totalIncomes'=>$totalIncomeQty, 'totalUsed' => $totalUsedQty];
-//        dd($response);
+        $response = ['totalIncomes' => $totalIncomeQty, 'totalUsed' => $totalUsedQty];
         return json_encode($response);
     }
 
@@ -97,7 +87,7 @@ class MaterialService
                 'name' => 'Значение уже используется',
                 'title' => ''
             ]);
-        }else {
+        } else {
             $this->material->title = $data->title;
             $this->material->name = $data->name;
             $this->material->unit = $data->unit;

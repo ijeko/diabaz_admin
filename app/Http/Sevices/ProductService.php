@@ -165,22 +165,37 @@ class ProductService
 
     public function Stock()
     {
-        $asMaterial = 0;
+
         foreach ($this->product->all() as $product) {
+            $asMaterial = 0;
             foreach ($this->material->all() as $material)
             {
                 if ($product->name === $material->name) {
-                    $norma = $this->norm->where('product_id', $product->id)->get();
+//                    $CurrentMatNorm = $this->norm->where('material_id', $material->id)->get();
+                    $asMaterial =
+//                        $this->ProductAsMaterialQty($CurrentMatNorm) +
+                        $material->getIncomeSumm();
 //                    $asMaterial = $product->getProducedQty()*$this->norm->where('product_id', $material->id)->where('product_id', $material->id)->get()->norma;
-                    dd($norma);
+
                 }
             }
 //            $product = $this->product->find($id);
             $productStock = $product->getProducedQty() - $product->getSoldQty() - $asMaterial;
             $stock[]=['product_id' => $product->id, 'qty' => $productStock];
+
     }
         return response()->
         json($stock);
     }
+
+//    private function ProductAsMaterialQty ($asMaterial) {
+//        $qty = 0;
+//        foreach ($asMaterial as $item)
+//        {
+//            $qty = $qty + ($item->norma * $this->product->find($item->product_id)->getProducedQty());
+//        }
+////        dd($qty);
+//        return $qty;
+//    }
 
 }
