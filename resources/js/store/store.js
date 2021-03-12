@@ -8,7 +8,8 @@ export default {
         incomes: [],
         materialsQty: [],
         motohours: [],
-        sold: []
+        sold: [],
+        stock: []
 
     },
     getters: {    // Fetch the total number of items in the cart
@@ -29,6 +30,9 @@ export default {
         },
         SOLD: state => {
             return state.sold
+        },
+        STOCK: state => {
+            return state.stock
         },
         SELECTED_NORM: state => {
             return state.selectedNorm
@@ -52,6 +56,9 @@ export default {
         },
         SET_SOLD: (state, data) => {
             state.sold = data;
+        },
+        SET_STOCK: (state, data) => {
+            state.stock = data;
         },
         SET_MOTOHOURS: (state, data) => {
             state.motohours = data;
@@ -147,6 +154,22 @@ export default {
                 })
                 .then(function (response) {
                     commit('SET_SOLD', response.data);
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
+        GET_STOCK: ({commit}, data) => {
+            axios.get('http://127.0.0.1:8000/api/products/getstock',
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
+                })
+                .then(function (response) {
+                    commit('SET_STOCK', response.data);
+                    console.log(response.data)
                     return response.data
                 })
                 .catch(function (error) {

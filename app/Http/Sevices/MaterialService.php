@@ -74,10 +74,10 @@ class MaterialService
         return json_encode($response);
     }
 
-    public function EditProduct($data)
+    public function EditMaterial($data)
     {
 //        dd($data);
-        $records = $this->product->find($data->id);
+        $records = $this->material->find($data->id);
 
         $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
     }

@@ -56,3 +56,6 @@ Route::post('/incomes/add', [App\Http\Controllers\MaterialsController::class, 'A
 // Motohour
 Route::get('/motohours/get', [App\Http\Controllers\MotohoursController::class, 'index']);
 Route::post('/motohours/add', [App\Http\Controllers\MotohoursController::class, 'add']);
+
+// Stock
+Route::get('/products/getstock', [App\Http\Controllers\ProductionController::class, 'GetStockByProduct']);

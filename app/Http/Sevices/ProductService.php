@@ -18,9 +18,11 @@ class ProductService
 
     public function __construct()
     {
+        $this->material = new Material();
         $this->product = new Product();
         $this->produced = new Produced();
         $this->sold = new Sold();
+        $this->norm = new Materialnorm();
     }
 
     public function get()
@@ -112,7 +114,7 @@ class ProductService
                 'name' => 'Значение уже используется',
                 'title' => ''
             ]);
-        }else {
+        } else {
             $this->product->title = $data->title;
             $this->product->name = $data->name;
             $this->product->unit = $data->unit;
@@ -125,26 +127,60 @@ class ProductService
 //            ]);
         }
     }
+
     public function getSold($data)
     {
-        $today=$data->date;
-        return $this->sold->where('date', $today)->get();
+        $today = $data->date;
+
+        foreach ($this->product->all() as $product) {
+            $productSold = $this->sold->where('date', $today)->where('product_id', $product->id)->get()->sum('qty');
+//            $product = $this->product->find($id);
+            $sold[]=['product_id' => $product->id, 'qty' => $productSold];
+        }
+
+//dd($sold);
+        return response()->
+        json($sold);
+//
+////        dd();
+//        return $this->sold->where('date', $today)->get()->sum('qty');
     }
+
     public function AddSold($data)
     {
-        if ($this->sold->where('date', $data->date)->exists() && $this->sold->where('product_id', $data->product_id)->exists())
-        {
-            $records = $this->sold->where('date', $data->date)->get();
-            $record_id=$records->where('product_id', $data->product_id)->first()->id;
-            $this->sold->where('id', $record_id)->update(['qty'=> $data->qty, 'user_id'=>$data->user_id]);
-        }
-        else {
+//        if ($this->sold->where('date', $data->date)->exists() && $this->sold->where('product_id', $data->product_id)->exists()) {
+//            dd('exists');
+//            $records = $this->sold->where('date', $data->date)->get();
+//            $record_id = $records->where('product_id', $data->product_id)->first()->id;
+//            $this->sold->where('id', $record_id)->update(['qty' => $data->qty, 'user_id' => $data->user_id]);
+//        } else {
             $this->sold->user_id = $data->user_id;
             $this->sold->product_id = $data->product_id;
             $this->sold->qty = $data->qty;
             $this->sold->date = $data->date;
+            $this->sold->soldTo = $data->soldTo;
             $this->sold->save();
-        }
+//        }
+    }
+
+    public function Stock()
+    {
+        $asMaterial = 0;
+        foreach ($this->product->all() as $product) {
+            foreach ($this->material->all() as $material)
+            {
+                if ($product->name === $material->name) {
+                    $norma = $this->norm->where('product_id', $product->id)->get();
+//                    $asMaterial = $product->getProducedQty()*$this->norm->where('product_id', $material->id)->where('product_id', $material->id)->get()->norma;
+                    dd($norma);
+                }
+            }
+//            $product = $this->product->find($id);
+            $productStock = $product->getProducedQty() - $product->getSoldQty() - $asMaterial;
+            $stock[]=['product_id' => $product->id, 'qty' => $productStock];
+    }
+        return response()->
+        json($stock);
     }
 
 }

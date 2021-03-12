@@ -2297,14 +2297,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductionComponent',
   components: {},
   mounted: function mounted() {
-    this.GET_SOLD(this.date);
+    // this.GET_SOLD(this.date)
     this.GET_PRODUCTS();
     this.GET_PRODUCED(this.date);
+    this.GET_STOCK(1);
   },
   data: function data() {
     return {
@@ -2323,17 +2326,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     date: ''
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'PRODUCED', 'SOLD'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'PRODUCED', 'SOLD', 'STOCK'])), {}, {
     currentDate: function currentDate() {
       var date = {
         date: this.date
       };
       this.GET_PRODUCED(date);
       this.GET_SOLD(date);
+      this.GET_STOCK();
       return date;
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_PRODUCED', 'ADD_PRODUCED', 'GET_SOLD', 'ADD_SOLD'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_PRODUCED', 'ADD_PRODUCED', 'GET_SOLD', 'ADD_SOLD', 'GET_STOCK'])), {}, {
     showPopup: function showPopup() {
       this.isEnterVisible = true;
     },
@@ -2350,12 +2354,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.ADD_PRODUCED(JSON.stringify(data));
       console.log(data);
       this.GET_PRODUCED(this.currentDate);
+      this.GET_STOCK();
       this.closePopup();
     },
     sendSold: function sendSold(data) {
       this.ADD_SOLD(JSON.stringify(data));
       console.log(data);
       this.GET_SOLD(this.currentDate);
+      this.GET_STOCK();
       this.closeSold();
     },
     producedOf: function producedOf(prd_id) {
@@ -2396,6 +2402,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _iterator2.e(err);
       } finally {
         _iterator2.f();
+      }
+    },
+    stockOf: function stockOf(prd_id) {
+      this.currentDate;
+
+      var _iterator3 = _createForOfIteratorHelper(this.STOCK),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var prod = _step3.value;
+
+          if (prod.product_id === prd_id) {
+            return prod.qty;
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
       }
     }
   })
@@ -3357,7 +3383,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     sendIncome: function sendIncome() {
       var data = {
-        material_id: this.selectedMaterial,
+        material_id: this.MATERIALS[this.selectedMaterial].id,
         qty: this.qty,
         date: this.inputDate,
         user_id: this.user
@@ -3445,11 +3471,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS', 'PRODUCTS'])),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['EDIT_SELECTED_NORM'])), {}, {
+    productById: function productById(id) {
+      var title = this.PRODUCTS.find(function (material) {
+        return material.id === id;
+      });
+      var unit = this.PRODUCTS.find(function (material) {
+        return material.id === id;
+      });
+
+      if (title && unit) {
+        var _data = {
+          title: title.title,
+          unit: unit.unit
+        };
+        return _data;
+      } else return false;
+    },
     closeEditForm: function closeEditForm() {
       this.$emit('closeEditForm');
     },
     addItem: function addItem() {
-      var material = this.MATERIALS[this.selectedMat - 1];
+      var material = this.MATERIALS[this.selectedMat];
       this.selectedNorm.push({
         id: null,
         title: material.title,
@@ -3572,6 +3614,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.GET_INCOMES({
         date: this.localDate
       });
+    },
+    materialById: function materialById(id) {
+      var title = this.MATERIALS.find(function (material) {
+        return material.id === id;
+      });
+      var unit = this.MATERIALS.find(function (material) {
+        return material.id === id;
+      });
+
+      if (title && unit) {
+        var data = {
+          title: title.title,
+          unit: unit.unit
+        };
+        return data;
+      } else return false;
     }
   }),
   mounted: function mounted() {
@@ -3799,6 +3857,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -3817,14 +3877,17 @@ __webpack_require__.r(__webpack_exports__);
         product_id: this.selectedProduct,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user,
+        soldTo: this.soldTo
       };
       this.$emit('sendSold', data);
+      this.closeSold();
     }
   },
   data: function data() {
     return {
       qty: 0,
+      soldTo: '',
       selectedProduct: 1,
       inputDate: new Date().toISOString().slice(0, 10)
     };
@@ -4046,7 +4109,8 @@ __webpack_require__.r(__webpack_exports__);
     incomes: [],
     materialsQty: [],
     motohours: [],
-    sold: []
+    sold: [],
+    stock: []
   },
   getters: {
     // Fetch the total number of items in the cart
@@ -4067,6 +4131,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     SOLD: function SOLD(state) {
       return state.sold;
+    },
+    STOCK: function STOCK(state) {
+      return state.stock;
     },
     SELECTED_NORM: function SELECTED_NORM(state) {
       return state.selectedNorm;
@@ -4090,6 +4157,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     SET_SOLD: function SET_SOLD(state, data) {
       state.sold = data;
+    },
+    SET_STOCK: function SET_STOCK(state, data) {
+      state.stock = data;
     },
     SET_MOTOHOURS: function SET_MOTOHOURS(state, data) {
       state.motohours = data;
@@ -4196,8 +4266,24 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_SOLD: function ADD_SOLD(_ref7, data) {
+    GET_STOCK: function GET_STOCK(_ref7, data) {
       var commit = _ref7.commit;
+      axios.get('http://127.0.0.1:8000/api/products/getstock', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: data
+      }).then(function (response) {
+        commit('SET_STOCK', response.data);
+        console.log(response.data);
+        return response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
+    },
+    ADD_SOLD: function ADD_SOLD(_ref8, data) {
+      var commit = _ref8.commit;
       axios.post('http://127.0.0.1:8000/api/products/addsold', {
         data: data
       }, {
@@ -4211,8 +4297,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_MOTOHOURS: function ADD_MOTOHOURS(_ref8, data) {
-      var commit = _ref8.commit;
+    ADD_MOTOHOURS: function ADD_MOTOHOURS(_ref9, data) {
+      var commit = _ref9.commit;
       axios.post('http://127.0.0.1:8000/api/motohours/add', {
         data: data
       }, {
@@ -4226,8 +4312,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MACHINES: function GET_MACHINES(_ref9) {
-      var commit = _ref9.commit;
+    GET_MACHINES: function GET_MACHINES(_ref10) {
+      var commit = _ref10.commit;
       axios.get('http://127.0.0.1:8000/api/machines/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -4240,8 +4326,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MOTOHOURS: function GET_MOTOHOURS(_ref10, data) {
-      var commit = _ref10.commit;
+    GET_MOTOHOURS: function GET_MOTOHOURS(_ref11, data) {
+      var commit = _ref11.commit;
       axios.get('http://127.0.0.1:8000/api/motohours/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -4255,8 +4341,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_NORM_BY_MATERIAL: function GET_NORM_BY_MATERIAL(_ref11, data) {
-      var commit = _ref11.commit;
+    GET_NORM_BY_MATERIAL: function GET_NORM_BY_MATERIAL(_ref12, data) {
+      var commit = _ref12.commit;
       axios.get('http://127.0.0.1:8000/api/matnorm/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -4271,8 +4357,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    EDIT_SELECTED_NORM: function EDIT_SELECTED_NORM(_ref12, data) {
-      var commit = _ref12.commit;
+    EDIT_SELECTED_NORM: function EDIT_SELECTED_NORM(_ref13, data) {
+      var commit = _ref13.commit;
       axios.post('http://127.0.0.1:8000/api/matnorm/edit', {
         data: data
       }, {
@@ -4286,8 +4372,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_INCOMES: function GET_INCOMES(_ref13, data) {
-      var commit = _ref13.commit;
+    GET_INCOMES: function GET_INCOMES(_ref14, data) {
+      var commit = _ref14.commit;
       axios.get('http://127.0.0.1:8000/api/incomes/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -4301,8 +4387,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_INCOME: function ADD_INCOME(_ref14, data) {
-      var commit = _ref14.commit;
+    ADD_INCOME: function ADD_INCOME(_ref15, data) {
+      var commit = _ref15.commit;
       axios.post('http://127.0.0.1:8000/api/incomes/add', {
         data: data
       }, {
@@ -43227,9 +43313,9 @@ var render = function() {
             _vm._s(_vm.dateFormated.day) +
             " " +
             _vm._s(_vm.dateFormated.month) +
-            "\n            " +
+            "\n        " +
             _vm._s(_vm.dateFormated.year) +
-            "\n        "
+            "\n    "
         )
       ]),
       _vm._v(" "),
@@ -43243,37 +43329,43 @@ var render = function() {
               return _c("tr", { key: index }, [
                 _c("td", [
                   _vm._v(
-                    "\n                        " +
+                    "\n                    " +
                       _vm._s(product.title) +
-                      "\n                    "
+                      "\n                "
                   )
                 ]),
                 _vm._v(" "),
                 _c("td", [
                   _vm._v(
-                    "\n                        " +
+                    "\n                    " +
                       _vm._s(_vm.producedOf(product.id)) +
                       " "
                   ),
                   !_vm.producedOf(product.id)
                     ? _c("span", [_vm._v("0")])
                     : _vm._e(),
-                  _vm._v(" " + _vm._s(product.unit) + "\n                    ")
+                  _vm._v(" " + _vm._s(product.unit) + "\n                ")
                 ]),
                 _vm._v(" "),
                 _c("td", [
                   _vm._v(
-                    "\n                        " +
+                    "\n                    " +
                       _vm._s(_vm.soldOf(product.id)) +
-                      " "
-                  ),
-                  !_vm.soldOf(product.id)
-                    ? _c("span", [_vm._v("0")])
-                    : _vm._e(),
-                  _vm._v(" " + _vm._s(product.unit) + "\n                    ")
+                      " " +
+                      _vm._s(product.unit) +
+                      "\n                "
+                  )
                 ]),
                 _vm._v(" "),
-                _c("td")
+                _c("td", [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.stockOf(product.id)) +
+                      " " +
+                      _vm._s(product.unit) +
+                      "\n                    "
+                  )
+                ])
               ])
             })
           ],
@@ -44567,7 +44659,7 @@ var render = function() {
               }
             },
             _vm._l(_vm.MATERIALS, function(material, index) {
-              return _c("option", { domProps: { value: material.id } }, [
+              return _c("option", { domProps: { value: index } }, [
                 _vm._v(_vm._s(material.title))
               ])
             }),
@@ -44577,9 +44669,7 @@ var render = function() {
           _c("label", { attrs: { for: "qty" } }, [
             _vm._v(
               "Количество, " +
-                _vm._s(_vm.selectedMaterial) +
-                " " +
-                _vm._s(_vm.MATERIALS[_vm.selectedMaterial - 1].unit) +
+                _vm._s(_vm.MATERIALS[_vm.selectedMaterial].unit) +
                 " "
             )
           ]),
@@ -44673,7 +44763,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("h3", { staticClass: "text-center mb-4" }, [
-        _vm._v(_vm._s(_vm.PRODUCTS[_vm.selectedProduct - 1].title))
+        _vm._v(_vm._s(_vm.productById(_vm.selectedProduct).title))
       ]),
       _vm._v(" "),
       _c("h5", { staticClass: "text-center mb-4" }, [
@@ -44763,7 +44853,7 @@ var render = function() {
           _vm._l(_vm.MATERIALS, function(material, index) {
             return _c(
               "option",
-              { key: material.id, domProps: { value: material.id } },
+              { key: material.id, domProps: { value: index } },
               [_vm._v(_vm._s(material.title) + "\n        ")]
             )
           })
@@ -44859,14 +44949,14 @@ var render = function() {
       _vm._l(_vm.INCOMES, function(item) {
         return _c("div", { key: item.id, staticClass: "incomeItem" }, [
           _c("div", { staticClass: "normTitle" }, [
-            _vm._v(" " + _vm._s(_vm.MATERIALS[item.material_id - 1].title))
+            _vm._v(" " + _vm._s(_vm.materialById(item.material_id).title))
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "normValue" }, [
             _vm._v(
               _vm._s(item.qty) +
                 " " +
-                _vm._s(_vm.MATERIALS[item.material_id - 1].unit)
+                _vm._s(_vm.materialById(item.material_id).unit)
             )
           ]),
           _vm._v(" "),
@@ -45232,7 +45322,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "body" }, [
-    _c("div", { on: { click: _vm.closePopup } }, [_vm._v("×")]),
+    _c("div", { on: { click: _vm.closeSold } }, [_vm._v("×")]),
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "mt-1" }, [
@@ -45327,6 +45417,30 @@ var render = function() {
                   return
                 }
                 _vm.qty = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "soldTo" } }, [_vm._v("Кому:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.soldTo,
+                expression: "soldTo"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", id: "soldTo" },
+            domProps: { value: _vm.soldTo },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.soldTo = $event.target.value
               }
             }
           })

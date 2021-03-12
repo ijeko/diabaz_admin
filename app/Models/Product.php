@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use League\Flysystem\SafeStorage;
 
 class Product extends Model
 {
@@ -18,6 +19,11 @@ class Product extends Model
     public function getProducedQty ()
     {
         $summ = $this->hasMany(Produced::class)->sum('qty');
+        return $summ;
+    }
+    public function getSoldQty ()
+    {
+        $summ = $this->hasMany(Sold::class)->sum('qty');
         return $summ;
     }
 }

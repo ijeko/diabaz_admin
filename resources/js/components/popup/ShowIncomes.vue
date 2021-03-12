@@ -7,8 +7,8 @@
         <div class="incomeItem" v-for="item in INCOMES"
              :key="item.id"
         >
-            <div class="normTitle"> {{ MATERIALS[item.material_id-1].title }}</div>
-            <div class="normValue">{{ item.qty }} {{ MATERIALS[item.material_id-1].unit }}</div>
+            <div class="normTitle"> {{ materialById(item.material_id).title }}</div>
+            <div class="normValue">{{ item.qty }} {{ materialById(item.material_id).unit }}</div>
             <div class="del" @click="remove(item.id)">&times;</div>
         </div>
 
@@ -51,6 +51,7 @@ export default {
             'MATERIALS'
         ]),
 
+
     },
     methods: {
         ...mapActions([
@@ -67,6 +68,18 @@ export default {
         },
         showIncomesOnDate() {
             this.GET_INCOMES({date: this.localDate})
+        },
+        materialById(id)
+        {
+
+                var title = this.MATERIALS.find(material => material.id === id)
+                var unit = this.MATERIALS.find(material => material.id === id)
+            if (title && unit)
+            {
+                let data = {title: title.title, unit: unit.unit}
+                return data
+            }
+            else return false
         }
     },
     mounted() {

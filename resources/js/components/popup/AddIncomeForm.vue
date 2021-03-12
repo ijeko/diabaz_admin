@@ -12,11 +12,11 @@
 <!--                        <option value="" disabled>Материал...</option>-->
                         <option
                             v-for="(material, index) in MATERIALS"
-                            :value="material.id"
+                            :value="index"
 
                            >{{material.title}}</option>
                     </select>
-                    <label for="qty">Количество, {{selectedMaterial}} {{MATERIALS[selectedMaterial-1].unit}} </label>
+                    <label for="qty">Количество, {{MATERIALS[selectedMaterial].unit}} </label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
                 </form>
             </div>
@@ -47,7 +47,7 @@ export default {
             this.$emit('closeAddForm')
         },
         sendIncome () {
-            var data = {material_id: this.selectedMaterial, qty: this.qty, date: this.inputDate, user_id: this.user}
+            var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user}
             this.ADD_INCOME(JSON.stringify(data))
             console.log(data)
             this.closeAddForm()

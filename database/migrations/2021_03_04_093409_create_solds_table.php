@@ -19,6 +19,7 @@ class CreateSoldsTable extends Migration
             $table->date('date');
             $table->float('qty');
             $table->integer('user_id');
+            $table->string('soldTo');
             $table->timestamps();
         });
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="body">
-        <div @click="closePopup">&times;</div>
+        <div @click="closeSold">&times;</div>
         <div class="container">
             <div class="mt-1">
                 <div class="text-center"><h3>Отгружено:</h3></div>
@@ -17,6 +17,8 @@
                     </select>
                     <label for="qty">Количество, {{products[selectedProduct-1].unit}}</label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
+                    <label for="soldTo">Кому:</label>
+                    <input v-model="soldTo" class="form-control" type="text" id="soldTo">
                 </form>
             </div>
 
@@ -48,13 +50,15 @@ export default {
         },
         sendSold () {
 
-            var data = {product_id: this.selectedProduct, qty: this.qty, date: this.inputDate, user_id: this.user}
+            var data = {product_id: this.selectedProduct, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
             this.$emit('sendSold', data)
+            this.closeSold()
         }
     },
     data () {
         return {
             qty: 0,
+            soldTo: '',
             selectedProduct: 1,
             inputDate: new Date().toISOString().slice(0,10)
         }

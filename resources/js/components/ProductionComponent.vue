@@ -22,10 +22,12 @@
                         {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
                     </td>
                     <td>
-                        {{ soldOf(product.id) }} <span v-if="!soldOf(product.id)">0</span> {{ product.unit }}
+                        {{ soldOf(product.id) }} {{ product.unit }}
                     </td>
                     <td>
-<!--                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}-->
+                        {{ stockOf(product.id) }} {{ product.unit }}
+                        <!--
+                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}-->
                     </td>
                 </tr>
             </table>
@@ -60,9 +62,10 @@ export default {
     name: 'ProductionComponent',
     components: {},
     mounted() {
-        this.GET_SOLD(this.date)
+        // this.GET_SOLD(this.date)
         this.GET_PRODUCTS()
         this.GET_PRODUCED(this.date)
+        this.GET_STOCK(1)
     },
     data: function () {
         return {
@@ -86,12 +89,14 @@ export default {
         ...mapGetters([
             'PRODUCTS',
             'PRODUCED',
-            'SOLD'
+            'SOLD',
+            'STOCK'
         ]),
         currentDate() {
             var date = {date: this.date}
             this.GET_PRODUCED(date)
             this.GET_SOLD(date)
+            this.GET_STOCK()
             return date
         }
     },
@@ -101,7 +106,8 @@ export default {
             'GET_PRODUCED',
             'ADD_PRODUCED',
             'GET_SOLD',
-            'ADD_SOLD'
+            'ADD_SOLD',
+            'GET_STOCK'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -119,12 +125,14 @@ export default {
             this.ADD_PRODUCED(JSON.stringify(data))
             console.log(data)
             this.GET_PRODUCED(this.currentDate)
+            this.GET_STOCK()
             this.closePopup()
         },
         sendSold(data) {
             this.ADD_SOLD(JSON.stringify(data))
             console.log(data)
             this.GET_SOLD(this.currentDate)
+            this.GET_STOCK()
             this.closeSold()
         },
         producedOf: function (prd_id) {
@@ -138,6 +146,14 @@ export default {
         soldOf: function (prd_id) {
             this.currentDate
             for (var prod of this.SOLD) {
+                if (prod.product_id === prd_id) {
+                    return prod.qty
+                }
+            }
+        },
+        stockOf: function (prd_id) {
+            this.currentDate
+            for (var prod of this.STOCK) {
                 if (prod.product_id === prd_id) {
                     return prod.qty
                 }

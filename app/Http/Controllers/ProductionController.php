@@ -79,4 +79,9 @@ class ProductionController extends Controller
         return \Illuminate\Http\Response::HTTP_ACCEPTED;
     }
 
+    public function GetStockByProduct (Request $request)
+    {
+       return $this->products->Stock();
+    }
+
 }

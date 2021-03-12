@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="text-right" @click="closeEditForm">&times;</div>
-        <h3 class="text-center mb-4">{{PRODUCTS[selectedProduct-1].title}}</h3>
+        <h3 class="text-center mb-4">{{productById(selectedProduct).title}}</h3>
         <h5 class="text-center mb-4">Ввод расхода материалов</h5>
         <div class="normItem" v-for="item in selectedNorm"
              :key="item.id"
@@ -19,7 +19,7 @@
             <option value=""></option>
             <option v-for="(material, index) in MATERIALS"
                     :key="material.id"
-                    :value="material.id"
+                    :value="index"
             >{{ material.title }}
             </option>
         </select>
@@ -56,11 +56,23 @@ export default {
         ...mapActions([
             'EDIT_SELECTED_NORM'
         ]),
+        productById(id)
+        {
+
+            var title = this.PRODUCTS.find(material => material.id === id)
+            var unit = this.PRODUCTS.find(material => material.id === id)
+            if (title && unit)
+            {
+                let data = {title: title.title, unit: unit.unit}
+                return data
+            }
+            else return false
+        },
         closeEditForm() {
             this.$emit('closeEditForm')
         },
         addItem () {
-            let material= this.MATERIALS[this.selectedMat-1]
+            let material= this.MATERIALS[this.selectedMat]
             this.selectedNorm.push({id:null,title: material.title, norma: 0, unit: material.unit, material_id: material.id, product_id: this.selectedProduct})
             console.log(this.selectedNorm)
         },
