@@ -11,11 +11,11 @@
                     <select  v-model="selectedMachine" name="machine" id="machine" class="form-control">
 <!--                        <option value="asd" disabled>Продукция</option>-->
                         <option
-                            :value="machine.id"
+                            :value="index"
                             v-for="(machine, index) in machines"
                            >{{machine.title}}</option>
                     </select>
-                    <label for="qty">Количество, {{machines[selectedMachine-1].unit}}</label>
+                    <label for="qty">Количество, {{machines[selectedMachine].unit}}</label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
                 </form>
             </div>
@@ -47,14 +47,14 @@ export default {
             this.$emit('closePopup')
         },
         sendMotohour () {
-            var data = {machine_id: this.selectedMachine, qty: this.qty, date: this.inputDate, user_id: this.user}
+            var data = {machine_id: this.machines[this.selectedMachine].id, qty: this.qty, date: this.inputDate, user_id: this.user}
             this.$emit('sendMotohour', data)
         }
     },
     data () {
         return {
             qty: 0,
-            selectedMachine: 1,
+            selectedMachine: 0,
             inputDate: new Date().toISOString().slice(0,10)
         }
     }
@@ -65,7 +65,7 @@ export default {
 .body {
     background-color: #cbd5e0;
     width: 400px;
-    height: 400px;
+    height: auto;
     position: absolute;
     left: 60px;
     top: 30%;

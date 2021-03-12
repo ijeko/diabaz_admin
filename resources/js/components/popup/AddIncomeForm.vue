@@ -72,7 +72,7 @@ export default {
 .body {
     background-color: #cbd5e0;
     width: 400px;
-    height: 400px;
+    height: auto;
     position: absolute;
     left: 60px;
     top: 30%;

@@ -11,11 +11,11 @@
                     <select  v-model="selectedProduct" name="product" id="product" class="form-control">
 <!--                        <option value="asd" disabled>Продукция</option>-->
                         <option
-                            :value="product.id"
+                            :value="index"
                             v-for="(product, index) in products"
                            >{{product.title}}</option>
                     </select>
-                    <label for="qty">Количество, {{products[selectedProduct-1].unit}}</label>
+                    <label for="qty">Количество, {{products[selectedProduct].unit}}</label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
                     <label for="soldTo">Кому:</label>
                     <input v-model="soldTo" class="form-control" type="text" id="soldTo">
@@ -50,7 +50,7 @@ export default {
         },
         sendSold () {
 
-            var data = {product_id: this.selectedProduct, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
+            var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
             this.$emit('sendSold', data)
             this.closeSold()
         }
@@ -59,7 +59,7 @@ export default {
         return {
             qty: 0,
             soldTo: '',
-            selectedProduct: 1,
+            selectedProduct: 0,
             inputDate: new Date().toISOString().slice(0,10)
         }
     }
@@ -70,7 +70,7 @@ export default {
 .body {
     background-color: #cbd5e0;
     width: 400px;
-    height: 400px;
+    height: auto;
     position: absolute;
     left: 60px;
     top: 30%;
