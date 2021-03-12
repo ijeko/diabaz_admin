@@ -7,7 +7,6 @@
             <table>
                 <tr>
                     <th>Продукция</th>
-                    <!--                    <th>Остатки??</th>-->
                     <th>Произведено</th>
                     <th>Отгружено</th>
                     <th>Склад</th>
@@ -17,7 +16,6 @@
                     <td>
                         {{ product.title }}
                     </td>
-                    <!--                    <td>1</td>-->
                     <td>
                         {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
                     </td>
@@ -26,8 +24,6 @@
                     </td>
                     <td>
                         {{ stockOf(product.id) }} {{ product.unit }}
-                        <!--
-                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}-->
                     </td>
                 </tr>
             </table>
@@ -163,9 +159,9 @@ export default {
 }
 </script>
 <style scoped>
-.materials {
-    display: flex;
-    justify-content: space-between;
+tr {
+    /*display: flex;*/
+    /*justify-content: space-between;*/
     border-bottom: 1px dotted silver;
 }
 

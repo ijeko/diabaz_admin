@@ -56,7 +56,7 @@ export default {
     data () {
         return {
             qty: 0,
-            selectedMaterial: 1,
+            selectedMaterial: 0,
             inputDate: new Date().toISOString().slice(0,10)
         }
     },
@@ -70,6 +70,7 @@ export default {
 
 <style scoped>
 .body {
+    padding: 10px;
     background-color: #cbd5e0;
     width: 400px;
     height: auto;

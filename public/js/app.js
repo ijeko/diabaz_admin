@@ -2295,10 +2295,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductionComponent',
@@ -3396,7 +3392,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       qty: 0,
-      selectedMaterial: 1,
+      selectedMaterial: 0,
       inputDate: new Date().toISOString().slice(0, 10)
     };
   },
@@ -8914,7 +8910,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.materials[data-v-530da829] {\n    display: flex;\n    justify-content: space-between;\n    border-bottom: 1px dotted silver;\n}\ntd[data-v-530da829] {\n    width: 25%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ntr[data-v-530da829] {\n    /*display: flex;*/\n    /*justify-content: space-between;*/\n    border-bottom: 1px dotted silver;\n}\ntd[data-v-530da829] {\n    width: 25%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9154,7 +9150,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-cdd65460] {\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-cdd65460] {\n    width: 100%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-cdd65460] {\n    padding: 10px;\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-cdd65460] {\n    width: 100%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9250,7 +9246,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-558a2dff] {\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-558a2dff] {\n    width: 100%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-558a2dff] {\n    padding: 10px;\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-558a2dff] {\n    width: 100%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9274,7 +9270,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-ecc1c512] {\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-ecc1c512] {\n    width: 100%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-ecc1c512] {\n    padding: 10px;\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-ecc1c512] {\n    width: 100%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9298,7 +9294,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-1b84cc0e] {\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-1b84cc0e] {\n    width: 100%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.body[data-v-1b84cc0e] {\n    padding: 10px;\n    background-color: #cbd5e0;\n    width: 400px;\n    height: auto;\n    position: absolute;\n    left: 60px;\n    top: 30%;\n    z-index: 1;\n    border-radius: 5px;\n}\n.btn[data-v-1b84cc0e] {\n    width: 100%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -43364,7 +43360,7 @@ var render = function() {
                       _vm._s(_vm.stockOf(product.id)) +
                       " " +
                       _vm._s(product.unit) +
-                      "\n                    "
+                      "\n                "
                   )
                 ])
               ])
