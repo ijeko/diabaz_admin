@@ -17,7 +17,6 @@ class MaterialsController extends Controller
 
     public function index()
     {
-//dd(__METHOD__, $request->data);
         return $this->materials->get();
     }
 

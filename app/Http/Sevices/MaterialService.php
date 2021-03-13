@@ -46,13 +46,13 @@ class MaterialService
     {
         $materials = $this->material->get();
         $materialQty = [];
-        $totalUsedQty = [];
         foreach ($materials as $material) {
             $used = 0;
             foreach ($material->norma() as $norma) {
                 $used = $used + $norma->product()->find($norma->product_id)->getProducedQty() * $norma->norma;
             }
             array_push($materialQty, [
+                'id' => $material->id,
                 'title' => $material->title,
                 'income' => $material->getIncomeSumm(),
                 'used' => $used,
@@ -93,11 +93,6 @@ class MaterialService
             $this->material->unit = $data->unit;
             $this->material->save();
             return Response::HTTP_OK;
-//            return response()->json([
-//                'name' => '',
-//                'title' => '',
-//                'message' => 'OK'
-//            ]);
         }
     }
 

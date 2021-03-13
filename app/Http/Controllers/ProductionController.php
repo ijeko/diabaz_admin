@@ -59,19 +59,22 @@ class ProductionController extends Controller
         }
         echo 'Nothing to delete';
     }
-    public function Add (Request $request)
+
+    public function Add(Request $request)
     {
         return $this->products->newProduct(json_decode($request->data));
     }
-    public function GetSoldOnDate (Request $request)
+
+    public function GetSoldOnDate(Request $request)
     {
         {
             $data = $request;
-            return  $this->products->getSold($data);
+            return $this->products->getSold($data);
 
         }
     }
-    public function AddSold (Request $request)
+
+    public function AddSold(Request $request)
     {
         $data = json_decode($request->data);
         $this->products->AddSold($data);
@@ -79,9 +82,9 @@ class ProductionController extends Controller
         return \Illuminate\Http\Response::HTTP_ACCEPTED;
     }
 
-    public function GetStockByProduct (Request $request)
+    public function GetStockByProduct(Request $request)
     {
-       return $this->products->Stock();
+        return $this->products->Stock();
     }
 
 }
