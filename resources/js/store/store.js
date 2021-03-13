@@ -139,6 +139,7 @@ export default {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(function (response) {
+                    commit('SET_PRODUCED', response.data)
                     return data
                 })
                 .catch(function (error) {

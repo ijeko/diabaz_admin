@@ -27,13 +27,18 @@ class ProducedService
 
     public function save($data)
     {
-        if ($this->produced->where('date', $data->date)->exists() && $this->produced->where('product_id', $data->product_id)->exists())
+//        dd(__METHOD__, $data);
+//        if ($this->produced->where('date', $data->date)->exists() && $this->produced->where('product_id', $data->product_id)->exists())
+        if ($this->produced->where('date', $data->date)->where('product_id', $data->product_id)->exists())
+
         {
+//            dd(__METHOD__, $data, 'IF OK');
             $records = $this->produced->where('date', $data->date)->get();
             $record_id=$records->where('product_id', $data->product_id)->first()->id;
             $this->produced->where('id', $record_id)->update(['qty'=> $data->qty, 'user_id'=>$data->user_id]);
         }
         else {
+//            dd(__METHOD__, $data, 'ELSE OK');
             $this->produced->user_id = $data->user_id;
             $this->produced->product_id = $data->product_id;
             $this->produced->qty = $data->qty;
