@@ -4,6 +4,7 @@
             {{ dateFormated.year }}
         </div>
         <div class="card-body">
+            {{PRODUCED}}
             <table>
                 <tr>
                     <th>Продукция</th>
@@ -103,7 +104,8 @@ export default {
             'ADD_PRODUCED',
             'GET_SOLD',
             'ADD_SOLD',
-            'GET_STOCK'
+            'GET_STOCK',
+            'GET_MATERIAL_QTY'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -119,14 +121,14 @@ export default {
         },
         sendProduced(data) {
             this.ADD_PRODUCED(JSON.stringify(data))
-            console.log(data)
             this.GET_PRODUCED(this.currentDate)
             this.GET_STOCK()
+            this.GET_MATERIAL_QTY()
+            // this.updateComponents()
             this.closePopup()
         },
         sendSold(data) {
             this.ADD_SOLD(JSON.stringify(data))
-            console.log(data)
             this.GET_SOLD(this.currentDate)
             this.GET_STOCK()
             this.closeSold()
@@ -154,6 +156,12 @@ export default {
                     return prod.qty
                 }
             }
+        },
+        updateComponents() {
+            this.GET_PRODUCTS()
+            this.GET_SOLD()
+            this.GET_STOCK()
+            this.GET_MATERIAL_QTY()
         }
     }
 }

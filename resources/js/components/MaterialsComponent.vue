@@ -2,11 +2,13 @@
     <div class="card">
         <div class="card-header">Остатки материалов на {{ dateFormated.day }} {{ dateFormated.month }} {{ dateFormated.year }}г.</div>
         <div class="card-body">
+            {{MATERIAL_QTY}}
             <div class="materials"
                  v-for="(material, index) in MATERIALS"
                  :key="index">
                 <div class="material-name">
                     <div>{{ material.title }}
+
                     </div>
                 </div>
                 <div class="material-qty">{{ MATERIAL_QTY.totalIncomes[index].qty - MATERIAL_QTY.totalUsed[index].qty }} {{ material.unit }}</div>
@@ -32,7 +34,6 @@ export default {
     name: 'MaterialsComponent',
     components: {ShowNorm},
     mounted() {
-        console.log('Component mounted.')
         this.GET_MATERIALS()
         this.GET_MATERIAL_QTY()
 

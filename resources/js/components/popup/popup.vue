@@ -1,6 +1,7 @@
 <template>
     <div class="body">
         <div @click="closePopup">&times;</div>
+        {{products}}
         <div class="container">
             <div class="mt-1">
                 <div class="text-center"><h3>Произведено:</h3></div>

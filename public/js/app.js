@@ -2034,6 +2034,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2042,7 +2044,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ShowNorm: _popup_ShowNorm__WEBPACK_IMPORTED_MODULE_0__.default
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
     this.GET_MATERIALS();
     this.GET_MATERIAL_QTY();
   },
@@ -2295,6 +2296,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductionComponent',
@@ -2333,7 +2335,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return date;
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_PRODUCED', 'ADD_PRODUCED', 'GET_SOLD', 'ADD_SOLD', 'GET_STOCK'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_PRODUCED', 'ADD_PRODUCED', 'GET_SOLD', 'ADD_SOLD', 'GET_STOCK', 'GET_MATERIAL_QTY'])), {}, {
     showPopup: function showPopup() {
       this.isEnterVisible = true;
     },
@@ -2348,14 +2350,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     sendProduced: function sendProduced(data) {
       this.ADD_PRODUCED(JSON.stringify(data));
-      console.log(data);
       this.GET_PRODUCED(this.currentDate);
       this.GET_STOCK();
+      this.GET_MATERIAL_QTY(); // this.updateComponents()
+
       this.closePopup();
     },
     sendSold: function sendSold(data) {
       this.ADD_SOLD(JSON.stringify(data));
-      console.log(data);
       this.GET_SOLD(this.currentDate);
       this.GET_STOCK();
       this.closeSold();
@@ -2419,6 +2421,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } finally {
         _iterator3.f();
       }
+    },
+    updateComponents: function updateComponents() {
+      this.GET_PRODUCTS();
+      this.GET_SOLD();
+      this.GET_STOCK();
+      this.GET_MATERIAL_QTY();
     }
   })
 });
@@ -3935,6 +3943,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -4197,12 +4206,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         commit('SET_MATERIALS_QTY', response.data);
-        console.log(response.data);
         return response.data;
       })["catch"](function (error) {
         // handle error
         console.log(error);
       });
+      console.log('get mat qty');
     },
     GET_PRODUCTS: function GET_PRODUCTS(_ref3) {
       var commit = _ref3.commit;
@@ -4242,6 +4251,7 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'application/json'
         }
       }).then(function (response) {
+        commit('SET_PRODUCED', response.data);
         return data;
       })["catch"](function (error) {
         // handle error
@@ -4272,7 +4282,6 @@ __webpack_require__.r(__webpack_exports__);
         params: data
       }).then(function (response) {
         commit('SET_STOCK', response.data);
-        console.log(response.data);
         return response.data;
       })["catch"](function (error) {
         // handle error
@@ -43193,25 +43202,30 @@ var render = function() {
       _c(
         "div",
         { staticClass: "card-body" },
-        _vm._l(_vm.MATERIALS, function(material, index) {
-          return _c("div", { key: index, staticClass: "materials" }, [
-            _c("div", { staticClass: "material-name" }, [
-              _c("div", [_vm._v(_vm._s(material.title) + "\n                ")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "material-qty" }, [
-              _vm._v(
-                _vm._s(
-                  _vm.MATERIAL_QTY.totalIncomes[index].qty -
-                    _vm.MATERIAL_QTY.totalUsed[index].qty
-                ) +
-                  " " +
-                  _vm._s(material.unit)
-              )
+        [
+          _vm._v("\n        " + _vm._s(_vm.MATERIAL_QTY) + "\n        "),
+          _vm._l(_vm.MATERIALS, function(material, index) {
+            return _c("div", { key: index, staticClass: "materials" }, [
+              _c("div", { staticClass: "material-name" }, [
+                _c("div", [
+                  _vm._v(_vm._s(material.title) + "\n\n                ")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "material-qty" }, [
+                _vm._v(
+                  _vm._s(
+                    _vm.MATERIAL_QTY.totalIncomes[index].qty -
+                      _vm.MATERIAL_QTY.totalUsed[index].qty
+                  ) +
+                    " " +
+                    _vm._s(material.unit)
+                )
+              ])
             ])
-          ])
-        }),
-        0
+          })
+        ],
+        2
       ),
       _vm._v(" "),
       _c(
@@ -43374,6 +43388,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
+        _vm._v("\n        " + _vm._s(_vm.PRODUCED) + "\n        "),
         _c(
           "table",
           [
@@ -45557,7 +45572,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "body" }, [
     _c("div", { on: { click: _vm.closePopup } }, [_vm._v("×")]),
-    _vm._v(" "),
+    _vm._v("\n        " + _vm._s(_vm.products) + "\n        "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "mt-1" }, [
         _vm._m(0),

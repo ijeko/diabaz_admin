@@ -96,13 +96,13 @@ export default {
             })
                 .then(function (response) {
                     commit('SET_MATERIALS_QTY', response.data);
-                    console.log(response.data)
                     return response.data
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
                 })
+            console.log('get mat qty')
         },
         GET_PRODUCTS: ({commit}) => {
             axios.get('http://127.0.0.1:8000/api/products/get', {
@@ -170,7 +170,6 @@ export default {
                 })
                 .then(function (response) {
                     commit('SET_STOCK', response.data);
-                    console.log(response.data)
                     return response.data
                 })
                 .catch(function (error) {
