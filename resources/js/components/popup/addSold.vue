@@ -49,7 +49,6 @@ export default {
             this.$emit('closeSold')
         },
         sendSold () {
-
             var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
             this.$emit('sendSold', data)
             this.closeSold()

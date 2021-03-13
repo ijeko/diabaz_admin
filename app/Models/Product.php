@@ -26,4 +26,9 @@ class Product extends Model
         $summ = $this->hasMany(Sold::class)->sum('qty');
         return $summ;
     }
+    public function getProducedByDate($today)
+    {
+        $summ = $this->hasMany(Produced::class)->where('date', $today)->sum('qty');
+        return $summ;
+    }
 }

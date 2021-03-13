@@ -2035,7 +2035,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2051,7 +2050,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       // date: new Date(),
       isShowNormVisible: false,
-      isIncomesVisible: false
+      isIncomesVisible: false,
+      stock: this.qty
     };
   },
   props: {
@@ -2059,20 +2059,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     user: '',
     date: ''
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS', 'MATERIAL_QTY'])), {}, {
-    qty: function qty() {
-      var qty = [];
-      var i = 0;
-
-      for (var item in this.MATERIAL_QTY.length) {
-        i++;
-        qty.push(item.totalIncomes[i].qty - item.totalUsed[i].qty);
-        console.log(item);
-      }
-
-      return qty;
-    }
-  }),
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS', 'MATERIAL_QTY'])),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['GET_MATERIALS', 'GET_MATERIAL_QTY'])), {}, {
     showShowNorm: function showShowNorm() {
       return this.isShowNormVisible = true;
@@ -2232,12 +2219,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2296,23 +2277,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductionComponent',
   components: {},
   mounted: function mounted() {
     // this.GET_SOLD(this.date)
-    this.GET_PRODUCTS();
-    this.GET_PRODUCED(this.date);
-    this.GET_STOCK(1);
+    this.GET_PRODUCTS(this.currentDate);
   },
   data: function data() {
     return {
       isEnterVisible: '',
-      produced: {},
       isSoldVisible: false
     };
+  },
+  watch: {
+    // эта функция запускается при любом изменении вопроса
+    currentDate: function currentDate(newcurrentDate, oldcurrentDate) {
+      this.GET_PRODUCTS(this.currentDate);
+    }
   },
   props: {
     user: {
@@ -2324,18 +2307,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     date: ''
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'PRODUCED', 'SOLD', 'STOCK'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS'])), {}, {
     currentDate: function currentDate() {
       var date = {
         date: this.date
       };
-      this.GET_PRODUCED(date);
-      this.GET_SOLD(date);
-      this.GET_STOCK();
+      this.GET_PRODUCTS(date);
       return date;
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_PRODUCED', 'ADD_PRODUCED', 'GET_SOLD', 'ADD_SOLD', 'GET_STOCK', 'GET_MATERIAL_QTY'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_MATERIAL_QTY', 'ADD_SOLD'])), {}, {
     showPopup: function showPopup() {
       this.isEnterVisible = true;
     },
@@ -2350,83 +2331,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     sendProduced: function sendProduced(data) {
       this.ADD_PRODUCED(JSON.stringify(data));
-      this.GET_PRODUCED(this.currentDate);
-      this.GET_STOCK();
-      this.GET_MATERIAL_QTY(); // this.updateComponents()
-
+      this.GET_PRODUCTS(this.currentDate);
+      this.GET_MATERIAL_QTY();
       this.closePopup();
     },
     sendSold: function sendSold(data) {
       this.ADD_SOLD(JSON.stringify(data));
-      this.GET_SOLD(this.currentDate);
-      this.GET_STOCK();
+      this.GET_PRODUCTS(this.currentDate);
       this.closeSold();
-    },
-    producedOf: function producedOf(prd_id) {
-      this.currentDate;
-
-      var _iterator = _createForOfIteratorHelper(this.PRODUCED),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var prod = _step.value;
-
-          if (prod.product_id === prd_id) {
-            return prod.qty;
-          }
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-    },
-    soldOf: function soldOf(prd_id) {
-      this.currentDate;
-
-      var _iterator2 = _createForOfIteratorHelper(this.SOLD),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var prod = _step2.value;
-
-          if (prod.product_id === prd_id) {
-            return prod.qty;
-          }
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-    },
-    stockOf: function stockOf(prd_id) {
-      this.currentDate;
-
-      var _iterator3 = _createForOfIteratorHelper(this.STOCK),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var prod = _step3.value;
-
-          if (prod.product_id === prd_id) {
-            return prod.qty;
-          }
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
-      }
-    },
-    updateComponents: function updateComponents() {
-      this.GET_PRODUCTS();
-      this.GET_SOLD();
-      this.GET_STOCK();
-      this.GET_MATERIAL_QTY();
     }
   })
 });
@@ -3964,7 +3876,6 @@ __webpack_require__.r(__webpack_exports__);
         date: this.inputDate,
         user_id: this.user
       };
-      console.log(data);
       this.$emit('sendProduced', data);
     }
   },
@@ -4213,12 +4124,13 @@ __webpack_require__.r(__webpack_exports__);
       });
       console.log('get mat qty');
     },
-    GET_PRODUCTS: function GET_PRODUCTS(_ref3) {
+    GET_PRODUCTS: function GET_PRODUCTS(_ref3, data) {
       var commit = _ref3.commit;
       axios.get('http://127.0.0.1:8000/api/products/get', {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        params: data
       }).then(function (response) {
         commit('SET_PRODUCTS', response.data);
         return response.data;
@@ -8919,7 +8831,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ntr[data-v-530da829] {\n    /*display: flex;*/\n    /*justify-content: space-between;*/\n    border-bottom: 1px dotted silver;\n}\ntd[data-v-530da829] {\n    width: 25%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ntable[data-v-530da829] {\n    width: 100%;\n}\ntr[data-v-530da829] {\n    /*display: flex;*/\n    /*justify-content: space-between;*/\n    border-bottom: 1px dotted silver;\n}\ntd[data-v-530da829] {\n    width: 25%;\n}\ntd[data-v-530da829] {\n    width: 25%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -43202,30 +43114,20 @@ var render = function() {
       _c(
         "div",
         { staticClass: "card-body" },
-        [
-          _vm._v("\n        " + _vm._s(_vm.MATERIAL_QTY) + "\n        "),
-          _vm._l(_vm.MATERIALS, function(material, index) {
-            return _c("div", { key: index, staticClass: "materials" }, [
-              _c("div", { staticClass: "material-name" }, [
-                _c("div", [
-                  _vm._v(_vm._s(material.title) + "\n\n                ")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "material-qty" }, [
-                _vm._v(
-                  _vm._s(
-                    _vm.MATERIAL_QTY.totalIncomes[index].qty -
-                      _vm.MATERIAL_QTY.totalUsed[index].qty
-                  ) +
-                    " " +
-                    _vm._s(material.unit)
-                )
+        _vm._l(_vm.MATERIAL_QTY, function(material, index) {
+          return _c("div", { key: index, staticClass: "materials" }, [
+            _c("div", { staticClass: "material-name" }, [
+              _c("div", [
+                _vm._v(_vm._s(material.title) + "\n\n                ")
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "material-qty" }, [
+              _vm._v(_vm._s(material.stock) + " " + _vm._s(material.unit))
             ])
-          })
-        ],
-        2
+          ])
+        }),
+        0
       ),
       _vm._v(" "),
       _c(
@@ -43388,7 +43290,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
-        _vm._v("\n        " + _vm._s(_vm.PRODUCED) + "\n        "),
         _c(
           "table",
           [
@@ -43407,19 +43308,7 @@ var render = function() {
                 _c("td", [
                   _vm._v(
                     "\n                    " +
-                      _vm._s(_vm.producedOf(product.id)) +
-                      " "
-                  ),
-                  !_vm.producedOf(product.id)
-                    ? _c("span", [_vm._v("0")])
-                    : _vm._e(),
-                  _vm._v(" " + _vm._s(product.unit) + "\n                ")
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.soldOf(product.id)) +
+                      _vm._s(product.dayProduced) +
                       " " +
                       _vm._s(product.unit) +
                       "\n                "
@@ -43429,7 +43318,17 @@ var render = function() {
                 _c("td", [
                   _vm._v(
                     "\n                    " +
-                      _vm._s(_vm.stockOf(product.id)) +
+                      _vm._s(product.sold) +
+                      " " +
+                      _vm._s(product.unit) +
+                      "\n                "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(product.stock) +
                       " " +
                       _vm._s(product.unit) +
                       "\n                "

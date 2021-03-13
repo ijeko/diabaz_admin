@@ -18,10 +18,10 @@ class ProductionController extends Controller
         $this->materials = new MaterialService();
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
-        return $this->products->get()->toJson();;
+        return json_encode($this->products->get($request->date));
     }
 
     public function ShowNorm(Request $request)

@@ -45,22 +45,22 @@ class MaterialService
     public function GetMaterialQty()
     {
         $materials = $this->material->get();
-        $totalIncomeQty = [];
+        $materialQty = [];
         $totalUsedQty = [];
         foreach ($materials as $material) {
             $used = 0;
             foreach ($material->norma() as $norma) {
                 $used = $used + $norma->product()->find($norma->product_id)->getProducedQty() * $norma->norma;
             }
-            array_push($totalIncomeQty, [
-                'material_id' => $material->id, 'qty' => $material->getIncomeSumm()
-            ]);
-
-            array_push($totalUsedQty, [
-                'material_id' => $material->id, 'qty' => $used
+            array_push($materialQty, [
+                'title' => $material->title,
+                'income' => $material->getIncomeSumm(),
+                'used' => $used,
+                'stock' => $material->getIncomeSumm()-$used,
+                'unit' => $material->unit
             ]);
         }
-        $response = ['totalIncomes' => $totalIncomeQty, 'totalUsed' => $totalUsedQty];
+        $response = $materialQty;
         return json_encode($response);
     }
 

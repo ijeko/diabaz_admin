@@ -104,9 +104,11 @@ export default {
                 })
             console.log('get mat qty')
         },
-        GET_PRODUCTS: ({commit}) => {
+        GET_PRODUCTS: ({commit}, data) => {
             axios.get('http://127.0.0.1:8000/api/products/get', {
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
+                params: data
+
             })
                 .then(function (response) {
                     commit('SET_PRODUCTS', response.data);

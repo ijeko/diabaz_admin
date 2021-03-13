@@ -2,16 +2,15 @@
     <div class="card">
         <div class="card-header">Остатки материалов на {{ dateFormated.day }} {{ dateFormated.month }} {{ dateFormated.year }}г.</div>
         <div class="card-body">
-            {{MATERIAL_QTY}}
             <div class="materials"
-                 v-for="(material, index) in MATERIALS"
+                 v-for="(material, index) in MATERIAL_QTY"
                  :key="index">
                 <div class="material-name">
                     <div>{{ material.title }}
 
                     </div>
                 </div>
-                <div class="material-qty">{{ MATERIAL_QTY.totalIncomes[index].qty - MATERIAL_QTY.totalUsed[index].qty }} {{ material.unit }}</div>
+                <div class="material-qty">{{ material.stock }} {{ material.unit }}</div>
             </div>
         </div>
         <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>
@@ -43,7 +42,8 @@ export default {
         return {
             // date: new Date(),
             isShowNormVisible: false,
-            isIncomesVisible: false
+            isIncomesVisible: false,
+            stock: this.qty
         }
     },
     props: {
@@ -56,16 +56,6 @@ export default {
             'MATERIALS',
             'MATERIAL_QTY'
         ]),
-        qty () {
-            let qty = []
-            let i = 0
-            for (let item in this.MATERIAL_QTY.length) {
-                i++
-                qty.push(item.totalIncomes[i].qty - item.totalUsed[i].qty)
-                console.log(item)
-            }
-            return qty
-        }
     },
     methods: {
         ...mapActions([

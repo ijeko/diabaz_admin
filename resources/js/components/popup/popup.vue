@@ -50,7 +50,6 @@ export default {
         sendProduced () {
 
             var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user}
-            console.log(data)
             this.$emit('sendProduced', data)
         }
     },

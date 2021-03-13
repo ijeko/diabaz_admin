@@ -4,7 +4,6 @@
             {{ dateFormated.year }}
         </div>
         <div class="card-body">
-            {{PRODUCED}}
             <table>
                 <tr>
                     <th>Продукция</th>
@@ -18,13 +17,13 @@
                         {{ product.title }}
                     </td>
                     <td>
-                        {{ producedOf(product.id) }} <span v-if="!producedOf(product.id)">0</span> {{ product.unit }}
+                        {{ product.dayProduced }} {{ product.unit }}
                     </td>
                     <td>
-                        {{ soldOf(product.id) }} {{ product.unit }}
+                        {{ product.sold }} {{ product.unit }}
                     </td>
                     <td>
-                        {{ stockOf(product.id) }} {{ product.unit }}
+                        {{ product.stock }} {{ product.unit }}
                     </td>
                 </tr>
             </table>
@@ -60,15 +59,18 @@ export default {
     components: {},
     mounted() {
         // this.GET_SOLD(this.date)
-        this.GET_PRODUCTS()
-        this.GET_PRODUCED(this.date)
-        this.GET_STOCK(1)
+        this.GET_PRODUCTS(this.currentDate)
     },
     data: function () {
         return {
             isEnterVisible: '',
-            produced: {},
-            isSoldVisible: false
+            isSoldVisible: false,
+        }
+    },
+    watch: {
+        // эта функция запускается при любом изменении вопроса
+        currentDate: function (newcurrentDate, oldcurrentDate) {
+            this.GET_PRODUCTS(this.currentDate)
         }
     },
     props: {
@@ -85,27 +87,18 @@ export default {
     computed: {
         ...mapGetters([
             'PRODUCTS',
-            'PRODUCED',
-            'SOLD',
-            'STOCK'
         ]),
         currentDate() {
             var date = {date: this.date}
-            this.GET_PRODUCED(date)
-            this.GET_SOLD(date)
-            this.GET_STOCK()
+            this.GET_PRODUCTS(date)
             return date
         }
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS',
-            'GET_PRODUCED',
-            'ADD_PRODUCED',
-            'GET_SOLD',
-            'ADD_SOLD',
-            'GET_STOCK',
-            'GET_MATERIAL_QTY'
+            'GET_MATERIAL_QTY',
+            'ADD_SOLD'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -121,56 +114,29 @@ export default {
         },
         sendProduced(data) {
             this.ADD_PRODUCED(JSON.stringify(data))
-            this.GET_PRODUCED(this.currentDate)
-            this.GET_STOCK()
+            this.GET_PRODUCTS(this.currentDate)
             this.GET_MATERIAL_QTY()
-            // this.updateComponents()
             this.closePopup()
         },
         sendSold(data) {
             this.ADD_SOLD(JSON.stringify(data))
-            this.GET_SOLD(this.currentDate)
-            this.GET_STOCK()
+            this.GET_PRODUCTS(this.currentDate)
             this.closeSold()
-        },
-        producedOf: function (prd_id) {
-            this.currentDate
-            for (var prod of this.PRODUCED) {
-                if (prod.product_id === prd_id) {
-                    return prod.qty
-                }
-            }
-        },
-        soldOf: function (prd_id) {
-            this.currentDate
-            for (var prod of this.SOLD) {
-                if (prod.product_id === prd_id) {
-                    return prod.qty
-                }
-            }
-        },
-        stockOf: function (prd_id) {
-            this.currentDate
-            for (var prod of this.STOCK) {
-                if (prod.product_id === prd_id) {
-                    return prod.qty
-                }
-            }
-        },
-        updateComponents() {
-            this.GET_PRODUCTS()
-            this.GET_SOLD()
-            this.GET_STOCK()
-            this.GET_MATERIAL_QTY()
         }
     }
 }
 </script>
 <style scoped>
+table {
+    width: 100%;
+}
 tr {
     /*display: flex;*/
     /*justify-content: space-between;*/
     border-bottom: 1px dotted silver;
+}
+td {
+    width: 25%;
 }
 
 td {

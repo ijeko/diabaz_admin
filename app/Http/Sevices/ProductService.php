@@ -14,7 +14,6 @@ use Illuminate\Http\Response;
 
 class ProductService
 {
-    private $product;
 
     public function __construct()
     {
@@ -25,9 +24,22 @@ class ProductService
         $this->norm = new Materialnorm();
     }
 
-    public function get()
+    public function get($date)
     {
-        return $this->product->get();
+        $products = [];
+        foreach ($this->product->get() as $product) {
+                 array_push($products, [
+                    'id' => $product->id,
+                    'title' => $product->title,
+                    'totalProduced' => $product->getProducedQty(),
+                    'dayProduced' => $product->getProducedByDate($date),
+                    'sold' => $product->getSoldQty(),
+                    'stock' => $product->getProducedQty() - $product->getSoldQty(),
+                    'unit' => $product->unit
+                ]);
+        }
+        return $products;
+//        dd($products);
     }
 
     public function GetProductionNorm($prodID)
@@ -135,7 +147,7 @@ class ProductService
         foreach ($this->product->all() as $product) {
             $productSold = $this->sold->where('date', $today)->where('product_id', $product->id)->get()->sum('qty');
 //            $product = $this->product->find($id);
-            $sold[]=['product_id' => $product->id, 'qty' => $productSold];
+            $sold[] = ['product_id' => $product->id, 'qty' => $productSold];
         }
 
 //dd($sold);
@@ -154,12 +166,12 @@ class ProductService
 //            $record_id = $records->where('product_id', $data->product_id)->first()->id;
 //            $this->sold->where('id', $record_id)->update(['qty' => $data->qty, 'user_id' => $data->user_id]);
 //        } else {
-            $this->sold->user_id = $data->user_id;
-            $this->sold->product_id = $data->product_id;
-            $this->sold->qty = $data->qty;
-            $this->sold->date = $data->date;
-            $this->sold->soldTo = $data->soldTo;
-            $this->sold->save();
+        $this->sold->user_id = $data->user_id;
+        $this->sold->product_id = $data->product_id;
+        $this->sold->qty = $data->qty;
+        $this->sold->date = $data->date;
+        $this->sold->soldTo = $data->soldTo;
+        $this->sold->save();
 //        }
     }
 
@@ -168,8 +180,7 @@ class ProductService
 
         foreach ($this->product->all() as $product) {
             $asMaterial = 0;
-            foreach ($this->material->all() as $material)
-            {
+            foreach ($this->material->all() as $material) {
                 if ($product->name === $material->name) {
 //                    $CurrentMatNorm = $this->norm->where('material_id', $material->id)->get();
                     $asMaterial =
@@ -181,9 +192,9 @@ class ProductService
             }
 //            $product = $this->product->find($id);
             $productStock = $product->getProducedQty() - $product->getSoldQty() - $asMaterial;
-            $stock[]=['product_id' => $product->id, 'qty' => $productStock];
+            $stock[] = ['product_id' => $product->id, 'qty' => $productStock];
 
-    }
+        }
         return response()->
         json($stock);
     }
