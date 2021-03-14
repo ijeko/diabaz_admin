@@ -2,6 +2,9 @@
     <div class="wrapper">
         <div class="text-right" @click="close">&times;</div>
         <h3 class="text-center mb-4">Редактировать</h3>
+        <div v-if="message" class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
         <label>Название техники</label>
         <input v-model="newMachineName" class="form-control">
         <label>Краткое название на английском</label>
@@ -24,7 +27,9 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
     name: "editMachine",
     data() {
-        return {}
+        return {
+            message: ''
+        }
     },
     props: {
         selectedMachine: '',
@@ -36,6 +41,41 @@ export default {
         ...mapGetters([
             'MACHINES',
         ]),
+        validation () {
+            if (this.newMachineName === '') {
+                this.message = 'Название техники не заполнино'
+                return false
+            }
+            if (this.newMachineName.length < 3) {
+                this.message = 'Название техники не должно быть менее 3 символов'
+                return false
+
+            }
+            if (this.newMachineSlug === '') {
+                 this.message = 'сокращенное название не заполнино'
+                return false
+
+            }
+            if (this.newMachineSlug.length < 3) {
+                 this.message = 'Сокращенное не должно быть менее 3 символов'
+                return false
+
+            }
+            var slugRE = new RegExp('^[a-zA-Z0-9]+$')
+            if(!slugRE.test(this.newMachineSlug)) {
+                 this.message = 'Сокращенное может состоять только из латинских букв и цифр'
+                return false
+            }
+            if (this.newMachineUnit === '') {
+                this.message = 'Едицина измерения не заполнена'
+                return false
+            }
+            var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$')
+            if(!unitRE.test(this.newMachineUnit)) {
+                this.message = 'Единица измерения не может быть цифрой'
+                return false
+            }
+        }
 
     },
     methods: {
@@ -50,26 +90,30 @@ export default {
             this.newMachineUnit = this.MACHINES[this.selectedMachine].unit
         },
         saveMachine() {
-            let data = JSON.stringify({
-                id: this.MACHINES[this.selectedMachine].id,
-                title: this.newMachineName,
-                name: this.newMachineSlug,
-                unit: this.newMachineUnit
-            })
-            axios.post('http://127.0.0.1:8000/api/machines/edit',
-                {data},
-                {
-                    headers: {'Content-Type': 'application/json'}
+            if (this.validation === false) {
+                return false
+            } else {
+                let data = JSON.stringify({
+                    id: this.MACHINES[this.selectedMachine].id,
+                    title: this.newMachineName,
+                    name: this.newMachineSlug,
+                    unit: this.newMachineUnit
                 })
-                .then(function (response) {
-                    return data
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-            this.$emit('update')
-            this.$emit('close')
+                axios.post('http://127.0.0.1:8000/api/machines/edit',
+                    {data},
+                    {
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then(function (response) {
+                        return data
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                this.$emit('update')
+                this.$emit('close')
+            }
         },
         deleteMachine(id) {
             axios.delete('http://127.0.0.1:8000/api/machines/remove',

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Sevices\MaterialService;
 use App\Models\Material;
+use App\Models\MaterialIncome;
 use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
@@ -41,6 +42,16 @@ class MaterialsController extends Controller
         $material = $model->find($request->id);
         if ($material) {
             $material->delete();
+        }
+        echo 'Nothing to delete';
+    }
+
+    public function RemoveIncome(Request $request)
+    {
+        $model = new MaterialIncome();
+        $income = $model->find($request->id);
+        if ($income) {
+            $income->delete();
         }
         echo 'Nothing to delete';
     }

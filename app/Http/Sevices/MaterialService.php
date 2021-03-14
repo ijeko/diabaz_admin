@@ -56,7 +56,7 @@ class MaterialService
                 'title' => $material->title,
                 'income' => $material->getIncomeSumm(),
                 'used' => $used,
-                'stock' => $material->getIncomeSumm()-$used,
+                'stock' => $material->getIncomeSumm() - $used,
                 'unit' => $material->unit
             ]);
         }
@@ -96,4 +96,21 @@ class MaterialService
         }
     }
 
+    public function chekInStock($toCheck, $data)
+    {
+        $materials = collect(json_decode($this->GetMaterialQty()));
+        $materialsNotEnough = [];
+        foreach ($toCheck as $norma) {
+            $checkedMaterial = $materials->where('id', $norma->material_id)->first();
+            $needed = $data->qty * $norma->norma;
+            if ($checkedMaterial->stock <= $needed) {
+                array_push($materialsNotEnough, [
+                    'material_id' => $norma->material_id,
+                    'title' => $checkedMaterial->title,
+                    'qty' => ($checkedMaterial->stock - $needed) * -1
+                ]);
+            }
+        }
+        return $materialsNotEnough;
+    }
 }

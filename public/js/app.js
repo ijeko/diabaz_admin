@@ -2277,6 +2277,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ProductionComponent',
@@ -2288,7 +2295,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       isEnterVisible: '',
-      isSoldVisible: false
+      isSoldVisible: false,
+      message: ''
     };
   },
   watch: {
@@ -2316,7 +2324,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return date;
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_MATERIAL_QTY', 'ADD_SOLD'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_MATERIAL_QTY', 'ADD_SOLD', 'ADD_PRODUCED'])), {}, {
     showPopup: function showPopup() {
       this.isEnterVisible = true;
     },
@@ -2330,7 +2338,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.isSoldVisible = '';
     },
     sendProduced: function sendProduced(data) {
-      this.ADD_PRODUCED(JSON.stringify(data));
+      var _this = this;
+
+      data = JSON.stringify(data); // this.ADD_PRODUCED(JSON.stringify(data))
+
+      axios.post('http://127.0.0.1:8000/api/produced/add', {
+        data: data
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        // commit('SET_PRODUCED', response.data)
+        _this.message = response.data;
+        return response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
       this.GET_PRODUCTS(this.currentDate);
       this.GET_MATERIAL_QTY();
       this.closePopup();
@@ -2563,11 +2588,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editMachine",
   data: function data() {
-    return {};
+    return {
+      message: ''
+    };
   },
   props: {
     selectedMachine: '',
@@ -2575,7 +2605,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     newMachineSlug: '',
     newMachineUnit: ''
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES'])), {}, {
+    validation: function validation() {
+      if (this.newMachineName === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.newMachineName.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.newMachineSlug === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.newMachineSlug.length < 3) {
+        this.message = 'Сокращенное не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.newMachineSlug)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.newMachineUnit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.newMachineUnit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)([])), {}, {
     close: function close() {
       this.$emit('close');
@@ -2587,26 +2658,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.newMachineUnit = this.MACHINES[this.selectedMachine].unit;
     },
     saveMachine: function saveMachine() {
-      var data = JSON.stringify({
-        id: this.MACHINES[this.selectedMachine].id,
-        title: this.newMachineName,
-        name: this.newMachineSlug,
-        unit: this.newMachineUnit
-      });
-      axios.post('http://127.0.0.1:8000/api/machines/edit', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        return data;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-      this.$emit('update');
-      this.$emit('close');
+      if (this.validation === false) {
+        return false;
+      } else {
+        var _data = JSON.stringify({
+          id: this.MACHINES[this.selectedMachine].id,
+          title: this.newMachineName,
+          name: this.newMachineSlug,
+          unit: this.newMachineUnit
+        });
+
+        axios.post('http://127.0.0.1:8000/api/machines/edit', {
+          data: _data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          return _data;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+        this.$emit('update');
+        this.$emit('close');
+      }
     },
     deleteMachine: function deleteMachine(id) {
       axios["delete"]('http://127.0.0.1:8000/api/machines/remove', {
@@ -2671,6 +2747,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editMaterial",
@@ -2681,9 +2760,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     selectedMaterial: '',
     newMaterialName: '',
     newMaterialSlug: '',
-    newMaterialUnit: ''
+    newMaterialUnit: '',
+    message: ''
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS'])), {}, {
+    validation: function validation() {
+      if (this.newMaterialName === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.newMaterialName.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.newMaterialSlug === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.newMaterialSlug.length < 3) {
+        this.message = 'Сокращенное не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.newMaterialSlug)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.newMaterialUnit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.newMaterialUnit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)([])), {}, {
     close: function close() {
       this.$emit('close');
@@ -2695,26 +2816,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.newMaterialUnit = this.MATERIALS[this.selectedMaterial].unit;
     },
     saveMaterial: function saveMaterial() {
-      var data = JSON.stringify({
-        id: this.MATERIALS[this.selectedMaterial].id,
-        title: this.newMaterialName,
-        name: this.newMaterialSlug,
-        unit: this.newMaterialUnit
-      });
-      axios.post('http://127.0.0.1:8000/api/materials/edit', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        return data;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-      this.$emit('update');
-      this.$emit('close');
+      if (this.validation === false) {
+        return false;
+      } else {
+        var _data = JSON.stringify({
+          id: this.MATERIALS[this.selectedMaterial].id,
+          title: this.newMaterialName,
+          name: this.newMaterialSlug,
+          unit: this.newMaterialUnit
+        });
+
+        axios.post('http://127.0.0.1:8000/api/materials/edit', {
+          data: _data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          return _data;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+        this.$emit('update');
+        this.$emit('close');
+      }
     },
     deleteMaterial: function deleteMaterial(id) {
       axios["delete"]('http://127.0.0.1:8000/api/materials/remove', {
@@ -2779,6 +2905,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "newMaterial",
@@ -2789,9 +2918,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     selectedProduct: '',
     newProductName: '',
     newProductSlug: '',
-    newProductUnit: ''
+    newProductUnit: '',
+    message: ''
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS'])),
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS'])), {}, {
+    validation: function validation() {
+      if (this.newProductName === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.newProductName.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.newProductSlug === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.newProductSlug.length < 3) {
+        this.message = 'Сокращенное не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.newProductSlug)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.newProductUnit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.newProductUnit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)([])), {}, {
     close: function close() {
       this.$emit('close');
@@ -2803,26 +2974,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.newProductUnit = this.PRODUCTS[this.selectedProduct].unit;
     },
     saveProduct: function saveProduct() {
-      var data = JSON.stringify({
-        id: this.PRODUCTS[this.selectedProduct].id,
-        title: this.newProductName,
-        name: this.newProductSlug,
-        unit: this.newProductUnit
-      });
-      axios.post('http://127.0.0.1:8000/api/products/edit', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        return data;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-      this.$emit('update');
-      this.$emit('close');
+      if (this.validation === false) {
+        return false;
+      } else {
+        var _data = JSON.stringify({
+          id: this.PRODUCTS[this.selectedProduct].id,
+          title: this.newProductName,
+          name: this.newProductSlug,
+          unit: this.newProductUnit
+        });
+
+        axios.post('http://127.0.0.1:8000/api/products/edit', {
+          data: _data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          return _data;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+        this.$emit('update');
+        this.$emit('close');
+      }
     },
     deleteProduct: function deleteProduct(id) {
       axios["delete"]('http://127.0.0.1:8000/api/products/remove', {
@@ -2887,6 +3063,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "newMachine",
@@ -2895,7 +3078,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: '',
       name: '',
       unit: '',
-      info: ''
+      info: '',
+      message: ''
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES'])), {}, {
@@ -2905,6 +3089,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return false;
+    },
+    validation: function validation() {
+      if (this.title === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.title.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.name === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.name.length < 3) {
+        this.message = 'Сокращенное название не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.name)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.unit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.unit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
     }
   }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_MACHINES'])), {}, {
@@ -2914,31 +3138,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addMachine: function addMachine() {
       var _this = this;
 
-      var data = JSON.stringify({
-        title: this.title,
-        name: this.name,
-        unit: this.unit
-      });
-      axios.post('http://127.0.0.1:8000/api/machines/add', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        _this.info = response;
+      if (this.validation === false) {
+        return false;
+      } else {
+        var data = JSON.stringify({
+          title: this.title,
+          name: this.name,
+          unit: this.unit
+        });
+        axios.post('http://127.0.0.1:8000/api/machines/add', {
+          data: data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          _this.info = response;
 
-        if (response.data === 200) {
-          alert('200');
+          if (response.data === 200) {
+            alert('200');
 
-          _this.$emit('close');
+            _this.$emit('close');
 
-          _this.$emit('update');
-        } else return false;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
+            _this.$emit('update');
+          } else return false;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+        alert('OK');
+      }
     }
   }),
   mounted: function mounted() {
@@ -2987,6 +3216,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "newMaterial",
@@ -2995,7 +3227,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: '',
       name: '',
       unit: '',
-      info: ''
+      info: '',
+      message: ''
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS'])), {}, {
@@ -3005,6 +3238,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return false;
+    },
+    validation: function validation() {
+      if (this.title === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.title.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.name === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.name.length < 3) {
+        this.message = 'Сокращенное название не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.name)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.unit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.unit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
     }
   }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_MATERIALS'])), {}, {
@@ -3014,31 +3287,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addMaterial: function addMaterial() {
       var _this = this;
 
-      var data = JSON.stringify({
-        title: this.title,
-        name: this.name,
-        unit: this.unit
-      });
-      axios.post('http://127.0.0.1:8000/api/materials/add', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        _this.info = response;
+      if (this.validation === false) {
+        return false;
+      } else {
+        var data = JSON.stringify({
+          title: this.title,
+          name: this.name,
+          unit: this.unit
+        });
+        axios.post('http://127.0.0.1:8000/api/materials/add', {
+          data: data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          _this.info = response;
 
-        if (response.data === 200) {
-          alert('200');
+          if (response.data === 200) {
+            alert('200');
 
-          _this.$emit('close');
+            _this.$emit('close');
 
-          _this.$emit('update');
-        } else return false;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
+            _this.$emit('update');
+          } else return false;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+      }
     }
   }),
   mounted: function mounted() {
@@ -3087,6 +3364,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "newProduct",
@@ -3095,7 +3377,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: '',
       name: '',
       unit: '',
-      info: ''
+      info: '',
+      message: ''
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS'])), {}, {
@@ -3105,6 +3388,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return false;
+    },
+    validation: function validation() {
+      if (this.title === '') {
+        this.message = 'Название техники не заполнино';
+        return false;
+      }
+
+      if (this.title.length < 3) {
+        this.message = 'Название техники не должно быть менее 3 символов';
+        return false;
+      }
+
+      if (this.name === '') {
+        this.message = 'сокращенное название не заполнино';
+        return false;
+      }
+
+      if (this.name.length < 3) {
+        this.message = 'Сокращенное название не должно быть менее 3 символов';
+        return false;
+      }
+
+      var slugRE = new RegExp('^[a-zA-Z0-9]+$');
+
+      if (!slugRE.test(this.name)) {
+        this.message = 'Сокращенное может состоять только из латинских букв и цифр';
+        return false;
+      }
+
+      if (this.unit === '') {
+        this.message = 'Едицина измерения не заполнена';
+        return false;
+      }
+
+      var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$');
+
+      if (!unitRE.test(this.unit)) {
+        this.message = 'Единица измерения не может быть цифрой';
+        return false;
+      }
     }
   }),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS'])), {}, {
@@ -3114,31 +3437,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addProduct: function addProduct() {
       var _this = this;
 
-      var data = JSON.stringify({
-        title: this.title,
-        name: this.name,
-        unit: this.unit
-      });
-      axios.post('http://127.0.0.1:8000/api/products/add', {
-        data: data
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        _this.info = response;
+      if (this.validation === false) {
+        return false;
+      } else {
+        var data = JSON.stringify({
+          title: this.title,
+          name: this.name,
+          unit: this.unit
+        });
+        axios.post('http://127.0.0.1:8000/api/products/add', {
+          data: data
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (response) {
+          _this.info = response;
 
-        if (response.data === 200) {
-          alert('200');
+          if (response.data === 200) {
+            alert('200');
 
-          _this.$emit('close');
+            _this.$emit('close');
 
-          _this.$emit('update');
-        } else return false;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
+            _this.$emit('update');
+          } else return false;
+        })["catch"](function (error) {
+          // handle error
+          console.log(error);
+        });
+      }
     }
   }),
   mounted: function mounted() {
@@ -3287,6 +3614,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddIncomeForm",
@@ -3298,6 +3628,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$emit('closeAddForm');
     },
     sendIncome: function sendIncome() {
+      if (this.qty <= 0) {
+        this.message = 'Количество должно быть больше 0';
+        return false;
+      }
+
       var data = {
         material_id: this.MATERIALS[this.selectedMaterial].id,
         qty: this.qty,
@@ -3313,7 +3648,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       qty: 0,
       selectedMaterial: 0,
-      inputDate: new Date().toISOString().slice(0, 10)
+      inputDate: new Date().toISOString().slice(0, 10),
+      message: ''
     };
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS']))
@@ -3369,6 +3705,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddMatNorm",
@@ -3378,7 +3717,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       selectMat: '',
       selectProd: '',
       selectedMat: [],
-      norma: ''
+      norma: '',
+      message: ''
     };
   },
   props: {
@@ -3419,7 +3759,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.selectedNorm);
     },
     test: function test() {
-      // console.log(this.selectedNorm)
+      if (this.norma <= 0) {
+        this.message = 'Расход должен быть больше 0';
+        return false;
+      } // console.log(this.selectedNorm)
+
+
       this.EDIT_SELECTED_NORM(JSON.stringify(this.selectedNorm));
       this.$emit('update', {
         prodID: this.selectedProduct
@@ -3540,12 +3885,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
 
       if (title && unit) {
-        var data = {
+        var _data = {
           title: title.title,
           unit: unit.unit
         };
-        return data;
+        return _data;
       } else return false;
+    },
+    remove: function remove(id) {
+      axios["delete"]('http://127.0.0.1:8000/api/incomes/remove', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          id: id
+        }
+      }).then(function (response) {
+        return data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
+      this.GET_INCOMES({
+        date: this.localDate
+      });
     }
   }),
   mounted: function mounted() {
@@ -3696,6 +4059,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -3710,6 +4076,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('closePopup');
     },
     sendMotohour: function sendMotohour() {
+      if (this.qty <= 0) {
+        this.message = 'Количество должно быть больше 0';
+        return false;
+      }
+
       var data = {
         machine_id: this.machines[this.selectedMachine].id,
         qty: this.qty,
@@ -3723,7 +4094,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       qty: 0,
       selectedMachine: 0,
-      inputDate: new Date().toISOString().slice(0, 10)
+      inputDate: new Date().toISOString().slice(0, 10),
+      message: ''
     };
   }
 });
@@ -3775,6 +4147,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -3789,6 +4164,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('closeSold');
     },
     sendSold: function sendSold() {
+      if (this.qty <= 0) {
+        this.message = 'Количество должно быть больше 0';
+        return false;
+      }
+
       var data = {
         product_id: this.products[this.selectedProduct].id,
         qty: this.qty,
@@ -3805,7 +4185,8 @@ __webpack_require__.r(__webpack_exports__);
       qty: 0,
       soldTo: '',
       selectedProduct: 0,
-      inputDate: new Date().toISOString().slice(0, 10)
+      inputDate: new Date().toISOString().slice(0, 10),
+      message: ''
     };
   }
 });
@@ -3856,6 +4237,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -3870,6 +4254,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('closePopup');
     },
     sendProduced: function sendProduced() {
+      if (this.qty <= 0) {
+        this.message = 'Количество должно быть больше 0';
+        return false;
+      }
+
       var data = {
         product_id: this.products[this.selectedProduct].id,
         qty: this.qty,
@@ -3883,7 +4272,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       qty: 0,
       selectedProduct: 0,
-      inputDate: new Date().toISOString().slice(0, 10)
+      inputDate: new Date().toISOString().slice(0, 10),
+      message: ''
     };
   }
 });
@@ -4163,7 +4553,7 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'application/json'
         }
       }).then(function (response) {
-        commit('SET_PRODUCED', response.data);
+        // commit('SET_PRODUCED', response.data)
         return data;
       })["catch"](function (error) {
         // handle error
@@ -43290,6 +43680,28 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
+        _vm.message
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _vm._v("\n            Не достаточно материалов:\n            "),
+                _vm._l(_vm.message, function(item, index) {
+                  return _c("div", { key: index }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(item.title) +
+                        " - " +
+                        _vm._s(item.qty) +
+                        "ед.\n            "
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c(
           "table",
           [
@@ -43631,6 +44043,14 @@ var render = function() {
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Редактировать")]),
     _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _c("label", [_vm._v("Название техники")]),
     _vm._v(" "),
     _c("input", {
@@ -43763,6 +44183,14 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Редактировать")]),
+    _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("label", [_vm._v("Название материала")]),
     _vm._v(" "),
@@ -43897,6 +44325,14 @@ var render = function() {
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Редактировать")]),
     _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _c("label", [_vm._v("Название продукции")]),
     _vm._v(" "),
     _c("input", {
@@ -44029,6 +44465,14 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Новая продукция")]),
+    _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("label", [_vm._v("Название техники")]),
     _vm._v(" "),
@@ -44174,6 +44618,14 @@ var render = function() {
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Новая продукция")]),
     _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _c("label", [_vm._v("Название продукции")]),
     _vm._v(" "),
     _vm.info
@@ -44317,6 +44769,14 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("h3", { staticClass: "text-center mb-4" }, [_vm._v("Новая продукция")]),
+    _vm._v(" "),
+    _vm.message
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+          [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("label", [_vm._v("Название продукции")]),
     _vm._v(" "),
@@ -44570,6 +45030,20 @@ var render = function() {
       _c("div", { staticClass: "mt-1" }, [
         _vm._m(0),
         _vm._v(" "),
+        _vm.message
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.message) +
+                    "\n                "
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c("form", { attrs: { action: "" } }, [
           _c("label", { attrs: { for: "date" } }, [_vm._v("Дата:")]),
           _vm._v(" "),
@@ -44737,6 +45211,14 @@ var render = function() {
       _c("h5", { staticClass: "text-center mb-4" }, [
         _vm._v("Ввод расхода материалов")
       ]),
+      _vm._v(" "),
+      _vm.message
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            [_vm._v("\n        " + _vm._s(_vm.message) + "\n    ")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.selectedNorm, function(item) {
         return _c("div", { key: item.id, staticClass: "normItem" }, [
@@ -45138,6 +45620,20 @@ var render = function() {
       _c("div", { staticClass: "mt-1" }, [
         _vm._m(0),
         _vm._v(" "),
+        _vm.message
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.message) +
+                    "\n                "
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c("form", { attrs: { action: "" } }, [
           _c("label", { attrs: { for: "date" } }, [_vm._v("Дата:")]),
           _vm._v(" "),
@@ -45294,6 +45790,20 @@ var render = function() {
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "mt-1" }, [
         _vm._m(0),
+        _vm._v(" "),
+        _vm.message
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.message) +
+                    "\n                "
+                )
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("form", { attrs: { action: "" } }, [
           _c("label", { attrs: { for: "date" } }, [_vm._v("Дата:")]),
@@ -45471,10 +45981,22 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "body" }, [
     _c("div", { on: { click: _vm.closePopup } }, [_vm._v("×")]),
-    _vm._v("\n        " + _vm._s(_vm.products) + "\n        "),
+    _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "mt-1" }, [
         _vm._m(0),
+        _vm._v(" "),
+        _vm.message
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _vm._v(
+                  "\n                " + _vm._s(_vm.message) + "\n            "
+                )
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("form", { attrs: { action: "" } }, [
           _c("label", { attrs: { for: "date" } }, [_vm._v("Дата:")]),
@@ -45534,7 +46056,7 @@ var render = function() {
             },
             _vm._l(_vm.products, function(product, index) {
               return _c("option", { domProps: { value: index } }, [
-                _vm._v(_vm._s(product.title))
+                _vm._v(_vm._s(product.title) + "\n                    ")
               ])
             }),
             0

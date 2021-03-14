@@ -52,6 +52,7 @@ Route::delete('/matnorm/remove', [App\Http\Controllers\ProductionController::cla
 //Incomes
 Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetIncomes']);
 Route::post('/incomes/add', [App\Http\Controllers\MaterialsController::class, 'AddIncome']);
+Route::delete('/incomes/remove', [App\Http\Controllers\MaterialsController::class, 'RemoveIncome']);
 
 // Motohour
 Route::get('/motohours/get', [App\Http\Controllers\MotohoursController::class, 'index']);

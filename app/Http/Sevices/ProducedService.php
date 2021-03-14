@@ -5,6 +5,8 @@ namespace App\Http\Sevices;
 
 
 use App\Models\Produced;
+use App\Models\Product;
+use http\Client\Response;
 
 class ProducedService
 {
@@ -13,6 +15,8 @@ class ProducedService
     public function __construct()
     {
         $this->produced = new Produced();
+        $this->materials = new MaterialService();
+        $this->product = new Product();
     }
 
     public function get($data)
@@ -23,6 +27,12 @@ class ProducedService
 
     public function save($data)
     {
+        $toCheck = $this->product->find($data->product_id)->materialNorm()->get();
+        if ($this->materials->chekInStock($toCheck, $data) != null) {
+            $response = $this->materials->chekInStock($toCheck, $data);
+           return json_encode($response);
+    }
+        else {
         if ($this->produced->where('date', $data->date)->where('product_id', $data->product_id)->exists()) {
             $records = $this->produced->where('date', $data->date)->get();
             $record_id = $records->where('product_id', $data->product_id)->first()->id;
@@ -34,6 +44,7 @@ class ProducedService
             $this->produced->date = $data->date;
             $this->produced->save();
         }
+    }
     }
 
     public function getProduced()
