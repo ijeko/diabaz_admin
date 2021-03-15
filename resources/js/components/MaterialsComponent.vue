@@ -7,7 +7,6 @@
                  :key="index">
                 <div class="material-name">
                     <div>{{ material.title }}
-
                     </div>
                 </div>
                 <div class="material-qty">{{ material.stock }} {{ material.unit }}</div>

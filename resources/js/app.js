@@ -22,6 +22,8 @@ window.Vue = require('vue').default;
 //wrappers
 Vue.component('home-wrapper-component', require('./components/HomeWrapperComponent.vue').default);
 Vue.component('admin-wrapper-component', require('./components/AdminWrapperComponent.vue').default);
+Vue.component('reports-wrapper-component', require('./components/ReportsWrapperComponent.vue').default);
+
 //inputdata
 Vue.component('materials-component', require('./components/MaterialsComponent.vue').default);
 Vue.component('motor-component', require('./components/MotorComponent.vue').default);

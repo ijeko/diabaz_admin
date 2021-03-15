@@ -2,32 +2,7 @@
     <div class="container">
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="row justify-content-between">
-            <div class="col-md-6">
-                <admin-production-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
-                ></admin-production-component>
-            </div>
-            <div class="col-md-6">
-                <admin-materials-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
-                ></admin-materials-component>
-            </div>
-        </div>
-        <div class="row justify-content-between">
-            <div class="col-md-6">
-                <admin-machines-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
-                ></admin-machines-component>
-            </div>
+            TEST
         </div>
     </div>
 </template>

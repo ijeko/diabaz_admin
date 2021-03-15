@@ -2034,7 +2034,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2367,6 +2366,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.closeSold();
     }
   })
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _admin_materials__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin/materials */ "./resources/js/components/admin/materials.vue");
+/* harmony import */ var _admin_machines__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./admin/machines */ "./resources/js/components/admin/machines.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "AdminWrapperComponent",
+  components: {
+    AdminMachines: _admin_machines__WEBPACK_IMPORTED_MODULE_1__.default,
+    AdminMaterials: _admin_materials__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  data: function data() {
+    return {
+      date: new Date().toISOString().slice(0, 10)
+    };
+  },
+  props: {
+    user: {
+      "default": ''
+    }
+  },
+  computed: {
+    dateFormated: function dateFormated() {
+      var dateSplit = this.date.split('-');
+      var day = dateSplit[2];
+      var mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+      var month = mnths[parseInt(dateSplit[1]) - 1];
+      var year = dateSplit[0];
+      return {
+        day: day,
+        month: month,
+        year: year
+      };
+    }
+  }
 });
 
 /***/ }),
@@ -4332,7 +4389,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 //wrappers
 
 Vue.component('home-wrapper-component', __webpack_require__(/*! ./components/HomeWrapperComponent.vue */ "./resources/js/components/HomeWrapperComponent.vue").default);
-Vue.component('admin-wrapper-component', __webpack_require__(/*! ./components/AdminWrapperComponent.vue */ "./resources/js/components/AdminWrapperComponent.vue").default); //inputdata
+Vue.component('admin-wrapper-component', __webpack_require__(/*! ./components/AdminWrapperComponent.vue */ "./resources/js/components/AdminWrapperComponent.vue").default);
+Vue.component('reports-wrapper-component', __webpack_require__(/*! ./components/ReportsWrapperComponent.vue */ "./resources/js/components/ReportsWrapperComponent.vue").default); //inputdata
 
 Vue.component('materials-component', __webpack_require__(/*! ./components/MaterialsComponent.vue */ "./resources/js/components/MaterialsComponent.vue").default);
 Vue.component('motor-component', __webpack_require__(/*! ./components/MotorComponent.vue */ "./resources/js/components/MotorComponent.vue").default);
@@ -41644,6 +41702,45 @@ component.options.__file = "resources/js/components/ProductionComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/ReportsWrapperComponent.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/ReportsWrapperComponent.vue ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true& */ "./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true&");
+/* harmony import */ var _ReportsWrapperComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ReportsWrapperComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _ReportsWrapperComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "42d5686e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ReportsWrapperComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/machines.vue":
 /*!****************************************************!*\
   !*** ./resources/js/components/admin/machines.vue ***!
@@ -42380,6 +42477,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsWrapperComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReportsWrapperComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsWrapperComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/machines.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/admin/machines.vue?vue&type=script&lang=js& ***!
@@ -42968,6 +43081,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true& ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsWrapperComponent_vue_vue_type_template_id_42d5686e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/machines.vue?vue&type=template&id=3ade5652&scoped=true&":
 /*!***********************************************************************************************!*\
   !*** ./resources/js/components/admin/machines.vue?vue&type=template&id=3ade5652&scoped=true& ***!
@@ -43471,9 +43601,7 @@ var render = function() {
         _vm._l(_vm.MATERIAL_QTY, function(material, index) {
           return _c("div", { key: index, staticClass: "materials" }, [
             _c("div", { staticClass: "material-name" }, [
-              _c("div", [
-                _vm._v(_vm._s(material.title) + "\n\n                ")
-              ])
+              _c("div", [_vm._v(_vm._s(material.title) + "\n                ")])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "material-qty" }, [
@@ -43764,6 +43892,59 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReportsWrapperComponent.vue?vue&type=template&id=42d5686e&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "bg-light text-center" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.date,
+            expression: "date"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "date" },
+        domProps: { value: _vm.date },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.date = $event.target.value
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-between" }, [
+      _vm._v("\n        TEST\n    ")
+    ])
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
