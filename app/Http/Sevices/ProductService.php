@@ -31,10 +31,11 @@ class ProductService
             array_push($products, [
                 'id' => $product->id,
                 'title' => $product->title,
+                'name' => $product->name,
                 'totalProduced' => $product->getProducedQty(),
                 'dayProduced' => $product->getProducedByDate($date),
                 'sold' => $product->getSoldQty(),
-                'stock' => $product->getProducedQty() - $product->getSoldQty(),
+                'stock' => $product->getProducedQty() - $product->getSoldQty() - $this->asMaterial($product->id),
                 'unit' => $product->unit
             ]);
         }
@@ -147,23 +148,33 @@ class ProductService
         $this->sold->save();
     }
 
-    public function Stock()
+//    public function Stock()
+//    {
+//
+//        foreach ($this->product->all() as $product) {
+//            $asMaterial = 0;
+//            foreach ($this->material->all() as $material) {
+//                if ($product->name === $material->name) {
+//                    $asMaterial =
+//                        $material->getIncomeSumm();
+//
+//                }
+//            }
+//            $productStock = $product->getProducedQty() - $product->getSoldQty() - $asMaterial;
+//            $stock[] = ['product_id' => $product->id, 'qty' => $productStock];
+//
+//        }
+//        return response()->
+//        json($stock);
+//    }
+    public function asMaterial($id)
     {
-
-        foreach ($this->product->all() as $product) {
             $asMaterial = 0;
             foreach ($this->material->all() as $material) {
-                if ($product->name === $material->name) {
-                    $asMaterial =
-                        $material->getIncomeSumm();
-
+                if ($this->product->find($id)->name === $material->name) {
+                    $asMaterial = $material->getIncomeSumm();
                 }
             }
-            $productStock = $product->getProducedQty() - $product->getSoldQty() - $asMaterial;
-            $stock[] = ['product_id' => $product->id, 'qty' => $productStock];
-
-        }
-        return response()->
-        json($stock);
+           return $asMaterial;
     }
 }

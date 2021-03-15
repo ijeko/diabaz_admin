@@ -42,7 +42,7 @@ export default {
             selectMat: '',
             selectProd: '',
             selectedMat: [],
-            norma: '',
+            norma: 0,
             message: ''
         }
     },
@@ -78,13 +78,17 @@ export default {
         addItem () {
             let material= this.MATERIALS[this.selectedMat]
             this.selectedNorm.push({id:null,title: material.title, norma: 0, unit: material.unit, material_id: material.id, product_id: this.selectedProduct})
-            console.log(this.selectedNorm)
+            // console.log(this.selectedNorm)
         },
         test() {
-            if (this.norma <=0) {
-                this.message = 'Расход должен быть больше 0'
-                return false
+            for (let item of this.selectedNorm) {
+                if (item.norma <= 0) {
+                    console.log(this.selectedNorm)
+                    this.message = 'Расход должен быть больше 0'
+                    return false
+                }
             }
+
             // console.log(this.selectedNorm)
             this.EDIT_SELECTED_NORM(JSON.stringify(this.selectedNorm))
             this.$emit('update', {prodID: this.selectedProduct})
