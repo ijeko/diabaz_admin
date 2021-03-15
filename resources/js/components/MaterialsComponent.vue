@@ -72,6 +72,7 @@ export default {
             return this.isIncomesVisible = true
         },
         closeIncomes () {
+            this.GET_MATERIAL_QTY()
             return this.isIncomesVisible = false
         },
     }

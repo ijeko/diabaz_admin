@@ -18,6 +18,7 @@
         <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeIncomes">Закрыть</button>
         <add-income-form v-if="isAddIncomesVisible"
                          @closeAddForm="closeAddForm"
+                         @update="showIncomesOnDate"
                          :user="user"
         ></add-income-form>
     </div>

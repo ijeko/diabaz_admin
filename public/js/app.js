@@ -2071,6 +2071,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.isIncomesVisible = true;
     },
     closeIncomes: function closeIncomes() {
+      this.GET_MATERIAL_QTY();
       return this.isIncomesVisible = false;
     }
   })
@@ -3640,7 +3641,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         user_id: this.user
       };
       this.ADD_INCOME(JSON.stringify(data));
-      console.log(data);
+      this.$emit('update');
       this.closeAddForm();
     }
   }),
@@ -3832,6 +3833,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -45410,7 +45412,10 @@ var render = function() {
       _vm.isAddIncomesVisible
         ? _c("add-income-form", {
             attrs: { user: _vm.user },
-            on: { closeAddForm: _vm.closeAddForm }
+            on: {
+              closeAddForm: _vm.closeAddForm,
+              update: _vm.showIncomesOnDate
+            }
           })
         : _vm._e()
     ],

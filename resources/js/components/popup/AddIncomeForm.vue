@@ -56,7 +56,8 @@ export default {
             }
                 var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user}
             this.ADD_INCOME(JSON.stringify(data))
-            console.log(data)
+            this.$emit('update')
+
             this.closeAddForm()
         }
     },
