@@ -22,7 +22,11 @@ class ReportsController extends Controller
     public function test ()
     {
 
-        $products=$this->product->find(12)->produced();
+        $products=$this->product->all();
+        foreach ($products as $product)
+        {
+
+        }
         dd(__METHOD__, $products->whereDay('date', 9)->get());
     }
 }
