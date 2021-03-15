@@ -2,7 +2,7 @@
     <div class="container">
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="row justify-content-between">
-            TEST
+            <button class="btn btn-info" @click="test">TEST</button>
         </div>
     </div>
 </template>
@@ -32,6 +32,20 @@ export default {
             var month = mnths[parseInt(dateSplit[1])-1]
             var year = dateSplit[0]
             return {day: day, month: month, year: year}
+        }
+    },
+    methods: {
+        test () {
+            axios.get('http://127.0.0.1:8000/api/products/test', {
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(function (response) {
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
         }
     }
 }
