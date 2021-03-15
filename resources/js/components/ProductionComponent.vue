@@ -4,6 +4,13 @@
             {{ dateFormated.year }}
         </div>
         <div class="card-body">
+            <div v-if="message" class="alert alert-danger" role="alert">
+                Не достаточно материалов:
+                <div v-for="(item, index) in message"
+                :key="index"
+                >
+                    {{item.title}} - {{item.qty}}ед.
+                </div></div>
             <table>
                 <tr>
                     <th>Продукция</th>
@@ -65,6 +72,7 @@ export default {
         return {
             isEnterVisible: '',
             isSoldVisible: false,
+            message: ''
         }
     },
     watch: {
@@ -98,7 +106,8 @@ export default {
         ...mapActions([
             'GET_PRODUCTS',
             'GET_MATERIAL_QTY',
-            'ADD_SOLD'
+            'ADD_SOLD',
+            'ADD_PRODUCED'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -113,7 +122,22 @@ export default {
             this.isSoldVisible = ''
         },
         sendProduced(data) {
-            this.ADD_PRODUCED(JSON.stringify(data))
+            data = JSON.stringify(data)
+            // this.ADD_PRODUCED(JSON.stringify(data))
+            axios.post('http://127.0.0.1:8000/api/produced/add',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(response => {
+                    // commit('SET_PRODUCED', response.data)
+                    this.message = response.data
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
             this.GET_PRODUCTS(this.currentDate)
             this.GET_MATERIAL_QTY()
             this.closePopup()

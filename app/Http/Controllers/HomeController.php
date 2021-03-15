@@ -33,28 +33,16 @@ class HomeController extends Controller
      */
     public function inputdata()
     {
-//        $prodList=$this->product->get();
-//        $matList=$this->material->get();
-//        $produced=$this->produced->get();
-//        dd(gettype($matList));
         return view('inputdata');
     }
 
     public function admin()
     {
-//        $prodList=$this->product->get();
-//        $matList=$this->material->get();
-//        $produced=$this->produced->get();
-//        dd(gettype($matList));
         return view('admin');
     }
 
     public function reports()
     {
-//        $prodList=$this->product->get();
-//        $matList=$this->material->get();
-//        $produced=$this->produced->get();
-//        dd(gettype($matList));
         return view('reports');
     }
 }

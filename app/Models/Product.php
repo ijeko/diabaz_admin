@@ -31,4 +31,9 @@ class Product extends Model
         $summ = $this->hasMany(Produced::class)->where('date', $today)->sum('qty');
         return $summ;
     }
+
+    public function inStock()
+    {
+        return $this->getProducedQty() - $this->getSoldQty();
+    }
 }

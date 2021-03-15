@@ -19,10 +19,7 @@ class MotohoursService
     public function get($data)
     {
         $today=$data->date;
-//        $today = date('Y-m-d');
         return $this->motohour->where('date', $today)->get();
-//        dd($this->produced->get()->where('date', '=', $today));
-//        return $this->produced->all();
     }
 
     public function save($data)

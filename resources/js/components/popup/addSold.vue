@@ -4,6 +4,9 @@
         <div class="container">
             <div class="mt-1">
                 <div class="text-center"><h3>Отгружено:</h3></div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
                 <form class="" action="">
                     <label for="date">Дата:</label>
                     <input v-model="inputDate" type="date" class="form-control" id="date">
@@ -49,6 +52,10 @@ export default {
             this.$emit('closeSold')
         },
         sendSold () {
+            if (this.qty <= 0) {
+                this.message = 'Количество должно быть больше 0'
+                return false
+            }
             var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
             this.$emit('sendSold', data)
             this.closeSold()
@@ -59,7 +66,8 @@ export default {
             qty: 0,
             soldTo: '',
             selectedProduct: 0,
-            inputDate: new Date().toISOString().slice(0,10)
+            inputDate: new Date().toISOString().slice(0,10),
+            message: ''
         }
     }
 }

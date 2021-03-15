@@ -4,6 +4,9 @@
         <div class="container">
             <div class="mt-1">
                 <div class="text-center"><h3>Поступление:</h3></div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
                 <form class="" action="">
                     <label for="date">Дата:</label>
                     <input v-model="inputDate" type="date" class="form-control" id="date">
@@ -47,7 +50,11 @@ export default {
             this.$emit('closeAddForm')
         },
         sendIncome () {
-            var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user}
+            if (this.qty <=0) {
+                this.message = 'Количество должно быть больше 0'
+                return false
+            }
+                var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user}
             this.ADD_INCOME(JSON.stringify(data))
             console.log(data)
             this.closeAddForm()
@@ -57,7 +64,8 @@ export default {
         return {
             qty: 0,
             selectedMaterial: 0,
-            inputDate: new Date().toISOString().slice(0,10)
+            inputDate: new Date().toISOString().slice(0,10),
+            message: ''
         }
     },
     computed: {

@@ -1,20 +1,23 @@
 <template>
     <div class="body">
         <div @click="closePopup">&times;</div>
-        {{products}}
         <div class="container">
             <div class="mt-1">
                 <div class="text-center"><h3>Произведено:</h3></div>
+                <div v-if="message" class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
                 <form class="" action="">
                     <label for="date">Дата:</label>
                     <input v-model="inputDate" type="date" class="form-control" id="date">
                     <label for="product">Материал</label>
-                    <select  v-model="selectedProduct" name="product" id="product" class="form-control">
-<!--                        <option value="asd" disabled>Продукция</option>-->
+                    <select v-model="selectedProduct" name="product" id="product" class="form-control">
+                        <!--                        <option value="asd" disabled>Продукция</option>-->
                         <option
                             :value="index"
                             v-for="(product, index) in products"
-                           >{{product.title}}</option>
+                        >{{ product.title }}
+                        </option>
                     </select>
                     <label for="qty">Количество, {{ products[selectedProduct].unit }}</label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
@@ -44,20 +47,30 @@ export default {
 
     },
     methods: {
-        closePopup () {
+        closePopup() {
             this.$emit('closePopup')
         },
-        sendProduced () {
-
-            var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user}
+        sendProduced() {
+            if (this.qty <= 0) {
+                this.message = 'Количество должно быть больше 0'
+                return false
+            }
+            var data = {
+                product_id: this.products[this.selectedProduct].id,
+                qty: this.qty,
+                date: this.inputDate,
+                user_id: this.user
+            }
             this.$emit('sendProduced', data)
         }
     },
-    data () {
+    data() {
         return {
             qty: 0,
             selectedProduct: 0,
-            inputDate: new Date().toISOString().slice(0,10)
+            inputDate: new Date().toISOString().slice(0, 10),
+            message: ''
+
         }
     }
 }
@@ -75,6 +88,7 @@ export default {
     z-index: 1;
     border-radius: 5px;
 }
+
 .btn {
     width: 100%;
 }

@@ -3,6 +3,9 @@
         <div class="text-right" @click="closeEditForm">&times;</div>
         <h3 class="text-center mb-4">{{productById(selectedProduct).title}}</h3>
         <h5 class="text-center mb-4">Ввод расхода материалов</h5>
+        <div v-if="message" class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
         <div class="normItem" v-for="item in selectedNorm"
              :key="item.id"
         >
@@ -39,7 +42,8 @@ export default {
             selectMat: '',
             selectProd: '',
             selectedMat: [],
-            norma: ''
+            norma: '',
+            message: ''
         }
     },
     props: {
@@ -77,6 +81,10 @@ export default {
             console.log(this.selectedNorm)
         },
         test() {
+            if (this.norma <=0) {
+                this.message = 'Расход должен быть больше 0'
+                return false
+            }
             // console.log(this.selectedNorm)
             this.EDIT_SELECTED_NORM(JSON.stringify(this.selectedNorm))
             this.$emit('update', {prodID: this.selectedProduct})
