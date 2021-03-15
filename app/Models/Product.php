@@ -36,4 +36,8 @@ class Product extends Model
     {
         return $this->getProducedQty() - $this->getSoldQty();
     }
+    public function produced ()
+    {
+        return $this->hasMany(Produced::class);
+    }
 }

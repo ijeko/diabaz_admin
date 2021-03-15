@@ -2423,6 +2423,20 @@ __webpack_require__.r(__webpack_exports__);
         year: year
       };
     }
+  },
+  methods: {
+    test: function test() {
+      axios.get('http://127.0.0.1:8000/api/products/test', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        return response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -43940,7 +43954,9 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-between" }, [
-      _vm._v("\n        TEST\n    ")
+      _c("button", { staticClass: "btn btn-info", on: { click: _vm.test } }, [
+        _vm._v("TEST")
+      ])
     ])
   ])
 }
