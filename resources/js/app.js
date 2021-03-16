@@ -4,7 +4,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import store from './store/store';
+import VueRouter from "vue-router";
 require('./bootstrap');
+
+import router from "./router/index";
 
 window.Vue = require('vue').default;
 
@@ -50,8 +53,10 @@ Vue.component('admin-new-machine-component', require('./components/admin/popup/n
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+Vue.use(VueRouter)
 const app = new Vue({
     el: '#app',
-    store: new Vuex.Store(store)
+    store: new Vuex.Store(store),
+    router
+
 });

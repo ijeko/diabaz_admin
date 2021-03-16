@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="test">
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="row justify-content-between">
             <div class="col-md-2">
@@ -16,9 +16,10 @@
                         <div class="dropdown-menu">
                             <!-- Dropdown menu links -->
                             <h6 class="dropdown-header">Отчеты</h6>
-                            <a class="dropdown-item" href="#">За месяц</a>
-                            <a class="dropdown-item" href="#">За год</a>
-                            <a class="dropdown-item" href="#">План-факт</a>
+                            <li class="dropdown-item"><router-link :to="{ name: 'producedMonth' }">За месяц</router-link></li>
+<!--                            <a class="dropdown-item" href="#">За месяц</a>-->
+<!--                            <a class="dropdown-item" href="#">За год</a>-->
+<!--                            <a class="dropdown-item" href="#">План-факт</a>-->
                         </div>
                     </div>
                     <div class="btn-group dropright">
@@ -49,20 +50,11 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <production-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
-                ></production-component>
-                <motor-component
-                    class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
-                ></motor-component>
+                <router-view
+                    :commonDate="date"
+                ></router-view>
             </div>
-            <button class="btn btn-info" @click="test">TEST</button>
+
         </div>
     </div>
 </template>
@@ -96,18 +88,7 @@ export default {
         }
     },
     methods: {
-        test() {
-            axios.get('http://127.0.0.1:8000/api/products/test', {
-                headers: {'Content-Type': 'application/json'},
-            })
-                .then(function (response) {
-                    return response.data
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-        }
+
     }
 }
 </script>
