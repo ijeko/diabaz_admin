@@ -1,29 +1,30 @@
 <template>
     <div class="test">
-        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
+        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control" disabled></div>
         <div class="row justify-content-between">
             <div class="col-md-2">
                 <div
                     class="mt-4"
-                    :user="user"
-                    :dateFormated="dateFormated"
-                    :date="date"
                 >
                     <div class="btn-group dropright">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                             Производство
                         </button>
                         <div class="dropdown-menu">
                             <!-- Dropdown menu links -->
                             <h6 class="dropdown-header">Отчеты</h6>
-                            <li class="dropdown-item"><router-link :to="{ name: 'producedMonth' }">За месяц</router-link></li>
-<!--                            <a class="dropdown-item" href="#">За месяц</a>-->
-<!--                            <a class="dropdown-item" href="#">За год</a>-->
-<!--                            <a class="dropdown-item" href="#">План-факт</a>-->
+                            <li class="dropdown-item">
+                                <router-link :to="{ name: 'producedMonth' }">За месяц</router-link>
+                            </li>
+                            <!--                            <a class="dropdown-item" href="#">За месяц</a>-->
+                            <!--                            <a class="dropdown-item" href="#">За год</a>-->
+                            <!--                            <a class="dropdown-item" href="#">План-факт</a>-->
                         </div>
                     </div>
                     <div class="btn-group dropright">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                             Продукция
                         </button>
                         <div class="dropdown-menu">
@@ -35,7 +36,8 @@
                         </div>
                     </div>
                     <div class="btn-group dropright">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                             Материалы
                         </button>
                         <div class="dropdown-menu">
@@ -52,6 +54,8 @@
             <div class="col-md-10">
                 <router-view
                     :commonDate="date"
+                    :dateFormated="dateFormated"
+                    @setDate="setDate"
                 ></router-view>
             </div>
 
@@ -79,15 +83,20 @@ export default {
     },
     computed: {
         dateFormated() {
-            var dateSplit = this.date.split('-')
-            var day = dateSplit[2]
-            var mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-            var month = mnths[parseInt(dateSplit[1]) - 1]
-            var year = dateSplit[0]
-            return {day: day, month: month, year: year}
+            const dateSplit = this.date.split('-')
+            const day = dateSplit[2]
+            const mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+            const ofMnths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
+            const month = mnths[parseInt(dateSplit[1]) - 1]
+            const ofMonth = ofMnths[parseInt(dateSplit[1]) - 1]
+            const year = dateSplit[0]
+            return {day: day, month: month, ofMonth: ofMonth, year: year}
         }
     },
     methods: {
+        setDate(newDate) {
+            this.date = newDate
+        }
 
     }
 }

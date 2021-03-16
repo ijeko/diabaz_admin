@@ -1,44 +1,83 @@
 <template>
-    <div class="card mt-4">
-        <div class="card-header">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">Произведено за</label>
+    <div>
+        <div class="card mt-4">
+            <div class="card-header">
+                <!--            {{ Date.parse(localDate) }}-->
+                Произведено продукции за месяц:
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-secondary"
+                            @click="decreaseMonth"
+                    > <
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary monthBtn"
+                            @click="resetMonth"
+                    >{{ dateFormated.ofMonth }}
+                    </button>
+                    <button type="button" class="btn btn-secondary"
+                            @click="increaseMonth"
+                    > >
+                    </button>
                 </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                    <option selected>этот месяц</option>
-                    <option value="1">январь</option>
-                    <option value="2">февраль</option>
-                    <option value="3">Three</option>
-                </select>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="title">Продукция</th>
+                            <th class="cells"
+                                v-for="day in daysInMonth()"
+                                :key="day">{{ day }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(product, index) in reportData"
+                            :key="index"
+                            v-if="product.daily.reduce(function(sum, elem) {
+                                                return sum + elem
+                                                 }, 0)>0">
+                            <td class="title">
+                                {{ product.title }} ({{ product.unit }})
+                            </td>
+                            <td class="cells"
+                                v-for="(dayProduced, index) in product.daily"
+                                :key="index"
+                                :class="{ 'bg-success produced': dayProduced }"
+                            >{{ dayProduced }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <table>
-                <tr>
-                    <th class="title">Продукция</th>
-                    <th class="cells"
-                        v-for="day in daysInMonth()"
-                        :key="day">{{ day }}
-                    </th>
-                </tr>
-                <tr v-for="(product, index) in reportData"
-                    :key="index"
-                    v-if="product.daily.reduce(function(sum, elem) {
-               return sum + elem
-                    }, 0)>0"
-                >
-                    <td class="title">
-                        {{ product.title }} ({{ product.unit }})
-                    </td>
-                    <td class="cells"
-                        v-for="(dayProduced, index) in product.daily"
+        <div class="card mt-4">
+            <div class="card-header">Всего произведено за месяц:</div>
+            <div class="card-body">
+                <table class="table table-striped col-6">
+                    <thead>
+                    <tr>
+                        <th class="title">Продукция</th>
+                        <th class="cells">Количество</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(product, index) in reportData"
                         :key="index"
-                        :class="{ 'bg-success produced': dayProduced }"
-                    >{{ dayProduced }}
-                    </td>
-                </tr>
-            </table>
+                        v-if="product.daily.reduce(function(sum, elem) {
+                                            return sum + elem
+                                            }, 0)>0">
+                        <td class="title">
+                            {{ product.title }}
+                        </td>
+                        <td>
+                            {{ product.monthly }} {{ product.unit }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -51,24 +90,47 @@ export default {
     data() {
         return {
             date: new Date(),
-            reportData: []
+            reportData: [],
+            localDate: this.commonDate,
         }
     },
     props: {
-        commonDate: ''
+        commonDate: '',
+        dateFormated: ''
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS'
         ]),
+        decreaseMonth() {
+            let currentDate = new Date(Date.parse(this.localDate))
+            currentDate.setDate(1);
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            this.localDate = currentDate.toISOString().slice(0, 10)
+            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
+            // console.log(currentDate.toISOString().slice(0, 10))
+        },
+        increaseMonth() {
+            let currentDate = new Date(Date.parse(this.localDate))
+            currentDate.setDate(1);
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            this.localDate = currentDate.toISOString().slice(0, 10)
+            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
+            // console.log(currentDate.toISOString().slice(0, 10))
+        },
+        resetMonth() {
+            this.localDate = new Date().toISOString().slice(0, 10)
+            this.$emit('setDate', this.localDate)
+        },
         daysInMonth() {
-            return new Date(this.date.getFullYear(),
-                this.date.getMonth() + 1,
+            let date = new Date(Date.parse(this.localDate))
+            return new Date(date.getFullYear(),
+                date.getMonth() + 1,
                 0).getDate();
         },
-        test() {
-            let data = {date: this.commonDate, days: this.daysInMonth()}
-            axios.get('http://127.0.0.1:8000/api/products/test', {
+        getReport() {
+            let data = {date: this.localDate, days: this.daysInMonth()}
+            axios.get('http://127.0.0.1:8000/api/reports/monthly', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })
@@ -89,12 +151,12 @@ export default {
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
-        commonDate: function (newCommonDate, oldCommonDate) {
-            this.test()
+        localDate: function (newLocalDate, oldCLocalDate) {
+            this.getReport()
         }
     },
     mounted() {
-        this.test()
+        this.getReport()
     }
 }
 </script>
@@ -115,20 +177,26 @@ tr {
 
 tr:hover {
     /*border-inline: 1px solid #1f6fb2;*/
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
 }
+
 td:hover {
     /*border-inline: 1px solid #1f6fb2;*/
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
 }
+
 .cells {
     width: 2.9%;
-    border-left: 1px solid silver;
-    border-right: 1px solid silver;
+    /*border-left: 1px solid silver;*/
+    /*border-right: 1px solid silver;*/
 }
 
 .title {
-    width: 50px;
+    width: 150px;
     text-align: left;
+}
+
+.monthBtn {
+    width: 100px;
 }
 </style>
