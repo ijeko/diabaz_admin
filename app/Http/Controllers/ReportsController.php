@@ -6,6 +6,7 @@ use App\Http\Sevices\ReportsService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use App\Models\Product;
+use App\Models\Sold;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
@@ -24,21 +25,18 @@ class ReportsController extends Controller
 
     public function MonthlyReport(Request $request)
     {
-        $action = 'produced';
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
         $daysCount = $request->days;
-        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product(), $action);
+        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product());
     }
 
     public function UploadReport(Request $request)
     {
-        $action = 'sold';
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
-        $daysCount = $request->days;
-        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product(), $action);
+        return $this->reports->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
     }
 }

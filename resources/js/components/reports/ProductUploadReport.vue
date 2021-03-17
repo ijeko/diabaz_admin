@@ -17,40 +17,41 @@
             </div></div>
             <div class="card-body">
                 <div class="container result-table">
-                    <div class="row">
+                    <div class="row text-light bg-dark">
                         <div class="col-3">Дата</div>
                         <div class="col-3">Продукция</div>
                         <div class="col-3">Контрагент</div>
                         <div class="col-3">Количество</div>
                     </div>
-                    <div class="row">
-                        <div class="col bg-light date">
-                            <div class="row"v-for="(day, index) in uploadDay()"
-                                 :key="index">
-                                <div class="col-3 bg-info">
-                                    {{ day }}
+                    <div class="row"
+                    >
+                        <div class="col date">
+                            <div class="row date-line"
+                                 v-for="(upload, index) in reportData.uploads"
+                                 :key="index"
+                            >
+                                <div class="col-3 date-block">
+                                    {{ index}}
                                 </div>
-                                <div class="col-9 bg-warning">
+                                <div class="col-9">
                                     <div class="row">
-                                        <div class="col bg-danger">
-                                            <div class="row"
-                                            v-for="(product, index) in reportData"
-                                                 :key="index"
-                                                 v-if="product.monthly"
+                                        <div class="col">
+                                            <div class="row item"
+                                                 v-for="product in upload"
+                                                 :key="product.id"
                                             >
                                                 <div class="col-4">
                                                     {{ product.title }}
                                                 </div>
                                                 <div class="col-4">
-                                                    <div class="row" v-for="(client, index) in clientsUpload"
-                                                    :key="index">
-                                                        <div class="col">{{client.client}}</div>
+                                                    <div class="row">
+                                                        <div class="col">{{product.client}}</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="row">
                                                         <div class="col">
-                                                            {{clientsUpload}}
+                                                            {{product.qty}} {{product.unit}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -66,6 +67,31 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4">
+            <div class="card-header">Всего отгружено за месяц:</div>
+            <div class="card-body">
+                <table class="table table-striped col-6">
+                    <thead>
+                    <tr>
+                        <th class="title">Продукция</th>
+                        <th class="cells">Количество</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(product, index) in reportData.total"
+                        :key="index"
+                        >
+                        <td class="title">
+                            {{ index }}
+                        </td>
+                        <td>
+                            {{ product.totalSold }} {{ product.unit }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -79,12 +105,13 @@ export default {
             date: new Date(),
             reportData: [],
             localDate: this.commonDate,
-            clientsUpload: []
+            clientsUpload: [],
+            lineToggle: 0
         }
     },
     props: {
         commonDate: '',
-        dateFormated: ''
+        dateFormated: '',
     },
     methods: {
         ...mapActions([
@@ -104,22 +131,6 @@ export default {
 
             }
             return dates
-        },
-        clients () {
-
-            let clients = []
-            for (let product of this.reportData)
-            {
-                for (let upload of product.upload)
-                {
-                    if (upload) {
-                        clients.push({qty: upload.qty, client : upload.soldTo})
-                        console.log(clients)
-                    }
-                }
-                console.log(clients)
-            }
-            return this.clientsUpload = clients
         },
         decreaseMonth() {
             let currentDate = new Date(Date.parse(this.localDate))
@@ -161,12 +172,15 @@ export default {
                     // handle error
                     console.log(error);
                 })
-        }
+        },
     },
     computed: {
         ...mapGetters([
             'PRODUCTS'
         ]),
+        colorToggle (){
+                return this.lineToggle+1
+        }
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
@@ -177,11 +191,23 @@ export default {
     mounted() {
         this.getReport()
         this.isWeekend
-        this.clients()
     }
 }
 </script>
 
 <style scoped>
-
+.date-line {
+    /*border-bottom: 1px solid silver;*/
+    margin-bottom: 10px;
+}
+.item {
+    border-bottom: 1px solid silver;
+    padding: 5px;
+}
+.monthBtn {
+    width: 100px;
+}
+.date-block {
+    border-bottom: 1px solid silver;
+}
 </style>

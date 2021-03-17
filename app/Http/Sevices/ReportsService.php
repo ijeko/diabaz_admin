@@ -4,35 +4,21 @@
 namespace App\Http\Sevices;
 
 
-use App\Models\Product;
 
 class ReportsService
 {
-    public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products, $action)
+    public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products)
     {
         $dayProductionReport = [];
-//        $products = $this->product->all();
         foreach ($products->all() as $product) {
             $daily = [];
-            $client = [];
-            $monthly = $product->$action()->sum('qty');
+            $monthly = $product->produced()->sum('qty');
             for ($day = 1; $daysCount >= $day; $day++) {
-                if ($product->$action()->getModel()->getConnection()
-                    ->getSchemaBuilder()
-                    ->hasColumn($product->$action()->getModel()->getTable(), 'soldTo')) {
-                    array_push($client,  $product->$action()
-                        ->whereYear('date', $targetYear)
-                        ->whereMonth('date', $targetMonth)
-                        ->whereDay('date', $day)->first());
-                }
-//                array_push($producedDaily, ['qty' => $product->produced()->whereDay('date', $day)->sum('qty')]);
-                array_push($daily, $product->$action()
+                array_push($daily, $product->produced()
                     ->whereYear('date', $targetYear)
                     ->whereMonth('date', $targetMonth)
                     ->whereDay('date', $day)->sum('qty'),
                 );
-//                Проверка, если есть поле soldTO, тогда добавляется контрагент
-
             }
             array_push($dayProductionReport, [
                 'id' => $product->id,
@@ -40,10 +26,36 @@ class ReportsService
                 'unit' => $product->unit,
                 'daily' => $daily,
                 'monthly' => $monthly,
-                'upload' => $client
             ]);
-//dd($dayProductionReport);
         }
         return $dayProductionReport;
+    }
+
+    public function MonthlyUploadReport($targetMonth, $targetYear, $upload)
+    {
+        $uploadsData = [];
+        $totalSold = [];
+        $uploads = $upload->whereYear('date', $targetYear)->whereMonth('date', $targetMonth)->get();
+        foreach ($uploads as $upload) {
+            $date = $upload->date;
+            $qty = $upload->qty;
+            $client = $upload->soldTo;
+            $product = $upload->product()->first();
+            array_push($uploadsData, [
+                'date' => $date,
+                'qty' => $qty,
+                'client' => $client,
+                'title' => $product->title,
+                'unit' => $product->unit
+            ]);
+            array_push($totalSold, [
+                'title' => $product->title,
+                'totalSold' => $product->getSoldQty(),
+                'unit' => $product->unit
+            ]);
+        }
+        $uploadsData = collect($uploadsData)->groupBy('date', false);
+        $totalSold = collect($totalSold)->keyBy('title');
+        return ['uploads' => $uploadsData, 'total' => $totalSold];
     }
 }
