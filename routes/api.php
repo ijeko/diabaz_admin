@@ -62,3 +62,4 @@ Route::get('/products/getstock', [App\Http\Controllers\ProductionController::cla
 
 // Reports
 Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
+Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);

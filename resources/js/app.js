@@ -48,6 +48,10 @@ Vue.component('admin-new-material-component', require('./components/admin/popup/
 Vue.component('admin-machines-component', require('./components/admin/machines.vue').default);
 Vue.component('admin-edit-machine-component', require('./components/admin/popup/editMachine.vue').default);
 Vue.component('admin-new-machine-component', require('./components/admin/popup/newMachine.vue').default);
+
+//reports
+Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);
+Vue.component('product-upload-component', require('./components/reports/ProductUploadReport.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

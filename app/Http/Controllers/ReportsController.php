@@ -14,7 +14,7 @@ class ReportsController extends Controller
     {
         $this->reports = new ReportsService();
         $this->material = new Material();
-        $this->product = new Product();
+
     }
 
     public function index()
@@ -22,13 +22,23 @@ class ReportsController extends Controller
         return view('reports');
     }
 
-    public function MonthlyReport (Request $request)
+    public function MonthlyReport(Request $request)
     {
-
+        $action = 'produced';
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
         $daysCount = $request->days;
-        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $this->product);
+        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product(), $action);
+    }
+
+    public function UploadReport(Request $request)
+    {
+        $action = 'sold';
+        $time = strtotime($request->date);
+        $targetMonth = date('m', $time);
+        $targetYear = date('Y', $time);
+        $daysCount = $request->days;
+        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product(), $action);
     }
 }

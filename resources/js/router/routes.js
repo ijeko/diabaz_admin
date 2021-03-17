@@ -4,6 +4,11 @@ const routes = [
         component: () => import('../components/reports/ProductionMonth'),
         name: 'producedMonth'
     },
+    {
+        path: '/reports/product/upload',
+        component: () => import('../components/reports/ProductUploadReport'),
+        name: 'productUpload'
+    },
     // {
     //     path: 'produced/year',
     //     component: () => import(),

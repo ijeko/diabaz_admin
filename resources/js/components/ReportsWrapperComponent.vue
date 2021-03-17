@@ -31,7 +31,9 @@
                             <!-- Dropdown menu links -->
                             <h6 class="dropdown-header">Отчеты</h6>
                             <a class="dropdown-item" href="#">Подробно</a>
-                            <a class="dropdown-item" href="#">Отгрузки</a>
+                            <li class="dropdown-item">
+                                <router-link :to="{ name: 'productUpload' }">Отгрузки</router-link>
+                            </li>
                             <a class="dropdown-item" href="#">Склад</a>
                         </div>
                     </div>
