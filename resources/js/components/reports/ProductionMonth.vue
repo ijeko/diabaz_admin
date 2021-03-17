@@ -25,9 +25,11 @@
                         <thead>
                         <tr>
                             <th class="title">Продукция</th>
-                            <th class="cells"
+                            <th class="cells text-dark"
                                 v-for="day in daysInMonth()"
-                                :key="day">{{ day }}
+                                :key="day"
+                                :class="{'bg-warning': isWeekend(day) }"
+                            >{{ day }}
                             </th>
                         </tr>
                         </thead>
@@ -102,6 +104,12 @@ export default {
         ...mapActions([
             'GET_PRODUCTS'
         ]),
+        isWeekend (day) {
+            let currentDate = new Date(Date.parse(this.localDate))
+            currentDate.setDate(day);
+            var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
+            return isWeekend
+        },
         decreaseMonth() {
             let currentDate = new Date(Date.parse(this.localDate))
             currentDate.setDate(1);
@@ -157,6 +165,7 @@ export default {
     },
     mounted() {
         this.getReport()
+        this.isWeekend
     }
 }
 </script>
