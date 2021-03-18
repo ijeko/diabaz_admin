@@ -1,20 +1,22 @@
 <template>
     <div>
         <div class="card mt-4">
-            <div class="card-header">Отгрузки за месяц: <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button type="button" class="btn btn-secondary"
-                        @click="decreaseMonth"
-                > <
-                </button>
-                <button type="button" class="btn btn-outline-secondary monthBtn"
-                        @click="resetMonth"
-                >{{ dateFormated.ofMonth }}
-                </button>
-                <button type="button" class="btn btn-secondary"
-                        @click="increaseMonth"
-                > >
-                </button>
-            </div></div>
+            <div class="card-header">Отгрузки за месяц:
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-secondary"
+                            @click="decreaseMonth"
+                    > <
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary monthBtn"
+                            @click="resetMonth"
+                    >{{ dateFormated.ofMonth }}
+                    </button>
+                    <button type="button" class="btn btn-secondary"
+                            @click="increaseMonth"
+                    > >
+                    </button>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="container result-table">
                     <div class="row text-light bg-dark">
@@ -31,7 +33,7 @@
                                  :key="index"
                             >
                                 <div class="col-3 date-block">
-                                    {{ index}}
+                                    {{ index }}
                                 </div>
                                 <div class="col-9">
                                     <div class="row">
@@ -45,13 +47,13 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="row">
-                                                        <div class="col">{{product.client}}</div>
+                                                        <div class="col">{{ product.client }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="row">
                                                         <div class="col">
-                                                            {{product.qty}} {{product.unit}}
+                                                            {{ product.qty }} {{ product.unit }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,7 +82,7 @@
                     <tbody>
                     <tr v-for="(product, index) in reportData.total"
                         :key="index"
-                        >
+                    >
                         <td class="title">
                             {{ index }}
                         </td>
@@ -117,12 +119,10 @@ export default {
         ...mapActions([
             'GET_PRODUCTS'
         ]),
-        uploadDay () {
+        uploadDay() {
             let dates = []
-            for (let product of this.reportData)
-            {
-                for (let upload of product.upload)
-                {
+            for (let product of this.reportData) {
+                for (let upload of product.upload) {
                     if (upload) {
                         console.log(upload.date)
                         dates.push(upload.date)
@@ -178,8 +178,8 @@ export default {
         ...mapGetters([
             'PRODUCTS'
         ]),
-        colorToggle (){
-                return this.lineToggle+1
+        colorToggle() {
+            return this.lineToggle + 1
         }
     },
     watch: {
@@ -200,13 +200,16 @@ export default {
     /*border-bottom: 1px solid silver;*/
     margin-bottom: 10px;
 }
+
 .item {
     border-bottom: 1px solid silver;
     padding: 5px;
 }
+
 .monthBtn {
     width: 100px;
 }
+
 .date-block {
     border-bottom: 1px solid silver;
 }

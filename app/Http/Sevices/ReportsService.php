@@ -4,7 +4,6 @@
 namespace App\Http\Sevices;
 
 
-
 class ReportsService
 {
     public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products)
@@ -12,7 +11,10 @@ class ReportsService
         $dayProductionReport = [];
         foreach ($products->all() as $product) {
             $daily = [];
-            $monthly = $product->produced()->sum('qty');
+            $monthly = $product->produced()
+                ->whereYear('date', $targetYear)
+                ->whereMonth('date', $targetMonth)
+                ->sum('qty');
             for ($day = 1; $daysCount >= $day; $day++) {
                 array_push($daily, $product->produced()
                     ->whereYear('date', $targetYear)

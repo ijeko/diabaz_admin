@@ -24,6 +24,8 @@ Route::post('/products/edit', [App\Http\Controllers\ProductionController::class,
 Route::post('/products/add', [App\Http\Controllers\ProductionController::class, 'Add']);
 Route::get('/products/getsold', [App\Http\Controllers\ProductionController::class, 'GetSoldOnDate']);
 Route::post('/products/addsold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
+Route::get('/products/admin/editsold', [App\Http\Controllers\ProductionController::class, 'GetEditSold']);
+
 
 // Materials
 Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, 'index']);

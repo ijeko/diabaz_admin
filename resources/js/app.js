@@ -48,6 +48,8 @@ Vue.component('admin-new-material-component', require('./components/admin/popup/
 Vue.component('admin-machines-component', require('./components/admin/machines.vue').default);
 Vue.component('admin-edit-machine-component', require('./components/admin/popup/editMachine.vue').default);
 Vue.component('admin-new-machine-component', require('./components/admin/popup/newMachine.vue').default);
+Vue.component('admin-edit-sold-component', require('./components/admin/popup/editSold.vue').default);
+
 
 //reports
 Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);

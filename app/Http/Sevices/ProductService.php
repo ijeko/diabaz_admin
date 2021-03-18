@@ -35,7 +35,7 @@ class ProductService
                 'totalProduced' => $product->getProducedQty(),
                 'dayProduced' => $product->getProducedByDate($date),
                 'sold' => $product->getSoldQty(),
-                'stock' => $product->getProducedQty() - $product->getSoldQty() - $this->asMaterial($product->id),
+                'stock' => round($product->getProducedQty() - $product->getSoldQty() - $this->asMaterial($product->id), 2),
                 'unit' => $product->unit
             ]);
         }
@@ -176,5 +176,10 @@ class ProductService
                 }
             }
            return $asMaterial;
+    }
+
+    public function SoldPerMonth ($year, $month, $product)
+    {
+        return $product->sold()->get();
     }
 }

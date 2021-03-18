@@ -86,5 +86,13 @@ class ProductionController extends Controller
     {
         return $this->products->Stock();
     }
+    public function GetEditSold(Request $request) {
+        $time = strtotime($request->date);
+        $month = date('m', $time);
+        $year = date('Y', $time);
+        $product = new Product;
+
+        return $this->products->SoldPerMonth($year, $month, $product->find($request->product));
+    }
 
 }
