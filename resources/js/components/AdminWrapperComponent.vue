@@ -2,9 +2,12 @@
     <div class="container">
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="editButtons">
-            <div class="btn btn-link" @click="editSoldControl">Изменить отгрузки</div>
-            <div class="btn btn-link">Изменить произведено</div>
-
+            <admin-edit-sold-component
+                :user="user"
+                :dateFormated="dateFormated"
+                :commonDate="date"
+                @setDate="setDate"
+            ></admin-edit-sold-component>
         </div>
         <div class="row justify-content-between">
             <div class="col-md-6">
@@ -34,14 +37,7 @@
                 ></admin-machines-component>
             </div>
         </div>
-        <admin-edit-sold-component
-            v-if="showEditSold"
-            @colse="editSoldControl"
-            :user="user"
-            :dateFormated="dateFormated"
-            :commonDate="date"
-            @setDate="setDate"
-        ></admin-edit-sold-component>
+
     </div>
 </template>
 <!--.toISOString().slice(0,10)-->

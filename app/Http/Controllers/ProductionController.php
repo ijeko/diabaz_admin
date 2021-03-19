@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Sevices\MaterialService;
+use App\Http\Sevices\ModelFactory;
 use App\Http\Sevices\ProductService;
 use App\Models\Materialnorm;
 use App\Models\Product;
@@ -52,10 +53,12 @@ class ProductionController extends Controller
 
     public function Remove(Request $request)
     {
-        $model = new Product();
-        $product = $model->find($request->id);
-        if ($product) {
-            $product->delete();
+        // в реквесте приходит например 'model' => 'Product', 'id' => '15'
+        $Factory = new ModelFactory();
+        $model = $Factory->makeModel($request->model);
+        $model = $model->find($request->id);
+        if ($model) {
+            $model->delete();
         }
         echo 'Nothing to delete';
     }
@@ -86,13 +89,12 @@ class ProductionController extends Controller
     {
         return $this->products->Stock();
     }
-    public function GetEditSold(Request $request) {
+    public function Process(Request $request) {
         $time = strtotime($request->date);
         $month = date('m', $time);
         $year = date('Y', $time);
-        $product = new Product;
-
-        return $this->products->SoldPerMonth($year, $month, $product->find($request->product));
+        $process = $request->process;
+        return $this->products->GetPerMonth($year, $month, $process, $request->product);
     }
 
 }

@@ -117,10 +117,14 @@ class ProductService
                 'title' => ''
             ]);
         } else {
-            $this->product->title = $data->title;
-            $this->product->name = $data->name;
-            $this->product->unit = $data->unit;
-            $this->product->save();
+            $Factory = new ModelFactory();
+            $model = $Factory->makeModel('Product',
+                [
+                'title' => $data->title,
+                'name' => $data->name,
+                'unit' => $data->unit,
+            ]);
+            $model->save();
             return Response::HTTP_OK;
         }
     }
@@ -178,8 +182,14 @@ class ProductService
            return $asMaterial;
     }
 
-    public function SoldPerMonth ($year, $month, $product)
+    public function GetPerMonth ($year, $month, $process, $id)
     {
-        return $product->sold()->get();
+        $Factory = new ModelFactory();
+        $model = $Factory->makeModel($process);
+        return $model
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->where('product_id', $id)
+            ->get();
     }
 }

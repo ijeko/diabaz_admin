@@ -24,7 +24,9 @@ Route::post('/products/edit', [App\Http\Controllers\ProductionController::class,
 Route::post('/products/add', [App\Http\Controllers\ProductionController::class, 'Add']);
 Route::get('/products/getsold', [App\Http\Controllers\ProductionController::class, 'GetSoldOnDate']);
 Route::post('/products/addsold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
-Route::get('/products/admin/editsold', [App\Http\Controllers\ProductionController::class, 'GetEditSold']);
+Route::get('/products/admin/getprocess', [App\Http\Controllers\ProductionController::class, 'Process']);
+Route::delete('/products/admin/delitesold', [App\Http\Controllers\ProductionController::class, 'DeleteSold']);
+Route::get('/products/getstock', [App\Http\Controllers\ProductionController::class, 'GetStockByProduct']);
 
 
 // Materials
@@ -60,7 +62,7 @@ Route::get('/motohours/get', [App\Http\Controllers\MotohoursController::class, '
 Route::post('/motohours/add', [App\Http\Controllers\MotohoursController::class, 'add']);
 
 // Stock
-Route::get('/products/getstock', [App\Http\Controllers\ProductionController::class, 'GetStockByProduct']);
+
 
 // Reports
 Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);

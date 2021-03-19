@@ -2,15 +2,21 @@
     <div class="card">
         <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
             {{ dateFormated.year }}
+            <div class="btn btn-link"
+                 @mousedown="GET_PRODUCTS(yesterday)"
+                 @mouseup="GET_PRODUCTS(currentDate)"
+            >Показать за вчера
+            </div>
         </div>
         <div class="card-body">
             <div v-if="message" class="alert alert-danger" role="alert">
                 Не достаточно материалов:
                 <div v-for="(item, index) in message"
-                :key="index"
+                     :key="index"
                 >
-                    {{item.title}} - {{item.qty}}ед.
-                </div></div>
+                    {{ item.title }} - {{ item.qty }}ед.
+                </div>
+            </div>
             <table>
                 <tr>
                     <th>Продукция</th>
@@ -20,16 +26,17 @@
                 </tr>
                 <tr v-for="(product, index) in PRODUCTS"
                     :key="index">
-                    <td>
+                    <td :class="{'text-secondary' : !product.stock, 'text-success' : product.dayProduced}"
+                    >
                         {{ product.title }}
                     </td>
-                    <td>
+                    <td :class="{'text-secondary' : !product.dayProduced}">
                         {{ product.dayProduced }} {{ product.unit }}
                     </td>
-                    <td>
+                    <td :class="{'text-secondary' : !product.sold}">
                         {{ product.sold }} {{ product.unit }}
                     </td>
-                    <td>
+                    <td :class="{'text-secondary' : !product.stock}">
                         {{ product.stock }} {{ product.unit }}
                     </td>
                 </tr>
@@ -100,6 +107,13 @@ export default {
             var date = {date: this.date}
             this.GET_PRODUCTS(date)
             return date
+        },
+        yesterday() {
+            let currentDate = new Date(Date.parse(this.date))
+            currentDate.setDate(currentDate.getDate() - 1);
+            // this.GET_PRODUCTS({date: currentDate})
+            return {date: currentDate.toISOString().slice(0, 10)}
+            // console.log(currentDate.toISOString().slice(0, 10))
         }
     },
     methods: {
@@ -154,11 +168,13 @@ export default {
 table {
     width: 100%;
 }
+
 tr {
     /*display: flex;*/
     /*justify-content: space-between;*/
     border-bottom: 1px dotted silver;
 }
+
 td {
     width: 25%;
 }

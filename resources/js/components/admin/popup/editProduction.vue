@@ -14,7 +14,7 @@
         <button class="btn btn-outline-success mt-4 actions" @click="saveProduct">
             Сохранить
         </button>
-        <button class="btn btn-outline-danger mt-4 actions" @click="deleteProduct(PRODUCTS[selectedProduct].id)">
+        <button class="btn btn-outline-danger mt-4 actions" @click="deleteProduct('Product', PRODUCTS[selectedProduct].id)">
             Удалить
         </button>
         <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
@@ -114,11 +114,12 @@ export default {
                 this.$emit('close')
             }
         },
-        deleteProduct(id) {
+        deleteProduct(model, id) {
+            let data = {model: model, id: id}
             axios.delete('http://127.0.0.1:8000/api/products/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
-                    params: {id: id}
+                    params: data
                 })
                 .then(function (response) {
                     return data
