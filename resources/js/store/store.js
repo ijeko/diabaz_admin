@@ -78,7 +78,7 @@ export default {
     },
     actions: {
         GET_MATERIALS: ({commit}) => {
-            axios.get('http://127.0.0.1:8000/api/materials/get', {
+            axios.get('/api/materials/get', {
                 headers: {'Content-Type': 'application/json'}
             })
                 .then(function (response) {
@@ -91,7 +91,7 @@ export default {
                 })
         },
         GET_MATERIAL_QTY: ({commit}) => {
-            axios.get('http://127.0.0.1:8000/api/materials/qty', {
+            axios.get('/api/materials/qty', {
                 headers: {'Content-Type': 'application/json'}
             })
                 .then(function (response) {
@@ -105,7 +105,7 @@ export default {
             console.log('get mat qty')
         },
         GET_PRODUCTS: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/products/get', {
+            axios.get('/api/products', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
 
@@ -120,7 +120,7 @@ export default {
                 })
         },
         GET_PRODUCED: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/produced/get',
+            axios.get('/api/produced/get',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -135,7 +135,7 @@ export default {
                 })
         },
         ADD_PRODUCED: ({commit}, data) => {
-            axios.post('http://127.0.0.1:8000/api/produced/add',
+            axios.post('/api/produced/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -150,7 +150,7 @@ export default {
                 })
         },
         GET_SOLD: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/products/getsold',
+            axios.get('/api/products/sold',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -165,7 +165,7 @@ export default {
                 })
         },
         GET_STOCK: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/products/getstock',
+            axios.get('/api/products/getstock',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -180,7 +180,7 @@ export default {
                 })
         },
         ADD_SOLD: ({commit}, data) => {
-            axios.post('http://127.0.0.1:8000/api/products/addsold',
+            axios.post('/api/products/sold',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -194,7 +194,7 @@ export default {
                 })
         },
         ADD_MOTOHOURS: ({commit}, data) => {
-            axios.post('http://127.0.0.1:8000/api/motohours/add',
+            axios.post('/api/motohours/',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -208,7 +208,7 @@ export default {
                 })
         },
         GET_MACHINES: ({commit}) => {
-            axios.get('http://127.0.0.1:8000/api/machines/get', {
+            axios.get('/api/machines', {
                 headers: {'Content-Type': 'application/json'}
             })
                 .then(function (response) {
@@ -221,7 +221,7 @@ export default {
                 })
         },
         GET_MOTOHOURS: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/motohours/get',
+            axios.get('/api/motohours/',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -236,7 +236,7 @@ export default {
                 })
         },
         GET_NORM_BY_MATERIAL: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/matnorm/get',
+            axios.get('/api/matnorm/get',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -252,7 +252,7 @@ export default {
                 })
         },
         EDIT_SELECTED_NORM: ({commit}, data) => {
-            axios.post('http://127.0.0.1:8000/api/matnorm/edit',
+            axios.post('/api/matnorm/edit',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -266,7 +266,7 @@ export default {
                 })
         },
         GET_INCOMES: ({commit}, data) => {
-            axios.get('http://127.0.0.1:8000/api/incomes/get',
+            axios.get('/api/incomes/get',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
@@ -281,7 +281,7 @@ export default {
                 })
         },
         ADD_INCOME: ({commit}, data) => {
-            axios.post('http://127.0.0.1:8000/api/incomes/add',
+            axios.post('/api/incomes/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}

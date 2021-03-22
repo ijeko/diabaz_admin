@@ -228,7 +228,7 @@ export default {
     watch: {
         // эта функция запускается при любом изменении вопроса
         localDate: function (newLocalDate, oldCLocalDate) {
-            this.getReport()
+            this.getReport(this.process)
         },
     },
     methods: {
@@ -261,7 +261,7 @@ export default {
         getReport(process) {
             this.process=process
             let data = {date: this.localDate, product: this.selectedProduct, process: this.process}
-            axios.get('http://127.0.0.1:8000/api/products/admin/getprocess', {
+            axios.get('/api/products/operations', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })
@@ -277,7 +277,7 @@ export default {
         remove(model, id) {
             let data = {model: model, id: id}
             if (confirm('Точно удалить?')) {
-                axios.delete('http://127.0.0.1:8000/api/products/remove',
+                axios.delete('/api/products/operations',
                     {
                         headers: {'Content-Type': 'application/json'},
                         params: data

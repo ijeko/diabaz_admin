@@ -82,7 +82,7 @@ export default {
             else return false
         },
         remove (id) {
-            axios.delete('http://127.0.0.1:8000/api/incomes/remove',
+            axios.delete('/api/incomes/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}

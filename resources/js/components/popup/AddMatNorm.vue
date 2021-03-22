@@ -95,7 +95,7 @@ export default {
             this.closeEditForm()
         },
         remove (id) {
-            axios.delete('http://127.0.0.1:8000/api/matnorm/remove',
+            axios.delete('/api/matnorm/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}

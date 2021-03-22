@@ -99,7 +99,7 @@ export default {
                     name: this.newMaterialSlug,
                     unit: this.newMaterialUnit
                 })
-                axios.post('http://127.0.0.1:8000/api/materials/edit',
+                axios.post('/api/materials/edit',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -116,7 +116,7 @@ export default {
             }
         },
         deleteMaterial(id) {
-            axios.delete('http://127.0.0.1:8000/api/materials/remove',
+            axios.delete('/api/materials/remove',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}

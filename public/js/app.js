@@ -2379,7 +2379,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       data = JSON.stringify(data); // this.ADD_PRODUCED(JSON.stringify(data))
 
-      axios.post('http://127.0.0.1:8000/api/produced/add', {
+      axios.post('/api/produced/add', {
         data: data
       }, {
         headers: {
@@ -2420,6 +2420,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _admin_materials__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin/materials */ "./resources/js/components/admin/materials.vue");
 /* harmony import */ var _admin_machines__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./admin/machines */ "./resources/js/components/admin/machines.vue");
+//
+//
 //
 //
 //
@@ -2829,7 +2831,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           unit: this.newMachineUnit
         });
 
-        axios.post('http://127.0.0.1:8000/api/machines/edit', {
+        axios.put('api/machines', {
           data: _data
         }, {
           headers: {
@@ -2846,7 +2848,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     deleteMachine: function deleteMachine(id) {
-      axios["delete"]('http://127.0.0.1:8000/api/machines/remove', {
+      axios["delete"]('/api/machines', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -2987,7 +2989,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           unit: this.newMaterialUnit
         });
 
-        axios.post('http://127.0.0.1:8000/api/materials/edit', {
+        axios.post('/api/materials/edit', {
           data: _data
         }, {
           headers: {
@@ -3004,7 +3006,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     deleteMaterial: function deleteMaterial(id) {
-      axios["delete"]('http://127.0.0.1:8000/api/materials/remove', {
+      axios["delete"]('/api/materials/remove', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3144,7 +3146,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           name: this.newProductSlug,
           unit: this.newProductUnit
         });
-        axios.post('http://127.0.0.1:8000/api/products/edit', {
+        axios.put('/api/products/admin', {
           data: data
         }, {
           headers: {
@@ -3165,7 +3167,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         model: model,
         id: id
       };
-      axios["delete"]('http://127.0.0.1:8000/api/products/remove', {
+      axios["delete"]('/api/products/admin', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3433,7 +3435,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     // эта функция запускается при любом изменении вопроса
     localDate: function localDate(newLocalDate, oldCLocalDate) {
-      this.getReport();
+      this.getReport(this.process);
     }
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS'])), {}, {
@@ -3467,7 +3469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         product: this.selectedProduct,
         process: this.process
       };
-      axios.get('http://127.0.0.1:8000/api/products/admin/getprocess', {
+      axios.get('/api/products/operations', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3487,7 +3489,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       };
 
       if (confirm('Точно удалить?')) {
-        axios["delete"]('http://127.0.0.1:8000/api/products/remove', {
+        axios["delete"]('/api/products/operations', {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -3631,7 +3633,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           name: this.name,
           unit: this.unit
         });
-        axios.post('http://127.0.0.1:8000/api/machines/add', {
+        axios.post('/api/machines', {
           data: data
         }, {
           headers: {
@@ -3641,8 +3643,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.info = response;
 
           if (response.data === 200) {
-            alert('200');
-
             _this.$emit('close');
 
             _this.$emit('update');
@@ -3704,6 +3704,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "newMaterial",
@@ -3713,6 +3715,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       name: '',
       unit: '',
       info: '',
+      minimal: 0,
       message: ''
     };
   },
@@ -3778,9 +3781,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var data = JSON.stringify({
           title: this.title,
           name: this.name,
-          unit: this.unit
+          unit: this.unit,
+          minimal: this.minimal
         });
-        axios.post('http://127.0.0.1:8000/api/materials/add', {
+        axios.post('/api/materials/add', {
           data: data
         }, {
           headers: {
@@ -3790,8 +3794,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.info = response;
 
           if (response.data === 200) {
-            alert('200');
-
             _this.$emit('close');
 
             _this.$emit('update');
@@ -3930,7 +3932,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           name: this.name,
           unit: this.unit
         });
-        axios.post('http://127.0.0.1:8000/api/products/add', {
+        axios.post('/api/products/admin', {
           data: data
         }, {
           headers: {
@@ -3940,8 +3942,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.info = response;
 
           if (response.data === 200) {
-            alert('200');
-
             _this.$emit('close');
 
             _this.$emit('update');
@@ -4276,7 +4276,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.closeEditForm();
     },
     remove: function remove(id) {
-      axios["delete"]('http://127.0.0.1:8000/api/matnorm/remove', {
+      axios["delete"]('/api/matnorm/remove', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -4398,7 +4398,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } else return false;
     },
     remove: function remove(id) {
-      axios["delete"]('http://127.0.0.1:8000/api/incomes/remove', {
+      axios["delete"]('/api/incomes/remove', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -4990,7 +4990,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         date: this.localDate,
         days: this.daysInMonth()
       };
-      axios.get('http://127.0.0.1:8000/api/reports/upload', {
+      axios.get('/api/reports/upload', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5178,7 +5178,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         date: this.localDate,
         days: this.daysInMonth()
       };
-      axios.get('http://127.0.0.1:8000/api/reports/monthly', {
+      axios.get('/api/reports/monthly', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5481,7 +5481,7 @@ __webpack_require__.r(__webpack_exports__);
   actions: {
     GET_MATERIALS: function GET_MATERIALS(_ref) {
       var commit = _ref.commit;
-      axios.get('http://127.0.0.1:8000/api/materials/get', {
+      axios.get('/api/materials/get', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -5495,7 +5495,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_MATERIAL_QTY: function GET_MATERIAL_QTY(_ref2) {
       var commit = _ref2.commit;
-      axios.get('http://127.0.0.1:8000/api/materials/qty', {
+      axios.get('/api/materials/qty', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -5510,7 +5510,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_PRODUCTS: function GET_PRODUCTS(_ref3, data) {
       var commit = _ref3.commit;
-      axios.get('http://127.0.0.1:8000/api/products/get', {
+      axios.get('/api/products', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5525,7 +5525,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_PRODUCED: function GET_PRODUCED(_ref4, data) {
       var commit = _ref4.commit;
-      axios.get('http://127.0.0.1:8000/api/produced/get', {
+      axios.get('/api/produced/get', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5540,7 +5540,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ADD_PRODUCED: function ADD_PRODUCED(_ref5, data) {
       var commit = _ref5.commit;
-      axios.post('http://127.0.0.1:8000/api/produced/add', {
+      axios.post('/api/produced/add', {
         data: data
       }, {
         headers: {
@@ -5556,7 +5556,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_SOLD: function GET_SOLD(_ref6, data) {
       var commit = _ref6.commit;
-      axios.get('http://127.0.0.1:8000/api/products/getsold', {
+      axios.get('/api/products/sold', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5571,7 +5571,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_STOCK: function GET_STOCK(_ref7, data) {
       var commit = _ref7.commit;
-      axios.get('http://127.0.0.1:8000/api/products/getstock', {
+      axios.get('/api/products/getstock', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5586,7 +5586,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ADD_SOLD: function ADD_SOLD(_ref8, data) {
       var commit = _ref8.commit;
-      axios.post('http://127.0.0.1:8000/api/products/addsold', {
+      axios.post('/api/products/sold', {
         data: data
       }, {
         headers: {
@@ -5601,7 +5601,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ADD_MOTOHOURS: function ADD_MOTOHOURS(_ref9, data) {
       var commit = _ref9.commit;
-      axios.post('http://127.0.0.1:8000/api/motohours/add', {
+      axios.post('/api/motohours/', {
         data: data
       }, {
         headers: {
@@ -5616,7 +5616,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_MACHINES: function GET_MACHINES(_ref10) {
       var commit = _ref10.commit;
-      axios.get('http://127.0.0.1:8000/api/machines/get', {
+      axios.get('/api/machines', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -5630,7 +5630,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_MOTOHOURS: function GET_MOTOHOURS(_ref11, data) {
       var commit = _ref11.commit;
-      axios.get('http://127.0.0.1:8000/api/motohours/get', {
+      axios.get('/api/motohours/', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5645,7 +5645,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_NORM_BY_MATERIAL: function GET_NORM_BY_MATERIAL(_ref12, data) {
       var commit = _ref12.commit;
-      axios.get('http://127.0.0.1:8000/api/matnorm/get', {
+      axios.get('/api/matnorm/get', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5661,7 +5661,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     EDIT_SELECTED_NORM: function EDIT_SELECTED_NORM(_ref13, data) {
       var commit = _ref13.commit;
-      axios.post('http://127.0.0.1:8000/api/matnorm/edit', {
+      axios.post('/api/matnorm/edit', {
         data: data
       }, {
         headers: {
@@ -5676,7 +5676,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     GET_INCOMES: function GET_INCOMES(_ref14, data) {
       var commit = _ref14.commit;
-      axios.get('http://127.0.0.1:8000/api/incomes/get', {
+      axios.get('/api/incomes/get', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -5691,7 +5691,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ADD_INCOME: function ADD_INCOME(_ref15, data) {
       var commit = _ref15.commit;
-      axios.post('http://127.0.0.1:8000/api/incomes/add', {
+      axios.post('/api/incomes/add', {
         data: data
       }, {
         headers: {
@@ -45412,22 +45412,26 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "dropdown-menu" }, [
-              _c("h6", { staticClass: "dropdown-header" }, [_vm._v("Отчеты")]),
-              _vm._v(" "),
-              _c(
-                "li",
-                { staticClass: "dropdown-item" },
-                [
-                  _c(
-                    "router-link",
-                    { attrs: { to: { name: "producedMonth" } } },
-                    [_vm._v("За месяц")]
-                  )
-                ],
-                1
-              )
-            ])
+            _c(
+              "div",
+              { staticClass: "dropdown-menu" },
+              [
+                _c("h6", { staticClass: "dropdown-header" }, [
+                  _vm._v("Отчеты")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  { attrs: { to: { name: "producedMonth" } } },
+                  [
+                    _c("li", { staticClass: "dropdown-item" }, [
+                      _vm._v("За месяц")
+                    ])
+                  ]
+                )
+              ],
+              1
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "btn-group dropright" }, [
@@ -45449,30 +45453,38 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "dropdown-menu" }, [
-              _c("h6", { staticClass: "dropdown-header" }, [_vm._v("Отчеты")]),
-              _vm._v(" "),
-              _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-                _vm._v("Подробно")
-              ]),
-              _vm._v(" "),
-              _c(
-                "li",
-                { staticClass: "dropdown-item" },
-                [
-                  _c(
-                    "router-link",
-                    { attrs: { to: { name: "productUpload" } } },
-                    [_vm._v("Отгрузки")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-                _vm._v("Склад")
-              ])
-            ])
+            _c(
+              "div",
+              { staticClass: "dropdown-menu" },
+              [
+                _c("h6", { staticClass: "dropdown-header" }, [
+                  _vm._v("Отчеты")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  { staticClass: "dropdown-item", attrs: { href: "#" } },
+                  [_vm._v("Подробно")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  { attrs: { to: { name: "productUpload" } } },
+                  [
+                    _c("li", { staticClass: "dropdown-item" }, [
+                      _vm._v("Отгрузки")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  { staticClass: "dropdown-item", attrs: { href: "#" } },
+                  [_vm._v("Склад")]
+                )
+              ],
+              1
+            )
           ]),
           _vm._v(" "),
           _vm._m(0)
@@ -46953,6 +46965,30 @@ var render = function() {
             return
           }
           _vm.unit = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _c("label", [_vm._v("Минимальное количество")]),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.minimal,
+          expression: "minimal"
+        }
+      ],
+      staticClass: "form-control",
+      attrs: { type: "number" },
+      domProps: { value: _vm.minimal },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.minimal = $event.target.value
         }
       }
     }),
@@ -48691,7 +48727,10 @@ var render = function() {
                             {
                               key: index,
                               staticClass: "cells",
-                              class: { "bg-success produced": dayProduced }
+                              class: {
+                                "bg-success produced": dayProduced,
+                                "text-secondary": !dayProduced
+                              }
                             },
                             [
                               _vm._v(

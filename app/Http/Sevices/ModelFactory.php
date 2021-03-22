@@ -23,9 +23,18 @@ class ModelFactory
     public function makeRelationModel($source, $relation)
     {
         $name = $this->namespace . '\\' . $source;
-
+//$model = new $name;
         if (class_exists($name)) {
-            return new $source->$relation();
+            return new $name->$relation();
         }
+    }
+
+    public function makeModelWith($model, $config)
+    {
+     //   $name = $this->namespace . '\\' . $source;
+//$model = new $name;
+
+            return new $model($config);
+
     }
 }

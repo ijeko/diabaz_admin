@@ -15,6 +15,8 @@
         <input v-model="name" class="form-control">
         <label>Единица измерения</label>
         <input type="text" v-model="unit" class="form-control">
+        <label>Минимальное количество</label>
+        <input type="number" v-model="minimal" class="form-control">
         <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMaterial" :disabled="!complete">
             Сохранить
         </button>
@@ -33,6 +35,7 @@ export default {
             name: '',
             unit: '',
             info: '',
+            minimal: 0,
             message: ''
         }
     },
@@ -97,16 +100,16 @@ export default {
                 let data = JSON.stringify({
                     title: this.title,
                     name: this.name,
-                    unit: this.unit
+                    unit: this.unit,
+                    minimal: this.minimal
                 })
-                axios.post('http://127.0.0.1:8000/api/materials/add',
+                axios.post('/api/materials/add',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
                     }).then(response => {
                     this.info = response
                     if (response.data === 200) {
-                        alert('200')
                         this.$emit('close')
                         this.$emit('update')
                     } else return false

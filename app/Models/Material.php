@@ -20,4 +20,8 @@ class Material extends Model
         $summ = $this->hasMany(MaterialIncome::class)->sum('qty');
         return $summ;
     }
+    public function minimum()
+    {
+        return $this->hasOne(MaterialMinimum::class);
+    }
 }

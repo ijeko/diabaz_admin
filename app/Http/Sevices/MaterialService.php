@@ -6,6 +6,7 @@ namespace App\Http\Sevices;
 
 use App\Models\Material;
 use App\Models\MaterialIncome;
+use App\Models\MaterialMinimum;
 use App\Models\Product;
 use Illuminate\Http\Response;
 
@@ -88,10 +89,16 @@ class MaterialService
                 'title' => ''
             ]);
         } else {
-            $this->material->title = $data->title;
-            $this->material->name = $data->name;
-            $this->material->unit = $data->unit;
-            $this->material->save();
+            $config = [
+                'title' => $data->title,
+                'name' => $data->name,
+                'unit' => $data->unit];
+
+
+            $Factory = new ModelFactory();
+            $material = $Factory->makeModelWith('Material', $config);
+//            $material->minimum()->qty = $data->minimal;
+            $material->save();
             return Response::HTTP_OK;
         }
     }

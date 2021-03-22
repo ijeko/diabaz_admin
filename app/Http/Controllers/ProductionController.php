@@ -89,7 +89,7 @@ class ProductionController extends Controller
     {
         return $this->products->Stock();
     }
-    public function Process(Request $request) {
+    public function Operations(Request $request) {
         $time = strtotime($request->date);
         $month = date('m', $time);
         $year = date('Y', $time);

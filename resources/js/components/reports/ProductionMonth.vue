@@ -45,7 +45,7 @@
                             <td class="cells"
                                 v-for="(dayProduced, index) in product.daily"
                                 :key="index"
-                                :class="{ 'bg-success produced': dayProduced }"
+                                :class="{ 'bg-success produced': dayProduced, 'text-secondary': !dayProduced }"
                             >{{ dayProduced }}
                             </td>
                         </tr>
@@ -138,7 +138,7 @@ export default {
         },
         getReport() {
             let data = {date: this.localDate, days: this.daysInMonth()}
-            axios.get('http://127.0.0.1:8000/api/reports/monthly', {
+            axios.get('/api/reports/monthly', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })

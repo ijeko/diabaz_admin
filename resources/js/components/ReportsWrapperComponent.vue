@@ -14,9 +14,10 @@
                         <div class="dropdown-menu">
                             <!-- Dropdown menu links -->
                             <h6 class="dropdown-header">Отчеты</h6>
-                            <li class="dropdown-item">
-                                <router-link :to="{ name: 'producedMonth' }">За месяц</router-link>
-                            </li>
+                                <router-link :to="{ name: 'producedMonth' }">
+                                    <li class="dropdown-item">За месяц</li>
+                                </router-link>
+
                             <!--                            <a class="dropdown-item" href="#">За месяц</a>-->
                             <!--                            <a class="dropdown-item" href="#">За год</a>-->
                             <!--                            <a class="dropdown-item" href="#">План-факт</a>-->
@@ -31,9 +32,10 @@
                             <!-- Dropdown menu links -->
                             <h6 class="dropdown-header">Отчеты</h6>
                             <a class="dropdown-item" href="#">Подробно</a>
-                            <li class="dropdown-item">
-                                <router-link :to="{ name: 'productUpload' }">Отгрузки</router-link>
-                            </li>
+                                <router-link :to="{ name: 'productUpload' }">
+                                    <li class="dropdown-item">Отгрузки</li>
+                                </router-link>
+
                             <a class="dropdown-item" href="#">Склад</a>
                         </div>
                     </div>

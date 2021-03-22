@@ -99,7 +99,7 @@ export default {
                     name: this.newMachineSlug,
                     unit: this.newMachineUnit
                 })
-                axios.post('http://127.0.0.1:8000/api/machines/edit',
+                axios.put('api/machines',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -116,7 +116,7 @@ export default {
             }
         },
         deleteMachine(id) {
-            axios.delete('http://127.0.0.1:8000/api/machines/remove',
+            axios.delete('/api/machines',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}

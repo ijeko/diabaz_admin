@@ -138,7 +138,7 @@ export default {
         sendProduced(data) {
             data = JSON.stringify(data)
             // this.ADD_PRODUCED(JSON.stringify(data))
-            axios.post('http://127.0.0.1:8000/api/produced/add',
+            axios.post('/api/produced/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}

@@ -98,7 +98,7 @@ export default {
                     name: this.newProductSlug,
                     unit: this.newProductUnit
                 })
-                axios.post('http://127.0.0.1:8000/api/products/edit',
+                axios.put('/api/products/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -116,7 +116,7 @@ export default {
         },
         deleteProduct(model, id) {
             let data = {model: model, id: id}
-            axios.delete('http://127.0.0.1:8000/api/products/remove',
+            axios.delete('/api/products/admin',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data

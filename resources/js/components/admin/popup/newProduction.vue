@@ -101,14 +101,13 @@ export default {
                     name: this.name,
                     unit: this.unit
                 })
-                axios.post('http://127.0.0.1:8000/api/products/add',
+                axios.post('/api/products/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
                     }).then(response => {
                     this.info = response
                     if (response.data === 200) {
-                        alert('200')
                         this.$emit('close')
                         this.$emit('update')
                     } else return false

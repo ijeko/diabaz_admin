@@ -160,7 +160,7 @@ export default {
         },
         getReport() {
             let data = {date: this.localDate, days: this.daysInMonth()}
-            axios.get('http://127.0.0.1:8000/api/reports/upload', {
+            axios.get('/api/reports/upload', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })
