@@ -58,7 +58,8 @@ class MaterialService
                 'income' => $material->getIncomeSumm(),
                 'used' => $used,
                 'stock' => $material->getIncomeSumm() - $used,
-                'unit' => $material->unit
+                'unit' => $material->unit,
+                'minQty' => $material->minQty
             ]);
         }
         $response = $materialQty;
@@ -67,10 +68,9 @@ class MaterialService
 
     public function EditMaterial($data)
     {
-//        dd($data);
         $records = $this->material->find($data->id);
 
-        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
+        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit, 'minQty' => $data->minQty]);
     }
 
     public function newMaterial($data)
@@ -92,12 +92,11 @@ class MaterialService
             $config = [
                 'title' => $data->title,
                 'name' => $data->name,
-                'unit' => $data->unit];
-
-
+                'unit' => $data->unit,
+                'minQty' => $data->minQty
+            ];
             $Factory = new ModelFactory();
-            $material = $Factory->makeModelWith('Material', $config);
-//            $material->minimum()->qty = $data->minimal;
+            $material = $Factory->makeModel('Material', $config);
             $material->save();
             return Response::HTTP_OK;
         }

@@ -18,11 +18,13 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
-Route::get('/inputdata', [App\Http\Controllers\HomeController::class, 'inputdata'])->name('inputdata');
-Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('admin');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/inputdata', [App\Http\Controllers\HomeController::class, 'inputdata'])->name('inputdata');
+    Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('admin');
 //Route::get('/reports/{any}', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports');
-Route::get('/{any}', [\App\Http\Controllers\ReportsController::class, 'index'])->where('any', '.*');
+    Route::get('/{any}', [\App\Http\Controllers\ReportsController::class, 'index'])->where('any', '.*');
+
+});
 
 
 //Route::get('/products/get', [App\Http\Controllers\ProductionController::class, 'getProducts'])->name('products');

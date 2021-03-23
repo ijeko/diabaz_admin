@@ -5,15 +5,15 @@
         <div class="card-body">
             <table>
                 <tr>
-                    <th class="text-center">Наименование</th>
-                    <!--                    <th>Остатки??</th>-->
-                    <th class="text-center">Ед. изм.</th>
-                    <th class="text-center">Действие</th>
+                    <th class="text-center align-text-top">Наименование</th>
+                    <th class="text-center align-text-top">Минимальное количество</th>
+                    <th class="text-center align-text-top">Ед. изм.</th>
+                    <th class="text-center align-text-top">Действие</th>
                 </tr>
                 <tr v-for="(material, index) in MATERIALS"
                     :key="index">
                     <td class="text-left"><span>{{ material.title }}</span></td>
-                    <!--                    <td>1</td>-->
+                    <td class="text-center"><span>{{ material.minQty }}</span></td>
                     <td class="text-center"><span>{{ material.unit }}</span></td>
                     <td class="text-center"><span class="btn btn-link" @click="editMaterial(index)">Изменить</span></td>
                 </tr>

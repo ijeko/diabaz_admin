@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
             {{ dateFormated.year }}
-            <div class="btn btn-link"
+            <div class="btn btn-link btn-sm"
                  @mousedown="GET_PRODUCTS(yesterday)"
                  @mouseup="GET_PRODUCTS(currentDate)"
             >Показать за вчера

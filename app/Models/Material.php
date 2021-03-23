@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Material extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'unit', 'name'];
+    protected $fillable = ['title', 'unit', 'name', 'minQty'];
 
     public function norma ()
     {

@@ -6,7 +6,7 @@
                  v-for="(material, index) in MATERIAL_QTY"
                  :key="index">
                 <div class="material-name">
-                    <div>{{ material.title }}
+                    <div>{{ material.title }} <span v-if="material.stock<=material.minQty" class="badge badge-pill badge-danger">Мало</span>
                     </div>
                 </div>
                 <div class="material-qty">{{ material.stock }} {{ material.unit }}</div>

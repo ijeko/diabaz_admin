@@ -18,6 +18,7 @@ class CreateMaterialsTable extends Migration
             $table->string('name');
             $table->string('title');
             $table->string('unit');
+            $table->integer('minQty')->default('0');
             $table->timestamps();
         });
     }

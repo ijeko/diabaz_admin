@@ -2913,6 +2913,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editMaterial",
@@ -2924,6 +2926,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     newMaterialName: '',
     newMaterialSlug: '',
     newMaterialUnit: '',
+    newMinQty: '',
     message: ''
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MATERIALS'])), {}, {
@@ -2977,6 +2980,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.newMaterialName = this.MATERIALS[this.selectedMaterial].title;
       this.newMaterialSlug = this.MATERIALS[this.selectedMaterial].name;
       this.newMaterialUnit = this.MATERIALS[this.selectedMaterial].unit;
+      this.newMinQty = this.MATERIALS[this.selectedMaterial].minQty;
     },
     saveMaterial: function saveMaterial() {
       if (this.validation === false) {
@@ -2986,7 +2990,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: this.MATERIALS[this.selectedMaterial].id,
           title: this.newMaterialName,
           name: this.newMaterialSlug,
-          unit: this.newMaterialUnit
+          unit: this.newMaterialUnit,
+          minQty: this.newMinQty
         });
 
         axios.post('/api/materials/edit', {
@@ -3715,7 +3720,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       name: '',
       unit: '',
       info: '',
-      minimal: 0,
+      minQty: 0,
       message: ''
     };
   },
@@ -3782,7 +3787,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           title: this.title,
           name: this.name,
           unit: this.unit,
-          minimal: this.minimal
+          minQty: this.minQty
         });
         axios.post('/api/materials/add', {
           data: data
@@ -45024,7 +45029,16 @@ var render = function() {
         _vm._l(_vm.MATERIAL_QTY, function(material, index) {
           return _c("div", { key: index, staticClass: "materials" }, [
             _c("div", { staticClass: "material-name" }, [
-              _c("div", [_vm._v(_vm._s(material.title) + "\n                ")])
+              _c("div", [
+                _vm._v(_vm._s(material.title) + " "),
+                material.stock <= material.minQty
+                  ? _c(
+                      "span",
+                      { staticClass: "badge badge-pill badge-danger" },
+                      [_vm._v("Мало")]
+                    )
+                  : _vm._e()
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "material-qty" }, [
@@ -45195,7 +45209,7 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "btn btn-link",
+            staticClass: "btn btn-link btn-sm",
             on: {
               mousedown: function($event) {
                 return _vm.GET_PRODUCTS(_vm.yesterday)
@@ -45692,6 +45706,10 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center" }, [
+                  _c("span", [_vm._v(_vm._s(material.minQty))])
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-center" }, [
                   _c("span", [_vm._v(_vm._s(material.unit))])
                 ]),
                 _vm._v(" "),
@@ -45749,11 +45767,21 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", { staticClass: "text-center" }, [_vm._v("Наименование")]),
+      _c("th", { staticClass: "text-center align-text-top" }, [
+        _vm._v("Наименование")
+      ]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Ед. изм.")]),
+      _c("th", { staticClass: "text-center align-text-top" }, [
+        _vm._v("Минимальное количество")
+      ]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Действие")])
+      _c("th", { staticClass: "text-center align-text-top" }, [
+        _vm._v("Ед. изм.")
+      ]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-center align-text-top" }, [
+        _vm._v("Действие")
+      ])
     ])
   }
 ]
@@ -45977,6 +46005,30 @@ var render = function() {
             return
           }
           _vm.newMaterialSlug = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _c("label", [_vm._v("Минимальное количество")]),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.newMinQty,
+          expression: "newMinQty"
+        }
+      ],
+      staticClass: "form-control",
+      attrs: { type: "number" },
+      domProps: { value: _vm.newMinQty },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.newMinQty = $event.target.value
         }
       }
     }),
@@ -46976,19 +47028,19 @@ var render = function() {
         {
           name: "model",
           rawName: "v-model",
-          value: _vm.minimal,
-          expression: "minimal"
+          value: _vm.minQty,
+          expression: "minQty"
         }
       ],
       staticClass: "form-control",
       attrs: { type: "number" },
-      domProps: { value: _vm.minimal },
+      domProps: { value: _vm.minQty },
       on: {
         input: function($event) {
           if ($event.target.composing) {
             return
           }
-          _vm.minimal = $event.target.value
+          _vm.minQty = $event.target.value
         }
       }
     }),

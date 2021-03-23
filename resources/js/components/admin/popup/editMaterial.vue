@@ -9,6 +9,8 @@
         <input v-model="newMaterialName" class="form-control">
         <label>Краткое название на английском</label>
         <input v-model="newMaterialSlug" class="form-control">
+        <label>Минимальное количество</label>
+        <input type="number" v-model="newMinQty" class="form-control">
         <label>Единица измерения</label>
         <input type="text" v-model="newMaterialUnit" class="form-control">
         <button class="btn btn-outline-success mt-4 actions" @click="saveMaterial">
@@ -34,6 +36,7 @@ export default {
         newMaterialName: '',
         newMaterialSlug: '',
         newMaterialUnit: '',
+        newMinQty: '',
         message: ''
     },
     computed: {
@@ -88,6 +91,7 @@ export default {
             this.newMaterialName = this.MATERIALS[this.selectedMaterial].title
             this.newMaterialSlug = this.MATERIALS[this.selectedMaterial].name
             this.newMaterialUnit = this.MATERIALS[this.selectedMaterial].unit
+            this.newMinQty = this.MATERIALS[this.selectedMaterial].minQty
         },
         saveMaterial() {
             if (this.validation === false) {
@@ -97,7 +101,8 @@ export default {
                     id: this.MATERIALS[this.selectedMaterial].id,
                     title: this.newMaterialName,
                     name: this.newMaterialSlug,
-                    unit: this.newMaterialUnit
+                    unit: this.newMaterialUnit,
+                    minQty: this.newMinQty
                 })
                 axios.post('/api/materials/edit',
                     {data},

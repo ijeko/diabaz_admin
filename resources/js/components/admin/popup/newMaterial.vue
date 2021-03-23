@@ -16,7 +16,7 @@
         <label>Единица измерения</label>
         <input type="text" v-model="unit" class="form-control">
         <label>Минимальное количество</label>
-        <input type="number" v-model="minimal" class="form-control">
+        <input type="number" v-model="minQty" class="form-control">
         <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMaterial" :disabled="!complete">
             Сохранить
         </button>
@@ -35,7 +35,7 @@ export default {
             name: '',
             unit: '',
             info: '',
-            minimal: 0,
+            minQty: 0,
             message: ''
         }
     },
@@ -101,7 +101,7 @@ export default {
                     title: this.title,
                     name: this.name,
                     unit: this.unit,
-                    minimal: this.minimal
+                    minQty: this.minQty
                 })
                 axios.post('/api/materials/add',
                     {data},
