@@ -3,7 +3,7 @@
         <div class="card-header">Остатки материалов на {{ dateFormated.day }} {{ dateFormated.month }} {{ dateFormated.year }}г.</div>
         <div class="card-body">
             <div class="materials"
-                 v-for="(material, index) in MATERIAL_QTY"
+                 v-for="(material, index) in MATERIALS"
                  :key="index">
                 <div class="material-name">
                     <div>{{ material.title }} <span v-if="material.stock<=material.minQty" class="badge badge-pill badge-danger">Мало</span>
@@ -33,7 +33,7 @@ export default {
     components: {ShowNorm},
     mounted() {
         this.GET_MATERIALS()
-        this.GET_MATERIAL_QTY()
+        // this.GET_MATERIAL_QTY()
 
 
     },
@@ -53,13 +53,13 @@ export default {
     computed: {
         ...mapGetters([
             'MATERIALS',
-            'MATERIAL_QTY'
+            // 'MATERIAL_QTY'
         ]),
     },
     methods: {
         ...mapActions([
             'GET_MATERIALS',
-            'GET_MATERIAL_QTY'
+            // 'GET_MATERIAL_QTY'
         ]),
         showShowNorm () {
             return this.isShowNormVisible = true
@@ -71,7 +71,7 @@ export default {
             return this.isIncomesVisible = true
         },
         closeIncomes () {
-            this.GET_MATERIAL_QTY()
+            this.GET_MATERIALS()
             return this.isIncomesVisible = false
         },
     }

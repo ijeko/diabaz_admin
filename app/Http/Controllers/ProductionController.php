@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Factories\ProductFactory;
 use App\Http\Sevices\MaterialService;
 use App\Http\Sevices\ModelFactory;
 use App\Http\Sevices\ProductService;
@@ -53,9 +54,8 @@ class ProductionController extends Controller
 
     public function Remove(Request $request)
     {
-        // в реквесте приходит например 'model' => 'Product', 'id' => '15'
-        $Factory = new ModelFactory();
-        $model = $Factory->makeModel($request->model);
+        $Factory = new ProductFactory();
+        $model = $Factory->makeAnyModel($request->model);
         $model = $model->find($request->id);
         if ($model) {
             $model->delete();
@@ -65,7 +65,7 @@ class ProductionController extends Controller
 
     public function Add(Request $request)
     {
-        return $this->products->newProduct(json_decode($request->data));
+        return $this->products->newProduct(json_decode($request->data, 1));
     }
 
     public function GetSoldOnDate(Request $request)
@@ -79,10 +79,9 @@ class ProductionController extends Controller
 
     public function AddSold(Request $request)
     {
-        $data = json_decode($request->data);
-        $this->products->AddSold($data);
 
-        return \Illuminate\Http\Response::HTTP_ACCEPTED;
+        $data = json_decode($request->data, 1);
+        return $this->products->AddSold($data);
     }
 
     public function GetStockByProduct(Request $request)

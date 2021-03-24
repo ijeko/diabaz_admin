@@ -77,8 +77,21 @@ export default {
         }
     },
     actions: {
+        // GET_MATERIALS: ({commit}) => {
+        //     axios.get('/api/materials/get', {
+        //         headers: {'Content-Type': 'application/json'}
+        //     })
+        //         .then(function (response) {
+        //             commit('SET_MATERIALS', response.data);
+        //             return response.data
+        //         })
+        //         .catch(function (error) {
+        //             // handle error
+        //             console.log(error);
+        //         })
+        // },
         GET_MATERIALS: ({commit}) => {
-            axios.get('/api/materials/get', {
+            axios.get('/api/materials', {
                 headers: {'Content-Type': 'application/json'}
             })
                 .then(function (response) {
@@ -89,20 +102,6 @@ export default {
                     // handle error
                     console.log(error);
                 })
-        },
-        GET_MATERIAL_QTY: ({commit}) => {
-            axios.get('/api/materials/qty', {
-                headers: {'Content-Type': 'application/json'}
-            })
-                .then(function (response) {
-                    commit('SET_MATERIALS_QTY', response.data);
-                    return response.data
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-            console.log('get mat qty')
         },
         GET_PRODUCTS: ({commit}, data) => {
             axios.get('/api/products', {

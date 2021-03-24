@@ -104,7 +104,7 @@ export default {
                     unit: this.newMaterialUnit,
                     minQty: this.newMinQty
                 })
-                axios.post('/api/materials/edit',
+                axios.put('/api/materials/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -121,7 +121,7 @@ export default {
             }
         },
         deleteMaterial(id) {
-            axios.delete('/api/materials/remove',
+            axios.delete('/api/materials/admin',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}
