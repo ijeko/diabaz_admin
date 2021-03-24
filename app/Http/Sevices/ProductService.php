@@ -4,6 +4,9 @@
 namespace App\Http\Sevices;
 
 
+use App\Factories\ProducedFactory;
+use App\Factories\ProductFactory;
+use App\Factories\SoldFactory;
 use App\Models\Material;
 use App\Models\Materialnorm;
 use App\Models\Produced;
@@ -103,30 +106,13 @@ class ProductService
 
     public function newProduct($data)
     {
-        if ($this->product->where('title', $data->title)->exists()) {
-            return response()->
-            json([
-                'name' => '',
-                'title' => 'Значение уже используется'
-            ]);
-        }
-        if ($this->product->where('name', $data->name)->exists()) {
-            return response()->
-            json([
-                'name' => 'Значение уже используется',
-                'title' => ''
-            ]);
-        } else {
-            $Factory = new ModelFactory();
-            $model = $Factory->makeModel('Product',
-                [
-                'title' => $data->title,
-                'name' => $data->name,
-                'unit' => $data->unit,
-            ]);
-            $model->save();
-            return Response::HTTP_OK;
-        }
+
+        $Factory = new ProductFactory();
+        $model = $Factory->make(Product::class, $data);
+        $check = CheckerService::CheckExists($model);
+        if ($check) return $check;
+        else $model->save();
+        return Response::HTTP_OK;
     }
 
     public function getSold($data)
@@ -144,12 +130,12 @@ class ProductService
 
     public function AddSold($data)
     {
-        $this->sold->user_id = $data->user_id;
-        $this->sold->product_id = $data->product_id;
-        $this->sold->qty = $data->qty;
-        $this->sold->date = $data->date;
-        $this->sold->soldTo = $data->soldTo;
-        $this->sold->save();
+        $Factory = new SoldFactory();
+        $item = $Factory->make(Sold::class, $data);
+        $check = CheckerService::CheckProductionStock($item);
+        if ($check) $item->save();
+        else   return \response(['error' => 'Не достаточно продукции: ' . $item->product()->first()->title]);
+
     }
 
 //    public function Stock()
@@ -173,19 +159,19 @@ class ProductService
 //    }
     public function asMaterial($id)
     {
-            $asMaterial = 0;
-            foreach ($this->material->all() as $material) {
-                if ($this->product->find($id)->name === $material->name) {
-                    $asMaterial = $material->getIncomeSumm();
-                }
+        $asMaterial = 0;
+        foreach ($this->material->all() as $material) {
+            if ($this->product->find($id)->name === $material->name) {
+                $asMaterial = $material->getIncomeSumm();
             }
-           return $asMaterial;
+        }
+        return $asMaterial;
     }
 
-    public function GetPerMonth ($year, $month, $process, $id)
+    public function GetPerMonth($year, $month, $process, $id)
     {
-        $Factory = new ModelFactory();
-        $model = $Factory->makeModel($process);
+        $Factory = new ProducedFactory();
+        $model = $Factory->makeAnyModel($process);
         return $model
             ->whereYear('date', $year)
             ->whereMonth('date', $month)

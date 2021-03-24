@@ -4,10 +4,11 @@
 namespace App\Http\Sevices;
 
 
+use App\Factories\MaterialFactory;
+use App\Factories\ModelFactory;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use App\Models\MaterialMinimum;
-use App\Models\Product;
 use Illuminate\Http\Response;
 
 class MaterialService
@@ -43,9 +44,10 @@ class MaterialService
         $this->income->save();
     }
 
-    public function GetMaterialQty()
+    public static function GetMaterialQty()
     {
-        $materials = $this->material->get();
+        $materials = new Material();
+        $materials = $materials->get();
         $materialQty = [];
         foreach ($materials as $material) {
             $used = 0;
@@ -55,6 +57,7 @@ class MaterialService
             array_push($materialQty, [
                 'id' => $material->id,
                 'title' => $material->title,
+                'name'=> $material->name,
                 'income' => $material->getIncomeSumm(),
                 'used' => $used,
                 'stock' => $material->getIncomeSumm() - $used,
@@ -62,61 +65,22 @@ class MaterialService
                 'minQty' => $material->minQty
             ]);
         }
-        $response = $materialQty;
-        return json_encode($response);
+        return $materialQty;
     }
 
     public function EditMaterial($data)
     {
-        $records = $this->material->find($data->id);
-
-        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit, 'minQty' => $data->minQty]);
+        $material = new Material();
+        $material->find($data['id'])->update($data);
     }
 
     public function newMaterial($data)
     {
-        if ($this->material->where('title', $data->title)->exists()) {
-            return response()->
-            json([
-                'name' => '',
-                'title' => 'Значение уже используется'
-            ]);
-        }
-        if ($this->material->where('name', $data->name)->exists()) {
-            return response()->
-            json([
-                'name' => 'Значение уже используется',
-                'title' => ''
-            ]);
-        } else {
-            $config = [
-                'title' => $data->title,
-                'name' => $data->name,
-                'unit' => $data->unit,
-                'minQty' => $data->minQty
-            ];
-            $Factory = new ModelFactory();
-            $material = $Factory->makeModel('Material', $config);
-            $material->save();
-            return Response::HTTP_OK;
-        }
-    }
-
-    public function chekInStock($toCheck, $data)
-    {
-        $materials = collect(json_decode($this->GetMaterialQty()));
-        $materialsNotEnough = [];
-        foreach ($toCheck as $norma) {
-            $checkedMaterial = $materials->where('id', $norma->material_id)->first();
-            $needed = $data->qty * $norma->norma;
-            if ($checkedMaterial->stock <= $needed) {
-                array_push($materialsNotEnough, [
-                    'material_id' => $norma->material_id,
-                    'title' => $checkedMaterial->title,
-                    'qty' => ($checkedMaterial->stock - $needed) * -1
-                ]);
-            }
-        }
-        return $materialsNotEnough;
+        $Factory = new MaterialFactory();
+        $model = $Factory->make(Material::class, $data);
+        $check = CheckerService::CheckExists($model);
+        if ($check) return $check;
+        else $model->save();
+        return Response::HTTP_OK;
     }
 }

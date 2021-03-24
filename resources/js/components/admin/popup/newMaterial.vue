@@ -103,7 +103,7 @@ export default {
                     unit: this.unit,
                     minQty: this.minQty
                 })
-                axios.post('/api/materials/add',
+                axios.post('/api/materials/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}

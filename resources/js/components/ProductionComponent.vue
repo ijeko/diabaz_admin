@@ -10,11 +10,11 @@
         </div>
         <div class="card-body">
             <div v-if="message" class="alert alert-danger" role="alert">
-                Не достаточно материалов:
-                <div v-for="(item, index) in message"
+                {{message.error}}
+                <div v-for="(item, index) in message.data"
                      :key="index"
                 >
-                    {{ item.title }} - {{ item.qty }}ед.
+                    {{ item.title }} - {{ item.qty }}ед. {{errorProduced}}
                 </div>
             </div>
             <table>
@@ -79,7 +79,8 @@ export default {
         return {
             isEnterVisible: '',
             isSoldVisible: false,
-            message: ''
+            message: '',
+            errorProduced: ''
         }
     },
     watch: {
@@ -148,16 +149,31 @@ export default {
                     this.message = response.data
                     return response.data
                 })
-                .catch(function (error) {
+                .catch(response => {
                     // handle error
-                    console.log(error);
+                    // this.errorProduced = response
+                    console.log(response.message);
                 })
             this.GET_PRODUCTS(this.currentDate)
             this.GET_MATERIAL_QTY()
             this.closePopup()
         },
         sendSold(data) {
-            this.ADD_SOLD(JSON.stringify(data))
+            data = JSON.stringify(data)
+            axios.post('/api/products/sold',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(response => {
+                    // commit('SET_PRODUCED', response.data)
+                    this.message = response.data
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
             this.GET_PRODUCTS(this.currentDate)
             this.closeSold()
         }

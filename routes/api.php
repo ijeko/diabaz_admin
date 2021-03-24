@@ -30,17 +30,16 @@ Route::delete('/products/operations', [App\Http\Controllers\ProductionController
 
 
 // Materials
-Route::get('/materials/get', [App\Http\Controllers\MaterialsController::class, 'index']);
-Route::get('/materials/qty', [App\Http\Controllers\MaterialsController::class, 'getQty']);
-Route::delete('/materials/remove', [App\Http\Controllers\MaterialsController::class, 'Remove']);
-Route::post('/materials/edit', [App\Http\Controllers\MaterialsController::class, 'Edit']);
-Route::post('/materials/add', [App\Http\Controllers\MaterialsController::class, 'Add']);
+Route::get('/materials', [App\Http\Controllers\MaterialsController::class, 'GetMaterials']);
+Route::delete('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'Remove']);
+Route::put('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'Edit']);
+Route::post('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'Add']);
 
 // Machines
 Route::get('/machines', [App\Http\Controllers\MachinesController::class, 'index']);
-Route::delete('/machines', [App\Http\Controllers\MachinesController::class, 'Remove']);
-Route::put('/machines', [App\Http\Controllers\MachinesController::class, 'Edit']);
-Route::post('/machines', [App\Http\Controllers\MachinesController::class, 'Add']);
+Route::delete('/machines/admin', [App\Http\Controllers\MachinesController::class, 'Remove']);
+Route::put('/machines/admin', [App\Http\Controllers\MachinesController::class, 'Edit']);
+Route::post('/machines/admin', [App\Http\Controllers\MachinesController::class, 'Add']);
 
 // Produced
 Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'index']);

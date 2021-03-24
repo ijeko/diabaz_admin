@@ -2064,8 +2064,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ShowNorm: _popup_ShowNorm__WEBPACK_IMPORTED_MODULE_0__.default
   },
   mounted: function mounted() {
-    this.GET_MATERIALS();
-    this.GET_MATERIAL_QTY();
+    this.GET_MATERIALS(); // this.GET_MATERIAL_QTY()
   },
   data: function data() {
     return {
@@ -2080,8 +2079,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     user: '',
     date: ''
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS', 'MATERIAL_QTY'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['GET_MATERIALS', 'GET_MATERIAL_QTY'])), {}, {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS' // 'MATERIAL_QTY'
+  ])),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['GET_MATERIALS' // 'GET_MATERIAL_QTY'
+  ])), {}, {
     showShowNorm: function showShowNorm() {
       return this.isShowNormVisible = true;
     },
@@ -2092,7 +2093,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.isIncomesVisible = true;
     },
     closeIncomes: function closeIncomes() {
-      this.GET_MATERIAL_QTY();
+      this.GET_MATERIALS();
       return this.isIncomesVisible = false;
     }
   })
@@ -2325,7 +2326,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       isEnterVisible: '',
       isSoldVisible: false,
-      message: ''
+      message: '',
+      errorProduced: ''
     };
   },
   watch: {
@@ -2389,16 +2391,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // commit('SET_PRODUCED', response.data)
         _this.message = response.data;
         return response.data;
-      })["catch"](function (error) {
+      })["catch"](function (response) {
         // handle error
-        console.log(error);
+        // this.errorProduced = response
+        console.log(response.message);
       });
       this.GET_PRODUCTS(this.currentDate);
       this.GET_MATERIAL_QTY();
       this.closePopup();
     },
     sendSold: function sendSold(data) {
-      this.ADD_SOLD(JSON.stringify(data));
+      var _this2 = this;
+
+      data = JSON.stringify(data);
+      axios.post('/api/products/sold', {
+        data: data
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        // commit('SET_PRODUCED', response.data)
+        _this2.message = response.data;
+        return response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
       this.GET_PRODUCTS(this.currentDate);
       this.closeSold();
     }
@@ -2994,7 +3013,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           minQty: this.newMinQty
         });
 
-        axios.post('/api/materials/edit', {
+        axios.put('/api/materials/admin', {
           data: _data
         }, {
           headers: {
@@ -3011,7 +3030,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     deleteMaterial: function deleteMaterial(id) {
-      axios["delete"]('/api/materials/remove', {
+      axios["delete"]('/api/materials/admin', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3212,6 +3231,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -3789,7 +3809,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           unit: this.unit,
           minQty: this.minQty
         });
-        axios.post('/api/materials/add', {
+        axios.post('/api/materials/admin', {
           data: data
         }, {
           headers: {
@@ -5484,9 +5504,22 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   actions: {
+    // GET_MATERIALS: ({commit}) => {
+    //     axios.get('/api/materials/get', {
+    //         headers: {'Content-Type': 'application/json'}
+    //     })
+    //         .then(function (response) {
+    //             commit('SET_MATERIALS', response.data);
+    //             return response.data
+    //         })
+    //         .catch(function (error) {
+    //             // handle error
+    //             console.log(error);
+    //         })
+    // },
     GET_MATERIALS: function GET_MATERIALS(_ref) {
       var commit = _ref.commit;
-      axios.get('/api/materials/get', {
+      axios.get('/api/materials', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -5498,23 +5531,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MATERIAL_QTY: function GET_MATERIAL_QTY(_ref2) {
+    GET_PRODUCTS: function GET_PRODUCTS(_ref2, data) {
       var commit = _ref2.commit;
-      axios.get('/api/materials/qty', {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(function (response) {
-        commit('SET_MATERIALS_QTY', response.data);
-        return response.data;
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-      console.log('get mat qty');
-    },
-    GET_PRODUCTS: function GET_PRODUCTS(_ref3, data) {
-      var commit = _ref3.commit;
       axios.get('/api/products', {
         headers: {
           'Content-Type': 'application/json'
@@ -5528,8 +5546,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_PRODUCED: function GET_PRODUCED(_ref4, data) {
-      var commit = _ref4.commit;
+    GET_PRODUCED: function GET_PRODUCED(_ref3, data) {
+      var commit = _ref3.commit;
       axios.get('/api/produced/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -5543,8 +5561,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_PRODUCED: function ADD_PRODUCED(_ref5, data) {
-      var commit = _ref5.commit;
+    ADD_PRODUCED: function ADD_PRODUCED(_ref4, data) {
+      var commit = _ref4.commit;
       axios.post('/api/produced/add', {
         data: data
       }, {
@@ -5559,8 +5577,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_SOLD: function GET_SOLD(_ref6, data) {
-      var commit = _ref6.commit;
+    GET_SOLD: function GET_SOLD(_ref5, data) {
+      var commit = _ref5.commit;
       axios.get('/api/products/sold', {
         headers: {
           'Content-Type': 'application/json'
@@ -5574,8 +5592,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_STOCK: function GET_STOCK(_ref7, data) {
-      var commit = _ref7.commit;
+    GET_STOCK: function GET_STOCK(_ref6, data) {
+      var commit = _ref6.commit;
       axios.get('/api/products/getstock', {
         headers: {
           'Content-Type': 'application/json'
@@ -5589,8 +5607,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_SOLD: function ADD_SOLD(_ref8, data) {
-      var commit = _ref8.commit;
+    ADD_SOLD: function ADD_SOLD(_ref7, data) {
+      var commit = _ref7.commit;
       axios.post('/api/products/sold', {
         data: data
       }, {
@@ -5604,8 +5622,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_MOTOHOURS: function ADD_MOTOHOURS(_ref9, data) {
-      var commit = _ref9.commit;
+    ADD_MOTOHOURS: function ADD_MOTOHOURS(_ref8, data) {
+      var commit = _ref8.commit;
       axios.post('/api/motohours/', {
         data: data
       }, {
@@ -5619,8 +5637,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MACHINES: function GET_MACHINES(_ref10) {
-      var commit = _ref10.commit;
+    GET_MACHINES: function GET_MACHINES(_ref9) {
+      var commit = _ref9.commit;
       axios.get('/api/machines', {
         headers: {
           'Content-Type': 'application/json'
@@ -5633,8 +5651,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MOTOHOURS: function GET_MOTOHOURS(_ref11, data) {
-      var commit = _ref11.commit;
+    GET_MOTOHOURS: function GET_MOTOHOURS(_ref10, data) {
+      var commit = _ref10.commit;
       axios.get('/api/motohours/', {
         headers: {
           'Content-Type': 'application/json'
@@ -5648,8 +5666,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_NORM_BY_MATERIAL: function GET_NORM_BY_MATERIAL(_ref12, data) {
-      var commit = _ref12.commit;
+    GET_NORM_BY_MATERIAL: function GET_NORM_BY_MATERIAL(_ref11, data) {
+      var commit = _ref11.commit;
       axios.get('/api/matnorm/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -5664,8 +5682,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    EDIT_SELECTED_NORM: function EDIT_SELECTED_NORM(_ref13, data) {
-      var commit = _ref13.commit;
+    EDIT_SELECTED_NORM: function EDIT_SELECTED_NORM(_ref12, data) {
+      var commit = _ref12.commit;
       axios.post('/api/matnorm/edit', {
         data: data
       }, {
@@ -5679,8 +5697,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_INCOMES: function GET_INCOMES(_ref14, data) {
-      var commit = _ref14.commit;
+    GET_INCOMES: function GET_INCOMES(_ref13, data) {
+      var commit = _ref13.commit;
       axios.get('/api/incomes/get', {
         headers: {
           'Content-Type': 'application/json'
@@ -5694,8 +5712,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ADD_INCOME: function ADD_INCOME(_ref15, data) {
-      var commit = _ref15.commit;
+    ADD_INCOME: function ADD_INCOME(_ref14, data) {
+      var commit = _ref14.commit;
       axios.post('/api/incomes/add', {
         data: data
       }, {
@@ -45026,7 +45044,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "card-body" },
-        _vm._l(_vm.MATERIAL_QTY, function(material, index) {
+        _vm._l(_vm.MATERIALS, function(material, index) {
           return _c("div", { key: index, staticClass: "materials" }, [
             _c("div", { staticClass: "material-name" }, [
               _c("div", [
@@ -45229,15 +45247,21 @@ var render = function() {
               "div",
               { staticClass: "alert alert-danger", attrs: { role: "alert" } },
               [
-                _vm._v("\n            Не достаточно материалов:\n            "),
-                _vm._l(_vm.message, function(item, index) {
+                _vm._v(
+                  "\n            " +
+                    _vm._s(_vm.message.error) +
+                    "\n            "
+                ),
+                _vm._l(_vm.message.data, function(item, index) {
                   return _c("div", { key: index }, [
                     _vm._v(
                       "\n                " +
                         _vm._s(item.title) +
                         " - " +
                         _vm._s(item.qty) +
-                        "ед.\n            "
+                        "ед. " +
+                        _vm._s(_vm.errorProduced) +
+                        "\n            "
                     )
                   ])
                 })
@@ -46660,7 +46684,9 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _vm._m(2),
+      _vm._v(" "),
+      _vm._m(3)
     ])
   ])
 }
@@ -46713,6 +46739,54 @@ var staticRenderFns = [
             [
               _vm._v(
                 "\n                        Редактировать материалы\n                    "
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "collapse",
+          attrs: {
+            id: "materialIncomes",
+            "aria-labelledby": "incomes",
+            "data-parent": "#accordionExample"
+          }
+        },
+        [
+          _c("div", { staticClass: "card-body" }, [
+            _vm._v(
+              "\n                    And lastly, the placeholder content for the third and final accordion panel. This panel is\n                    hidden by default.\n                "
+            )
+          ])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header", attrs: { id: "incomes" } }, [
+        _c("h2", { staticClass: "mb-0" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-link btn-block text-left collapsed",
+              attrs: {
+                type: "button",
+                "data-toggle": "collapse",
+                "data-target": "#collapseThree",
+                "aria-expanded": "false",
+                "aria-controls": "collapseThree"
+              }
+            },
+            [
+              _vm._v(
+                "\n                        Редактировать нормы расхода материалов\n                    "
               )
             ]
           )

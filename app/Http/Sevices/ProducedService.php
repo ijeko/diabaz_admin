@@ -4,6 +4,7 @@
 namespace App\Http\Sevices;
 
 
+use App\Factories\ProducedFactory;
 use App\Models\Produced;
 use App\Models\Product;
 use http\Client\Response;
@@ -27,24 +28,18 @@ class ProducedService
 
     public function save($data)
     {
-        $toCheck = $this->product->find($data->product_id)->materialNorm()->get();
-        if ($this->materials->chekInStock($toCheck, $data) != null) {
-            $response = $this->materials->chekInStock($toCheck, $data);
-           return json_encode($response);
-    }
-        else {
-        if ($this->produced->where('date', $data->date)->where('product_id', $data->product_id)->exists()) {
-            $records = $this->produced->where('date', $data->date)->get();
-            $record_id = $records->where('product_id', $data->product_id)->first()->id;
-            $this->produced->where('id', $record_id)->update(['qty' => $data->qty, 'user_id' => $data->user_id]);
-        } else {
-            $this->produced->user_id = $data->user_id;
-            $this->produced->product_id = $data->product_id;
-            $this->produced->qty = $data->qty;
-            $this->produced->date = $data->date;
-            $this->produced->save();
-        }
-    }
+        $Factory = new ProducedFactory();
+        $item = $Factory->makeProduction(Produced::class, [
+            'user_id' => $data->user_id,
+            'product_id' => $data->product_id,
+            'date' => $data->date,
+            'qty' => $data->qty
+        ]);
+        $check = CheckerService::CheckMaterials($item);
+        if ($check)
+            return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
+        else $item->save();
+
     }
 
     public function getProduced()

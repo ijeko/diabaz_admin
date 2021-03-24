@@ -53,8 +53,6 @@
                                         <table class="w-100">
                                             <tr>
                                                 <th class="text-center">Дата</th>
-                                                <!--                    <th>Остатки??</th>-->
-                                                <!--                                                <th class="text-center">Клиент</th>-->
                                                 <th class="text-center">Количество</th>
                                                 <th class="text-center">Действие</th>
 
@@ -71,19 +69,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <!--                                        <div class="row" v-if="selectedProduct"-->
-                                        <!--                                             v-for="upload in uploads"-->
-                                        <!--                                             :key="upload.id">-->
-                                        <!--                                            <div class="container d-inline-flex listItem justify-content-between">-->
-                                        <!--                                                <div class="date">{{ upload.date }}</div>-->
-                                        <!--                                                &lt;!&ndash;                                <div class="product text-nowrap">{{PRODUCTS.find(x => x.id === upload.product_id).title}}</div>&ndash;&gt;-->
-                                        <!--                                                <div class="client">{{ upload.soldTo }}</div>-->
-                                        <!--                                                <div class="qty">{{ upload.qty }}-->
-                                        <!--                                                    {{ PRODUCTS.find(x => x.id === upload.product_id).unit }}-->
-                                        <!--                                                </div>-->
-                                        <!--                                                <div class="action">удалить</div>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -187,6 +172,22 @@
                         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
                                 data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                             Редактировать материалы
+                        </button>
+                    </h2>
+                </div>
+                <div id="materialIncomes" class="collapse" aria-labelledby="incomes" data-parent="#accordionExample">
+                    <div class="card-body">
+                        And lastly, the placeholder content for the third and final accordion panel. This panel is
+                        hidden by default.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="incomes">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Редактировать нормы расхода материалов
                         </button>
                     </h2>
                 </div>

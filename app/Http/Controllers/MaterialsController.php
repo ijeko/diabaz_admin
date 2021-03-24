@@ -31,9 +31,9 @@ class MaterialsController extends Controller
         return $this->materials->SaveNewIncome(json_decode($request->data));
     }
 
-    public function getQty()
+    public function GetMaterials()
     {
-        return $this->materials->GetMaterialQty();
+        return json_encode($this->materials->GetMaterialQty());
     }
 
     public function Remove(Request $request)
@@ -58,12 +58,12 @@ class MaterialsController extends Controller
 
     public function Add(Request $request)
     {
-        return $this->materials->newMaterial(json_decode($request->data));
+        return $this->materials->newMaterial(json_decode($request->data, 1));
     }
 
     public function Edit(Request $request)
     {
-        return $this->materials->EditMaterial(json_decode($request->data));
+        return $this->materials->EditMaterial(json_decode($request->data, 1));
     }
 
 
