@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div>
         <div class="text-right" @click="closeShowNorm">&times;</div>
         <h3 class="text-center mb-4">Нормы расхода</h3>
         <label>Название продукции</label>

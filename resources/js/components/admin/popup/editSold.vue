@@ -127,7 +127,6 @@
                                         <table class="w-100">
                                             <tr>
                                                 <th class="text-center">Дата</th>
-                                                <!--                    <th>Остатки??</th>-->
                                                 <th class="text-center">Клиент</th>
                                                 <th class="text-center">Количество</th>
                                                 <th class="text-center">Действие</th>
@@ -146,19 +145,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <!--                                        <div class="row" v-if="selectedProduct"-->
-                                        <!--                                             v-for="upload in uploads"-->
-                                        <!--                                             :key="upload.id">-->
-                                        <!--                                            <div class="container d-inline-flex listItem justify-content-between">-->
-                                        <!--                                                <div class="date">{{ upload.date }}</div>-->
-                                        <!--                                                &lt;!&ndash;                                <div class="product text-nowrap">{{PRODUCTS.find(x => x.id === upload.product_id).title}}</div>&ndash;&gt;-->
-                                        <!--                                                <div class="client">{{ upload.soldTo }}</div>-->
-                                        <!--                                                <div class="qty">{{ upload.qty }}-->
-                                        <!--                                                    {{ PRODUCTS.find(x => x.id === upload.product_id).unit }}-->
-                                        <!--                                                </div>-->
-                                        <!--                                                <div class="action">удалить</div>-->
-                                        <!--                                            </div>-->
-                                        <!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -170,12 +156,12 @@
                 <div class="card-header" id="headingThree">
                     <h2 class="mb-0">
                         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Редактировать материалы
+                                data-target="#editMaterials" aria-expanded="false" aria-controls="editMaterials">
+                            Редактировать поступления материалов
                         </button>
                     </h2>
                 </div>
-                <div id="materialIncomes" class="collapse" aria-labelledby="incomes" data-parent="#accordionExample">
+                <div id="editMaterials" class="collapse" aria-labelledby="editMaterials" data-parent="#editMaterials">
                     <div class="card-body">
                         And lastly, the placeholder content for the third and final accordion panel. This panel is
                         hidden by default.
@@ -183,21 +169,54 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header" id="incomes">
+                <div class="card-header" id="editIncomesbtn">
                     <h2 class="mb-0">
                         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
-                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                data-target="#editIncomes" aria-expanded="false" aria-controls="editIncomes">
                             Редактировать нормы расхода материалов
                         </button>
                     </h2>
                 </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <div id="editIncomes" class="collapse" aria-labelledby="editIncomes" data-parent="#editMaterials">
                     <div class="card-body">
-                        And lastly, the placeholder content for the third and final accordion panel. This panel is
-                        hidden by default.
+                        <div class="card">
+                            <div class="card-header">
+                                Для редактирования выберите продукт
+                            </div>
+                            <div class="card-body">
+                                <label>Продукт:</label>
+                                <select v-model="selectProd" class="form-control mb-4"
+                                        @change="selectProductForNorm($event)">
+                                    <option value=""></option>
+                                    <option v-for="product in PRODUCTS"
+                                            :key="product.id"
+                                            :value="product.id"
+                                    >{{ product.title }}
+                                    </option>
+                                </select>
+                                <div v-if="isSelected" class="normItem" v-for="item in SELECTED_NORM"
+                                     :key="item.id"
+                                >
+                                    <div class="normTitle">{{ item.title }}</div>
+                                    <div class="normValue">{{ item.norma }} {{ item.unit }}</div>
+                                </div>
+
+                                <button class="btn btn-outline-success mt-4" style="width: 100%" :disabled="!isSelected"
+                                        @click="showAddForm">
+                                    Изменить
+                                </button>
+                                <add-mat-norm v-if="isAddFormVisible"
+                                              :selectedNorm="SELECTED_NORM"
+                                              :selectedProduct="selectProd"
+                                              @close="showAddForm"
+                                              @update="GET_NORM_BY_MATERIAL"
+                                ></add-mat-norm>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
 
@@ -223,7 +242,11 @@ export default {
             clientsUpload: [],
             lineToggle: 0,
             selectedProduct: '',
-            process: ''
+            process: '',
+            isSelected: '',
+            selectProd: '',
+            isAddFormVisible: false
+
         }
     },
     watch: {
@@ -234,8 +257,17 @@ export default {
     },
     methods: {
         ...mapActions([
-            'GET_PRODUCTS'
+            'GET_PRODUCTS',
+            'GET_NORM_BY_MATERIAL'
         ]),
+        showAddForm() {
+            if (this.isAddFormVisible === true) {
+                this.isAddFormVisible = false
+            } else {
+                this.isAddFormVisible = true
+            }
+
+        },
         clearData() {
             this.selectedProduct = ''
         },
@@ -260,7 +292,7 @@ export default {
             this.$emit('setDate', this.localDate)
         },
         getReport(process) {
-            this.process=process
+            this.process = process
             let data = {date: this.localDate, product: this.selectedProduct, process: this.process}
             axios.get('/api/products/operations', {
                 headers: {'Content-Type': 'application/json'},
@@ -292,11 +324,22 @@ export default {
                     })
                 this.clearData()
             }
-        }
+        },
+        selectProductForNorm(event) {
+            this.isSelected = true
+            let id = event.target.value
+            if (!id) {
+                this.isSelected = false
+                return false
+            }
+            let data = {prodID: id}
+            this.GET_NORM_BY_MATERIAL(data)
+        },
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS'
+            'PRODUCTS',
+            'SELECTED_NORM'
         ])
     },
     mounted() {
@@ -325,5 +368,12 @@ export default {
 
 .monthBtn {
     width: 100px;
+}
+
+.normItem {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted silver;
 }
 </style>

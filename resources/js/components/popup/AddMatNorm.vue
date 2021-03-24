@@ -1,6 +1,5 @@
 <template>
-    <div class="wrapper">
-        <div class="text-right" @click="closeEditForm">&times;</div>
+    <div>
         <h3 class="text-center mb-4">{{productById(selectedProduct).title}}</h3>
         <h5 class="text-center mb-4">Ввод расхода материалов</h5>
         <div v-if="message" class="alert alert-danger" role="alert">
@@ -13,7 +12,7 @@
                 {{ item.title }}
             </div>
             <div class="normValue">
-                <input type="number" v-model="item.norma">
+                <input type="number" class="form-control-sm" v-model="item.norma">
                 {{ item.unit }}
             </div>
             <div class="del" @click="remove(item.id)">&times;</div>
@@ -27,7 +26,7 @@
             </option>
         </select>
         <button class="btn btn-outline-success mt-4" style="width: 100%" @click="test">Сохранить</button>
-        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeEditForm">Закрыть</button>
+        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="close">Закрыть</button>
     </div>
 </template>
 
@@ -72,8 +71,8 @@ export default {
             }
             else return false
         },
-        closeEditForm() {
-            this.$emit('closeEditForm')
+        close() {
+            this.$emit('close')
         },
         addItem () {
             let material= this.MATERIALS[this.selectedMat]
@@ -92,7 +91,6 @@ export default {
             // console.log(this.selectedNorm)
             this.EDIT_SELECTED_NORM(JSON.stringify(this.selectedNorm))
             this.$emit('update', {prodID: this.selectedProduct})
-            this.closeEditForm()
         },
         remove (id) {
             axios.delete('/api/matnorm/remove',
@@ -114,16 +112,17 @@ export default {
 </script>
 
 <style scoped>
+input {
+    width: 60px;
+}
 .wrapper {
-    width: 500px;
-    height: auto;
-    position: absolute;
-    top: 50px;
-    left: 50%;
+    /*width: 500px;*/
+    /*height: auto;*/
+    position: center;
+    /*top: 0;*/
+    /*left: 50%;*/
     z-index: 1;
     background-color: white;
-    border: 2px solid black;
-    padding: 10px;
 }
 .normItem {
     margin-top: 5px;

@@ -3437,6 +3437,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editSold",
@@ -3454,7 +3473,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       clientsUpload: [],
       lineToggle: 0,
       selectedProduct: '',
-      process: ''
+      process: '',
+      isSelected: '',
+      selectProd: '',
+      isAddFormVisible: false
     };
   },
   watch: {
@@ -3463,7 +3485,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getReport(this.process);
     }
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_NORM_BY_MATERIAL'])), {}, {
+    showAddForm: function showAddForm() {
+      if (this.isAddFormVisible === true) {
+        this.isAddFormVisible = false;
+      } else {
+        this.isAddFormVisible = true;
+      }
+    },
     clearData: function clearData() {
       this.selectedProduct = '';
     },
@@ -3527,9 +3556,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         this.clearData();
       }
+    },
+    selectProductForNorm: function selectProductForNorm(event) {
+      this.isSelected = true;
+      var id = event.target.value;
+
+      if (!id) {
+        this.isSelected = false;
+        return false;
+      }
+
+      var data = {
+        prodID: id
+      };
+      this.GET_NORM_BY_MATERIAL(data);
     }
   }),
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS'])),
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'SELECTED_NORM'])),
   mounted: function mounted() {
     this.GET_PRODUCTS();
   }
@@ -4223,7 +4266,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddMatNorm",
@@ -4259,8 +4301,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return _data;
       } else return false;
     },
-    closeEditForm: function closeEditForm() {
-      this.$emit('closeEditForm');
+    close: function close() {
+      this.$emit('close');
     },
     addItem: function addItem() {
       var material = this.MATERIALS[this.selectedMat];
@@ -4298,7 +4340,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$emit('update', {
         prodID: this.selectedProduct
       });
-      this.closeEditForm();
     },
     remove: function remove(id) {
       axios["delete"]('/api/matnorm/remove', {
@@ -10406,7 +10447,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-71534f0c] {\n    width: auto;\n    height: auto;\n    position: sticky;\n    /*top: 30%;*/\n    /*right: 25%;*/\n    z-index: 1;\n    background-color: white;\n    border: 2px solid black;\n    padding: 10px;\n}\n.listItem > div[data-v-71534f0c] {\n    margin-right: 10px;\n    /*width: 100px;*/\n}\n.monthBtn[data-v-71534f0c] {\n    width: 100px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-71534f0c] {\n    width: auto;\n    height: auto;\n    position: sticky;\n    /*top: 30%;*/\n    /*right: 25%;*/\n    z-index: 1;\n    background-color: white;\n    border: 2px solid black;\n    padding: 10px;\n}\n.listItem > div[data-v-71534f0c] {\n    margin-right: 10px;\n    /*width: 100px;*/\n}\n.monthBtn[data-v-71534f0c] {\n    width: 100px;\n}\n.normItem[data-v-71534f0c] {\n    margin-top: 5px;\n    display: flex;\n    justify-content: space-between;\n    border-bottom: 1px dotted silver;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10550,7 +10591,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-322f9a09] {\n    width: 500px;\n    height: auto;\n    position: absolute;\n    top: 50px;\n    left: 50%;\n    z-index: 1;\n    background-color: white;\n    border: 2px solid black;\n    padding: 10px;\n}\n.normItem[data-v-322f9a09] {\n    margin-top: 5px;\n    display: flex;\n    justify-content: space-between;\n    border-bottom: 1px dotted silver;\n}\n.del[data-v-322f9a09] {\n    background-color: rosybrown;\n    border-radius: 50%;\n    width: 20px;\n    height: 20px;\n    color: white;\n    text-align: center;\n    /*font-size: 18px;*/\n    vertical-align: middle;\n}\n.del[data-v-322f9a09]:hover {\n    background-color: red;\n    cursor: pointer;\n}\n.normTitle[data-v-322f9a09], .normValue[data-v-322f9a09] {\n    width: 45%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ninput[data-v-322f9a09] {\n    width: 60px;\n}\n.wrapper[data-v-322f9a09] {\n    /*width: 500px;*/\n    /*height: auto;*/\n    position: center;\n    /*top: 0;*/\n    /*left: 50%;*/\n    z-index: 1;\n    background-color: white;\n}\n.normItem[data-v-322f9a09] {\n    margin-top: 5px;\n    display: flex;\n    justify-content: space-between;\n    border-bottom: 1px dotted silver;\n}\n.del[data-v-322f9a09] {\n    background-color: rosybrown;\n    border-radius: 50%;\n    width: 20px;\n    height: 20px;\n    color: white;\n    text-align: center;\n    /*font-size: 18px;*/\n    vertical-align: middle;\n}\n.del[data-v-322f9a09]:hover {\n    background-color: red;\n    cursor: pointer;\n}\n.normTitle[data-v-322f9a09], .normValue[data-v-322f9a09] {\n    width: 45%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -46743,7 +46784,140 @@ var render = function() {
       _vm._v(" "),
       _vm._m(2),
       _vm._v(" "),
-      _vm._m(3)
+      _c("div", { staticClass: "card" }, [
+        _vm._m(3),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "collapse",
+            attrs: {
+              id: "editIncomes",
+              "aria-labelledby": "editIncomes",
+              "data-parent": "#editMaterials"
+            }
+          },
+          [
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _vm._v(
+                    "\n                            Для редактирования выберите продукт\n                        "
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _c("label", [_vm._v("Продукт:")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectProd,
+                            expression: "selectProd"
+                          }
+                        ],
+                        staticClass: "form-control mb-4",
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectProd = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.selectProductForNorm($event)
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }),
+                        _vm._v(" "),
+                        _vm._l(_vm.PRODUCTS, function(product) {
+                          return _c(
+                            "option",
+                            {
+                              key: product.id,
+                              domProps: { value: product.id }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(product.title) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.SELECTED_NORM, function(item) {
+                      return _vm.isSelected
+                        ? _c("div", { key: item.id, staticClass: "normItem" }, [
+                            _c("div", { staticClass: "normTitle" }, [
+                              _vm._v(_vm._s(item.title))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "normValue" }, [
+                              _vm._v(
+                                _vm._s(item.norma) + " " + _vm._s(item.unit)
+                              )
+                            ])
+                          ])
+                        : _vm._e()
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-success mt-4",
+                        staticStyle: { width: "100%" },
+                        attrs: { disabled: !_vm.isSelected },
+                        on: { click: _vm.showAddForm }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                Изменить\n                            "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.isAddFormVisible
+                      ? _c("add-mat-norm", {
+                          attrs: {
+                            selectedNorm: _vm.SELECTED_NORM,
+                            selectedProduct: _vm.selectProd
+                          },
+                          on: {
+                            close: _vm.showAddForm,
+                            update: _vm.GET_NORM_BY_MATERIAL
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ])
+            ])
+          ]
+        )
+      ])
     ])
   ])
 }
@@ -46788,14 +46962,14 @@ var staticRenderFns = [
               attrs: {
                 type: "button",
                 "data-toggle": "collapse",
-                "data-target": "#collapseThree",
+                "data-target": "#editMaterials",
                 "aria-expanded": "false",
-                "aria-controls": "collapseThree"
+                "aria-controls": "editMaterials"
               }
             },
             [
               _vm._v(
-                "\n                        Редактировать материалы\n                    "
+                "\n                        Редактировать поступления материалов\n                    "
               )
             ]
           )
@@ -46807,9 +46981,9 @@ var staticRenderFns = [
         {
           staticClass: "collapse",
           attrs: {
-            id: "materialIncomes",
-            "aria-labelledby": "incomes",
-            "data-parent": "#accordionExample"
+            id: "editMaterials",
+            "aria-labelledby": "editMaterials",
+            "data-parent": "#editMaterials"
           }
         },
         [
@@ -46826,8 +47000,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header", attrs: { id: "incomes" } }, [
+    return _c(
+      "div",
+      { staticClass: "card-header", attrs: { id: "editIncomesbtn" } },
+      [
         _c("h2", { staticClass: "mb-0" }, [
           _c(
             "button",
@@ -46836,9 +47012,9 @@ var staticRenderFns = [
               attrs: {
                 type: "button",
                 "data-toggle": "collapse",
-                "data-target": "#collapseThree",
+                "data-target": "#editIncomes",
                 "aria-expanded": "false",
-                "aria-controls": "collapseThree"
+                "aria-controls": "editIncomes"
               }
             },
             [
@@ -46848,27 +47024,8 @@ var staticRenderFns = [
             ]
           )
         ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "collapse",
-          attrs: {
-            id: "collapseThree",
-            "aria-labelledby": "headingThree",
-            "data-parent": "#accordionExample"
-          }
-        },
-        [
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v(
-              "\n                    And lastly, the placeholder content for the third and final accordion panel. This panel is\n                    hidden by default.\n                "
-            )
-          ])
-        ]
-      )
-    ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -47654,14 +47811,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "wrapper" },
     [
-      _c(
-        "div",
-        { staticClass: "text-right", on: { click: _vm.closeEditForm } },
-        [_vm._v("×")]
-      ),
-      _vm._v(" "),
       _c("h3", { staticClass: "text-center mb-4" }, [
         _vm._v(_vm._s(_vm.productById(_vm.selectedProduct).title))
       ]),
@@ -47694,6 +47844,7 @@ var render = function() {
                   expression: "item.norma"
                 }
               ],
+              staticClass: "form-control-sm",
               attrs: { type: "number" },
               domProps: { value: item.norma },
               on: {
@@ -47784,7 +47935,7 @@ var render = function() {
         {
           staticClass: "btn btn-outline-danger mt-2",
           staticStyle: { width: "100%" },
-          on: { click: _vm.closeEditForm }
+          on: { click: _vm.close }
         },
         [_vm._v("Закрыть")]
       )
