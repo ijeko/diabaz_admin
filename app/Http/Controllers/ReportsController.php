@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Sevices\ReportsService;
 use App\Models\Material;
-use App\Models\MaterialIncome;
 use App\Models\Product;
 use App\Models\Sold;
 use Illuminate\Http\Request;
