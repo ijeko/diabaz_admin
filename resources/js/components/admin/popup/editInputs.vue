@@ -227,7 +227,7 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-    name: "editSold",
+    name: "editInputs",
     props: {
         dateFormated: '',
         user: '',
