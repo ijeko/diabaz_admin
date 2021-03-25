@@ -31,13 +31,13 @@ Vue.component('reports-wrapper-component', require('./components/ReportsWrapperC
 Vue.component('materials-component', require('./components/MaterialsComponent.vue').default);
 Vue.component('motor-component', require('./components/MotorComponent.vue').default);
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);
-Vue.component('enter-produced', require('./components/popup/popup.vue').default);
+Vue.component('enter-produced', require('./components/popup/addProduction.vue').default);
 Vue.component('enter-sold', require('./components/popup/addSold.vue').default);
-Vue.component('add-mat-norm', require('./components/popup/AddMatNorm.vue').default);
 Vue.component('show-norm-norm', require('./components/popup/ShowNorm.vue').default);
 Vue.component('show-incomes', require('./components/popup/ShowIncomes.vue').default);
 Vue.component('add-incomes', require('./components/popup/AddIncomeForm.vue').default);
 Vue.component('enter-motohour', require('./components/popup/addMotohours.vue').default);
+
 //admin
 Vue.component('admin-production-component', require('./components/admin/production.vue').default);
 Vue.component('admin-edit-production-component', require('./components/admin/popup/editProduction.vue').default);
@@ -48,7 +48,11 @@ Vue.component('admin-new-material-component', require('./components/admin/popup/
 Vue.component('admin-machines-component', require('./components/admin/machines.vue').default);
 Vue.component('admin-edit-machine-component', require('./components/admin/popup/editMachine.vue').default);
 Vue.component('admin-new-machine-component', require('./components/admin/popup/newMachine.vue').default);
-Vue.component('admin-edit-sold-component', require('./components/admin/popup/editSold.vue').default);
+Vue.component('admin-edit-inputs-component', require('./components/admin/popup/editInputs.vue').default);
+Vue.component('add-mat-norm', require('./components/admin/popup/AddMatNorm.vue').default);
+Vue.component('admin-user-component', require('./components/admin/users.vue').default);
+Vue.component('admin-edit-user-component', require('./components/admin/popup/editUser.vue').default);
+Vue.component('admin-new-user-component', require('./components/admin/popup/newUser.vue').default);
 
 
 //reports

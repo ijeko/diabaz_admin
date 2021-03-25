@@ -2,12 +2,12 @@
     <div class="container">
         <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
         <div class="editButtons">
-            <admin-edit-sold-component
+            <admin-edit-inputs-component
                 :user="user"
                 :dateFormated="dateFormated"
                 :commonDate="date"
                 @setDate="setDate"
-            ></admin-edit-sold-component>
+            ></admin-edit-inputs-component>
         </div>
         <div class="row justify-content-between">
             <div class="col-md-6">
@@ -35,6 +35,14 @@
                     :dateFormated="dateFormated"
                     :date="date"
                 ></admin-machines-component>
+            </div>
+            <div class="col-md-6">
+                <admin-user-component
+                    class="mt-4"
+                    :user="user"
+                    :dateFormated="dateFormated"
+                    :date="date"
+                ></admin-user-component>
             </div>
         </div>
 

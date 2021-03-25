@@ -1,23 +1,25 @@
 <template>
     <div class="wrapper">
-        <div class="text-right" @click="close">&times;</div>
-        <h3 class="text-center mb-4">Редактировать</h3>
-        <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+        <div class="formBox">
+            <div class="text-right" @click="close">&times;</div>
+            <h3 class="text-center mb-4">Редактировать</h3>
+            <div v-if="message" class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+            <label>Название техники</label>
+            <input v-model="newMachineName" class="form-control">
+            <label>Краткое название на английском</label>
+            <input v-model="newMachineSlug" class="form-control">
+            <label>Единица измерения</label>
+            <input type="text" v-model="newMachineUnit" class="form-control">
+            <button class="btn btn-outline-success mt-4 actions" @click="saveMachine">
+                Сохранить
+            </button>
+            <button class="btn btn-outline-danger mt-4 actions" @click="deleteMachine(MACHINES[selectedMachine].id)">
+                Удалить
+            </button>
+            <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
         </div>
-        <label>Название техники</label>
-        <input v-model="newMachineName" class="form-control">
-        <label>Краткое название на английском</label>
-        <input v-model="newMachineSlug" class="form-control">
-        <label>Единица измерения</label>
-        <input type="text" v-model="newMachineUnit" class="form-control">
-        <button class="btn btn-outline-success mt-4 actions" @click="saveMachine">
-            Сохранить
-        </button>
-        <button class="btn btn-outline-danger mt-4 actions" @click="deleteMachine(MACHINES[selectedMachine].id)">
-            Удалить
-        </button>
-        <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
     </div>
 </template>
 
@@ -41,7 +43,7 @@ export default {
         ...mapGetters([
             'MACHINES',
         ]),
-        validation () {
+        validation() {
             if (this.newMachineName === '') {
                 this.message = 'Название техники не заполнино'
                 return false
@@ -52,18 +54,18 @@ export default {
 
             }
             if (this.newMachineSlug === '') {
-                 this.message = 'сокращенное название не заполнино'
+                this.message = 'сокращенное название не заполнино'
                 return false
 
             }
             if (this.newMachineSlug.length < 3) {
-                 this.message = 'Сокращенное не должно быть менее 3 символов'
+                this.message = 'Сокращенное не должно быть менее 3 символов'
                 return false
 
             }
             var slugRE = new RegExp('^[a-zA-Z0-9]+$')
-            if(!slugRE.test(this.newMachineSlug)) {
-                 this.message = 'Сокращенное может состоять только из латинских букв и цифр'
+            if (!slugRE.test(this.newMachineSlug)) {
+                this.message = 'Сокращенное может состоять только из латинских букв и цифр'
                 return false
             }
             if (this.newMachineUnit === '') {
@@ -71,7 +73,7 @@ export default {
                 return false
             }
             var unitRE = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9]+$')
-            if(!unitRE.test(this.newMachineUnit)) {
+            if (!unitRE.test(this.newMachineUnit)) {
                 this.message = 'Единица измерения не может быть цифрой'
                 return false
             }
@@ -140,15 +142,33 @@ export default {
 
 <style scoped>
 .wrapper {
-    width: 500px;
-    height: auto;
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    z-index: 1;
-    background-color: white;
-    border: 2px solid black;
-    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    min-height: 100%;
+    margin: auto;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.formBox {
+    margin: 50px 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    background: #fff;
+    width: 600px;
+    max-width: 100%;
+    overflow: visible;
+    transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
+    transform: scale(0.9);
+    opacity: 1;
 }
 
 .actions {

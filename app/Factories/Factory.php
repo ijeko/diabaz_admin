@@ -19,4 +19,18 @@ abstract class Factory
             return new $name($config);
         }
     }
+
+    public function make($source, $config = [])
+    {
+        if (class_exists($source)) {
+            return new $source($config);
+        }
+    }
+
+    public function Update ($source, $config = [])
+    {
+        if (class_exists($source)) {
+            return new $source($config);
+        }
+    }
 }

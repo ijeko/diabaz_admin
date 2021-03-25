@@ -1,26 +1,30 @@
 <template>
     <div class="wrapper">
-        <div class="text-right" @click="close">&times;</div>
-        <h3 class="text-center mb-4">Новая продукция</h3>
-        <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+        <div class="formBox">
+            <div class="text-right" @click="close">&times;</div>
+            <h3 class="text-center mb-4">Новая продукция</h3>
+            <div v-if="message" class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+            <label>Название продукции</label> <span v-if="info"
+                                                    class="badge bg-danger text-white">{{ info.data.title }}</span>
+            <input v-model="title" class="form-control" list="materials">
+            <datalist id="materials">
+                <option v-for="material in MATERIALS">{{ material.title }}</option>
+            </datalist>
+            <label>Краткое название на английском</label> <span v-if="info" class="badge bg-danger text-white">{{
+                info.data.name
+            }}</span>
+            <input v-model="name" class="form-control">
+            <label>Единица измерения</label>
+            <input type="text" v-model="unit" class="form-control">
+            <label>Минимальное количество</label>
+            <input type="number" v-model="minQty" class="form-control">
+            <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMaterial" :disabled="!complete">
+                Сохранить
+            </button>
+            <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
         </div>
-        <label>Название продукции</label> <span v-if="info"
-                                                class="badge bg-danger text-white">{{ info.data.title }}</span>
-        <input v-model="title" class="form-control" list="materials">
-        <datalist id="materials">
-            <option v-for="material in MATERIALS">{{ material.title }}</option>
-        </datalist>
-        <label>Краткое название на английском</label> <span v-if="info" class="badge bg-danger text-white">{{info.data.name }}</span>
-        <input v-model="name" class="form-control">
-        <label>Единица измерения</label>
-        <input type="text" v-model="unit" class="form-control">
-        <label>Минимальное количество</label>
-        <input type="number" v-model="minQty" class="form-control">
-        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="addMaterial" :disabled="!complete">
-            Сохранить
-        </button>
-        <button class="btn btn-outline-dark mt-2" style="width: 100%" @click="close">Закрыть</button>
     </div>
 </template>
 
@@ -129,15 +133,33 @@ export default {
 
 <style scoped>
 .wrapper {
-    width: 500px;
-    height: auto;
-    position: absolute;
-    top: 50px;
-    right: 50%;
-    z-index: 1;
-    background-color: white;
-    border: 2px solid black;
-    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    min-height: 100%;
+    margin: auto;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.formBox {
+    margin: 50px 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    background: #fff;
+    width: 600px;
+    max-width: 100%;
+    overflow: visible;
+    transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
+    transform: scale(0.9);
+    opacity: 1;
 }
 
 .normItem {

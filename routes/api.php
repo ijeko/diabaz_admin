@@ -60,7 +60,11 @@ Route::delete('/incomes/remove', [App\Http\Controllers\MaterialsController::clas
 Route::get('/motohours', [App\Http\Controllers\MotohoursController::class, 'index']);
 Route::post('/motohours', [App\Http\Controllers\MotohoursController::class, 'add']);
 
-// Stock
+// Users
+Route::get('/admin/users', [App\Http\Controllers\UserController::class, 'GetList']);
+Route::put('/admin/users', [App\Http\Controllers\UserController::class, 'EditUser']);
+Route::post('/admin/users', [App\Http\Controllers\UserController::class, 'AddUser']);
+Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'DeleteUser']);
 
 
 // Reports
