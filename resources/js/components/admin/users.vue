@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Управление пользователями
+        <div class="card-header">Управление пользователями {{user}}
         </div>
         <div class="card-body">
             <table>
@@ -41,7 +41,9 @@ import {mapActions, mapGetters} from 'vuex'
 
 export default {
     name: "adminUsers",
-    props: {},
+    props: {
+        user: ''
+    },
     data() {
         return {
             isNewFormVisible: false,

@@ -4703,7 +4703,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "adminUsers",
-  props: {},
+  props: {
+    user: ''
+  },
   data: function data() {
     return {
       isNewFormVisible: false,
@@ -49095,7 +49097,7 @@ var render = function() {
     { staticClass: "card" },
     [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("Управление пользователями\n    ")
+        _vm._v("Управление пользователями " + _vm._s(_vm.user) + "\n    ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
