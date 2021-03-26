@@ -2084,7 +2084,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     dateFormated: '',
-    user: '',
+    user: {},
     date: ''
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS' // 'MATERIAL_QTY'
@@ -2182,7 +2182,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     user: {
-      "default": ''
+      "default": {}
     },
     dateFormated: {
       type: Object,
@@ -2346,7 +2346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     user: {
-      "default": ''
+      "default": {}
     },
     dateFormated: {
       type: Object,
@@ -4803,7 +4803,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddIncomeForm",
   props: {
-    user: ''
+    user: {}
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['ADD_INCOME'])), {}, {
     closeAddForm: function closeAddForm() {
@@ -4819,7 +4819,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         material_id: this.MATERIALS[this.selectedMaterial].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.ADD_INCOME(JSON.stringify(data));
       this.$emit('update');
@@ -5115,7 +5115,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    user: ''
+    user: {}
   },
   methods: {
     closePopup: function closePopup() {
@@ -5131,7 +5131,7 @@ __webpack_require__.r(__webpack_exports__);
         machine_id: this.machines[this.selectedMachine].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.$emit('sendMotohour', data);
     }
@@ -5202,7 +5202,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    user: ''
+    user: {}
   },
   methods: {
     closePopup: function closePopup() {
@@ -5218,7 +5218,7 @@ __webpack_require__.r(__webpack_exports__);
         product_id: this.products[this.selectedProduct].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.$emit('sendProduced', data);
     }
@@ -5290,7 +5290,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    user: ''
+    user: {}
   },
   methods: {
     closeSold: function closeSold() {
@@ -5306,7 +5306,7 @@ __webpack_require__.r(__webpack_exports__);
         product_id: this.products[this.selectedProduct].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user,
+        user_id: this.user.id,
         soldTo: this.soldTo
       };
       this.$emit('sendSold', data);
@@ -5449,6 +5449,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ProductUploadReport",
@@ -5458,7 +5464,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       reportData: [],
       localDate: this.commonDate,
       clientsUpload: [],
-      lineToggle: 0
+      lineToggle: 0,
+      light: ''
     };
   },
   props: {
@@ -5501,6 +5508,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return dates;
+    },
+    lightUp: function lightUp(item) {
+      this.light = item;
+    },
+    lightUpCl: function lightUpCl(item) {
+      this.lightUpClient = '';
+      this.lightUpProduction = '';
+      this.lightUpClient = item;
     },
     decreaseMonth: function decreaseMonth() {
       var currentDate = new Date(Date.parse(this.localDate));
@@ -11285,7 +11300,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.date-line[data-v-4d66abb9] {\n    /*border-bottom: 1px solid silver;*/\n    margin-bottom: 10px;\n}\n.item[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n    padding: 5px;\n}\n.monthBtn[data-v-4d66abb9] {\n    width: 100px;\n}\n.date-block[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.date-line[data-v-4d66abb9] {\n    /*border-bottom: 1px solid silver;*/\n    margin-bottom: 10px;\n}\n.item[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n    padding: 5px;\n}\n.monthBtn[data-v-4d66abb9] {\n    width: 100px;\n}\n.date-block[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n}\n.lightable[data-v-4d66abb9] {\n    cursor: pointer;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -46027,15 +46042,6 @@ var render = function() {
       _vm._v(" "),
       _c(
         "button",
-        {
-          staticClass: "btn btn-outline-dark",
-          on: { click: _vm.showShowNorm }
-        },
-        [_vm._v("Нормы расхода")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
         { staticClass: "btn btn-outline-dark", on: { click: _vm.showIncomes } },
         [_vm._v("Поступления материалов")]
       ),
@@ -46240,7 +46246,7 @@ var render = function() {
                   {
                     class: {
                       "text-secondary": !product.stock,
-                      "text-success": product.dayProduced
+                      "bg-success": product.dayProduced
                     }
                   },
                   [
@@ -49097,7 +49103,7 @@ var render = function() {
     { staticClass: "card" },
     [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("Управление пользователями " + _vm._s(_vm.user) + "\n    ")
+        _vm._v("Управление пользователями\n    ")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -50251,19 +50257,45 @@ var render = function() {
                             "div",
                             { key: product.id, staticClass: "row item" },
                             [
-                              _c("div", { staticClass: "col-4" }, [
-                                _vm._v(
-                                  "\n                                                " +
-                                    _vm._s(product.title) +
-                                    "\n                                            "
-                                )
-                              ]),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "col-4 lightable",
+                                  class: {
+                                    "bg-info": _vm.light === product.title
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.lightUp(product.title)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                                " +
+                                      _vm._s(product.title) +
+                                      "\n                                            "
+                                  )
+                                ]
+                              ),
                               _vm._v(" "),
                               _c("div", { staticClass: "col-4" }, [
                                 _c("div", { staticClass: "row" }, [
-                                  _c("div", { staticClass: "col" }, [
-                                    _vm._v(_vm._s(product.client))
-                                  ])
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "col lightable",
+                                      class: {
+                                        "bg-info": _vm.light === product.client
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.lightUp(product.client)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(product.client))]
+                                  )
                                 ])
                               ]),
                               _vm._v(" "),

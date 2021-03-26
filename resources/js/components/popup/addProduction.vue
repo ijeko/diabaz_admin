@@ -43,7 +43,7 @@ export default {
             type: Array,
             default: [],
         },
-        user: ''
+        user: {}
 
     },
     methods: {
@@ -59,7 +59,7 @@ export default {
                 product_id: this.products[this.selectedProduct].id,
                 qty: this.qty,
                 date: this.inputDate,
-                user_id: this.user
+                user_id: this.user.id
             }
             this.$emit('sendProduced', data)
         }

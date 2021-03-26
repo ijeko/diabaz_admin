@@ -26,7 +26,7 @@
                 </tr>
                 <tr v-for="(product, index) in PRODUCTS"
                     :key="index">
-                    <td :class="{'text-secondary' : !product.stock, 'text-success' : product.dayProduced}"
+                    <td :class="{'text-secondary' : !product.stock, 'bg-success' : product.dayProduced}"
                     >
                         {{ product.title }}
                     </td>
@@ -91,7 +91,7 @@ export default {
     },
     props: {
         user: {
-            default: ''
+            default: {}
         },
         dateFormated: {
             type: Object,

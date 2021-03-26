@@ -56,8 +56,8 @@ class ReportsService
                 'unit' => $product->unit
             ]);
         }
-        $uploadsData = collect($uploadsData)->groupBy('date', false);
-        $totalSold = collect($totalSold)->keyBy('title');
+        $uploadsData = collect($uploadsData)->sortBy('date', 0, true)->groupBy('date', false);
+        $totalSold = collect($totalSold)->sortBy('client')->keyBy('title');
         return ['uploads' => $uploadsData, 'total' => $totalSold];
     }
 }

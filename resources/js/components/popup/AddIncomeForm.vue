@@ -39,7 +39,7 @@ import {mapActions, mapGetters} from 'vuex'
 export default {
     name: "AddIncomeForm",
     props: {
-        user: ''
+        user: {}
 
     },
     methods: {
@@ -54,7 +54,7 @@ export default {
                 this.message = 'Количество должно быть больше 0'
                 return false
             }
-                var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user}
+                var data = {material_id: this.MATERIALS[this.selectedMaterial].id, qty: this.qty, date: this.inputDate, user_id: this.user.id}
             this.ADD_INCOME(JSON.stringify(data))
             this.$emit('update')
 

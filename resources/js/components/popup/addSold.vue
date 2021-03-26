@@ -44,7 +44,7 @@ export default {
             type: Array,
             default: [],
         },
-        user: ''
+        user: {}
 
     },
     methods: {
@@ -56,7 +56,7 @@ export default {
                 this.message = 'Количество должно быть больше 0'
                 return false
             }
-            var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user, soldTo: this.soldTo}
+            var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user.id, soldTo: this.soldTo}
             this.$emit('sendSold', data)
             this.closeSold()
         }

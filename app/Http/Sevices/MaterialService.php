@@ -58,9 +58,9 @@ class MaterialService
                 'id' => $material->id,
                 'title' => $material->title,
                 'name'=> $material->name,
-                'income' => $material->getIncomeSumm(),
+                'income' => round($material->getIncomeSumm(), 2),
                 'used' => $used,
-                'stock' => $material->getIncomeSumm() - $used,
+                'stock' => round($material->getIncomeSumm() - $used, 2),
                 'unit' => $material->unit,
                 'minQty' => $material->minQty
             ]);

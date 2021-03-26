@@ -3,7 +3,7 @@
 @section('content')
     <div id="app">
       <home-wrapper-component
-      :user="{{ \Illuminate\Support\Facades\Auth::id() }}"
+      :user="{{ \Illuminate\Support\Facades\Auth::User() }}"
       ></home-wrapper-component>
     </div>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Управление пользователями {{user}}
+        <div class="card-header">Управление пользователями
         </div>
         <div class="card-body">
             <table>

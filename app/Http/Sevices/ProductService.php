@@ -168,6 +168,7 @@ class ProductService
         return $asMaterial;
     }
 
+
     public function GetPerMonth($year, $month, $process, $id)
     {
         $Factory = new ProducedFactory();
