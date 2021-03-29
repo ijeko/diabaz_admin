@@ -35,7 +35,7 @@ class UserService
             ];
             $user->find($data['id'])
                 ->update($newData);
-        } else return $this->validator($data)->validated();
+        } else return $this->validator($data)->validate();
     }
 
     public function AddUser($data)

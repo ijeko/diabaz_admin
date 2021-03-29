@@ -13,14 +13,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware('auth:api')->group(function () {
-
-
+//
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 
 // Products
@@ -67,7 +63,7 @@ Route::get('/motohours', [App\Http\Controllers\MotohoursController::class, 'inde
 Route::post('/motohours', [App\Http\Controllers\MotohoursController::class, 'add']);
 
 // Users
-Route::get('/admin/users', [App\Http\Controllers\UserController::class, 'GetList']);
+Route::get('/admin/users', [App\Http\Controllers\UserController::class, 'GetList'])->middleware('auth:api');
 Route::put('/admin/users', [App\Http\Controllers\UserController::class, 'EditUser']);
 Route::post('/admin/users', [App\Http\Controllers\UserController::class, 'AddUser']);
 Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'DeleteUser']);
@@ -76,4 +72,3 @@ Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'Dele
 // Reports
 Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
 Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
-});
