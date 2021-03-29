@@ -12,4 +12,6 @@ class ModelFactory extends Factory
     {
         parent::__construct($namespace);
     }
+
+
 }

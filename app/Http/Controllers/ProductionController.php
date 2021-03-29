@@ -77,12 +77,12 @@ class ProductionController extends Controller
         }
     }
 
-    public function AddSold(Request $request)
-    {
-
-        $data = json_decode($request->data, 1);
-        return $this->products->AddSold($data);
-    }
+//    public function AddSold(Request $request)
+//    {
+//
+//        $data = json_decode($request->data, 1);
+//        return $this->products->AddSold($data);
+//    }
 
     public function GetStockByProduct(Request $request)
     {

@@ -5246,6 +5246,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -5283,13 +5290,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
-    products: {
-      type: Array,
-      "default": []
-    },
+    // products: {
+    //     type: Array,
+    //     default: [],
+    // },
     user: {}
   },
   methods: {
@@ -5303,24 +5327,41 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var data = {
-        product_id: this.products[this.selectedProduct].id,
+        product_id: this.selectProduction[this.selectedProduct].id,
         qty: this.qty,
         date: this.inputDate,
         user_id: this.user.id,
-        soldTo: this.soldTo
+        soldTo: this.soldTo,
+        model: this.productionType
       };
       this.$emit('sendSold', data);
       this.closeSold();
     }
   },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'MATERIALS'])), {}, {
+    selectProduction: function selectProduction() {
+      if (this.productionType === 'product') {
+        return this.PRODUCTS;
+      }
+
+      if (this.productionType === 'material') {
+        return this.MATERIALS;
+      }
+    }
+  }),
   data: function data() {
     return {
+      production: this.selectProduction,
       qty: 0,
       soldTo: '',
       selectedProduct: 0,
       inputDate: new Date().toISOString().slice(0, 10),
-      message: ''
+      message: '',
+      productionType: 'product'
     };
+  },
+  beforeMount: function beforeMount() {
+    this.production = this.PRODUCTS;
   }
 });
 
@@ -50036,7 +50077,84 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("label", { attrs: { for: "product" } }, [_vm._v("Продукция")]),
+          _c("div", { staticClass: "form-check" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productionType,
+                  expression: "productionType"
+                }
+              ],
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "exampleRadios",
+                id: "exampleRadios1",
+                value: "product",
+                checked: ""
+              },
+              domProps: { checked: _vm._q(_vm.productionType, "product") },
+              on: {
+                change: function($event) {
+                  _vm.productionType = "product"
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "form-check-label",
+                attrs: { for: "exampleRadios1" }
+              },
+              [
+                _vm._v(
+                  "\n                            Продукция\n                        "
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-check" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productionType,
+                  expression: "productionType"
+                }
+              ],
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "exampleRadios",
+                id: "exampleRadios2",
+                value: "material"
+              },
+              domProps: { checked: _vm._q(_vm.productionType, "material") },
+              on: {
+                change: function($event) {
+                  _vm.productionType = "material"
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "form-check-label",
+                attrs: { for: "exampleRadios2" }
+              },
+              [
+                _vm._v(
+                  "\n                            Материалы\n                        "
+                )
+              ]
+            )
+          ]),
           _vm._v(" "),
           _c(
             "select",
@@ -50067,7 +50185,7 @@ var render = function() {
                 }
               }
             },
-            _vm._l(_vm.products, function(product, index) {
+            _vm._l(_vm.selectProduction, function(product, index) {
               return _c("option", { domProps: { value: index } }, [
                 _vm._v(_vm._s(product.title))
               ])
@@ -50077,7 +50195,8 @@ var render = function() {
           _vm._v(" "),
           _c("label", { attrs: { for: "qty" } }, [
             _vm._v(
-              "Количество, " + _vm._s(_vm.products[_vm.selectedProduct].unit)
+              "Количество, " +
+                _vm._s(_vm.selectProduction[_vm.selectedProduct].unit)
             )
           ]),
           _vm._v(" "),

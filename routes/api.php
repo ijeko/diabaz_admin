@@ -23,7 +23,7 @@ Route::delete('/products/admin', [App\Http\Controllers\ProductionController::cla
 Route::put('/products/admin', [App\Http\Controllers\ProductionController::class, 'Edit']);
 Route::post('/products/admin', [App\Http\Controllers\ProductionController::class, 'Add']);
 Route::get('/products/sold', [App\Http\Controllers\ProductionController::class, 'GetSoldOnDate']);
-Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
+Route::post('/products/sold', [App\Http\Controllers\SoldController::class, 'AddSold']);
 Route::get('/products/operations', [App\Http\Controllers\ProductionController::class, 'Operations']);
 Route::delete('/products/operations', [App\Http\Controllers\ProductionController::class, 'Remove']);
 //Route::get('/products/stock', [App\Http\Controllers\ProductionController::class, 'GetStockByProduct']);

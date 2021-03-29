@@ -10,15 +10,31 @@
                 <form class="" action="">
                     <label for="date">Дата:</label>
                     <input v-model="inputDate" type="date" class="form-control" id="date">
-                    <label for="product">Продукция</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                               value="product"
+                               v-model="productionType"
+                               checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                            Продукция
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                               value="material"
+                               v-model="productionType">
+                        <label class="form-check-label" for="exampleRadios2">
+                            Материалы
+                        </label>
+                    </div>
                     <select  v-model="selectedProduct" name="product" id="product" class="form-control">
 <!--                        <option value="asd" disabled>Продукция</option>-->
                         <option
                             :value="index"
-                            v-for="(product, index) in products"
+                            v-for="(product, index) in selectProduction"
                            >{{product.title}}</option>
                     </select>
-                    <label for="qty">Количество, {{products[selectedProduct].unit}}</label>
+                    <label for="qty">Количество, {{selectProduction[selectedProduct].unit}}</label>
                     <input v-model="qty" class="form-control" type="number" id="qty">
                     <label for="soldTo">Кому:</label>
                     <input v-model="soldTo" class="form-control" type="text" id="soldTo">
@@ -36,14 +52,14 @@
 </template>
 
 <script>
-
+import {mapGetters} from 'vuex'
 export default {
     name: "popup",
     props: {
-        products: {
-            type: Array,
-            default: [],
-        },
+        // products: {
+        //     type: Array,
+        //     default: [],
+        // },
         user: {}
 
     },
@@ -56,19 +72,45 @@ export default {
                 this.message = 'Количество должно быть больше 0'
                 return false
             }
-            var data = {product_id: this.products[this.selectedProduct].id, qty: this.qty, date: this.inputDate, user_id: this.user.id, soldTo: this.soldTo}
+            var data = {product_id: this.selectProduction[this.selectedProduct].id,
+                qty: this.qty,
+                date: this.inputDate,
+                user_id: this.user.id,
+                soldTo: this.soldTo,
+                model: this.productionType}
             this.$emit('sendSold', data)
             this.closeSold()
+        },
+
+    },
+    computed: {
+      ...mapGetters([
+          'PRODUCTS',
+          'MATERIALS'
+      ]),
+        selectProduction ()
+        {
+            if (this.productionType === 'product') {
+                return this.PRODUCTS
+            }
+            if (this.productionType === 'material') {
+                return this.MATERIALS
+            }
         }
     },
     data () {
         return {
+            production: this.selectProduction,
             qty: 0,
             soldTo: '',
             selectedProduct: 0,
             inputDate: new Date().toISOString().slice(0,10),
-            message: ''
+            message: '',
+            productionType: 'product'
         }
+    },
+    beforeMount() {
+        this.production = this.PRODUCTS
     }
 }
 </script>

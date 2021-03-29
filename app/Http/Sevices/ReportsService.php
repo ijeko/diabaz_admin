@@ -42,7 +42,12 @@ class ReportsService
             $date = $upload->date;
             $qty = $upload->qty;
             $client = $upload->soldTo;
-            $product = $upload->product()->first();
+            if ($upload->isMaterial) {
+                $product = $upload->material()->first();
+            } else {
+                $product = $upload->product()->first();
+
+            }
             array_push($uploadsData, [
                 'date' => $date,
                 'qty' => $qty,
