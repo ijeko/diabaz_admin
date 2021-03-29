@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:api')->group(function () {
+
+
+
+
 // Products
 Route::get('/products', [App\Http\Controllers\ProductionController::class, 'index']);
 Route::delete('/products/admin', [App\Http\Controllers\ProductionController::class, 'Remove']);
@@ -70,3 +76,4 @@ Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'Dele
 // Reports
 Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
 Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
+});
