@@ -12,7 +12,7 @@
                 <div class="material-qty">{{ material.stock }} {{ material.unit }}</div>
             </div>
         </div>
-        <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>
+<!--        <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>-->
         <button class="btn btn-outline-dark" @click="showIncomes">Поступления материалов</button>
         <show-norm v-if="isShowNormVisible"
         @closeShowNorm="closeShowNorm"
@@ -47,7 +47,7 @@ export default {
     },
     props: {
         dateFormated: '',
-        user: '',
+        user: {},
         date:''
     },
     computed: {

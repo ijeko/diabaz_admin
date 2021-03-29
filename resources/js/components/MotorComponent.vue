@@ -50,7 +50,7 @@ export default {
     },
     props: {
         user: {
-            default: ''
+            default: {}
         },
         dateFormated: {
             type: Object,

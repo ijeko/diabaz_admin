@@ -42,7 +42,7 @@ export default {
             type: Array,
             default: [],
         },
-        user: ''
+        user: {}
 
     },
     methods: {
@@ -54,7 +54,7 @@ export default {
                 this.message = 'Количество должно быть больше 0'
                 return false
             }
-            var data = {machine_id: this.machines[this.selectedMachine].id, qty: this.qty, date: this.inputDate, user_id: this.user}
+            var data = {machine_id: this.machines[this.selectedMachine].id, qty: this.qty, date: this.inputDate, user_id: this.user.id}
             this.$emit('sendMotohour', data)
         }
     },

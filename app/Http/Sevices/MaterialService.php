@@ -9,6 +9,7 @@ use App\Factories\ModelFactory;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use App\Models\MaterialMinimum;
+use App\Models\Sold;
 use Illuminate\Http\Response;
 
 class MaterialService
@@ -47,20 +48,22 @@ class MaterialService
     public static function GetMaterialQty()
     {
         $materials = new Material();
+        $sold = new Sold();
         $materials = $materials->get();
         $materialQty = [];
         foreach ($materials as $material) {
             $used = 0;
+            $sold = $material->getSoldQty();
             foreach ($material->norma() as $norma) {
                 $used = $used + $norma->product()->find($norma->product_id)->getProducedQty() * $norma->norma;
             }
             array_push($materialQty, [
                 'id' => $material->id,
                 'title' => $material->title,
-                'name'=> $material->name,
-                'income' => $material->getIncomeSumm(),
+                'name' => $material->name,
+                'income' => round($material->getIncomeSumm(), 2),
                 'used' => $used,
-                'stock' => $material->getIncomeSumm() - $used,
+                'stock' => round($material->getIncomeSumm() - $used - $sold, 2),
                 'unit' => $material->unit,
                 'minQty' => $material->minQty
             ]);

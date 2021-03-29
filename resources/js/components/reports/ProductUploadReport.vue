@@ -42,12 +42,18 @@
                                                  v-for="product in upload"
                                                  :key="product.id"
                                             >
-                                                <div class="col-4">
+                                                <div class="col-4 lightable"
+                                                     @click="lightUp (product.title)"
+                                                     :class="{'bg-info' : light===product.title}"
+                                                >
                                                     {{ product.title }}
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="row">
-                                                        <div class="col">{{ product.client }}</div>
+                                                        <div class="col lightable"
+                                                             @click="lightUp (product.client)"
+                                                             :class="{'bg-info' : light===product.client}"
+                                                        >{{ product.client }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -108,7 +114,8 @@ export default {
             reportData: [],
             localDate: this.commonDate,
             clientsUpload: [],
-            lineToggle: 0
+            lineToggle: 0,
+            light: ''
         }
     },
     props: {
@@ -131,6 +138,16 @@ export default {
 
             }
             return dates
+        },
+        lightUp (item) {
+            this.light = item
+
+        },
+        lightUpCl (item) {
+            this.lightUpClient = ''
+            this.lightUpProduction = ''
+            this.lightUpClient = item
+
         },
         decreaseMonth() {
             let currentDate = new Date(Date.parse(this.localDate))
@@ -212,5 +229,8 @@ export default {
 
 .date-block {
     border-bottom: 1px solid silver;
+}
+.lightable {
+    cursor: pointer;
 }
 </style>

@@ -2084,7 +2084,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     dateFormated: '',
-    user: '',
+    user: {},
     date: ''
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['MATERIALS' // 'MATERIAL_QTY'
@@ -2182,7 +2182,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     user: {
-      "default": ''
+      "default": {}
     },
     dateFormated: {
       type: Object,
@@ -2346,7 +2346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: {
     user: {
-      "default": ''
+      "default": {}
     },
     dateFormated: {
       type: Object,
@@ -4703,7 +4703,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "adminUsers",
-  props: {},
+  props: {
+    user: ''
+  },
   data: function data() {
     return {
       isNewFormVisible: false,
@@ -4801,7 +4803,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddIncomeForm",
   props: {
-    user: ''
+    user: {}
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['ADD_INCOME'])), {}, {
     closeAddForm: function closeAddForm() {
@@ -4817,7 +4819,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         material_id: this.MATERIALS[this.selectedMaterial].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.ADD_INCOME(JSON.stringify(data));
       this.$emit('update');
@@ -5113,7 +5115,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    user: ''
+    user: {}
   },
   methods: {
     closePopup: function closePopup() {
@@ -5129,7 +5131,7 @@ __webpack_require__.r(__webpack_exports__);
         machine_id: this.machines[this.selectedMachine].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.$emit('sendMotohour', data);
     }
@@ -5200,7 +5202,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    user: ''
+    user: {}
   },
   methods: {
     closePopup: function closePopup() {
@@ -5216,7 +5218,7 @@ __webpack_require__.r(__webpack_exports__);
         product_id: this.products[this.selectedProduct].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user
+        user_id: this.user.id
       };
       this.$emit('sendProduced', data);
     }
@@ -5244,6 +5246,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -5281,14 +5290,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
-    products: {
-      type: Array,
-      "default": []
-    },
-    user: ''
+    // products: {
+    //     type: Array,
+    //     default: [],
+    // },
+    user: {}
   },
   methods: {
     closeSold: function closeSold() {
@@ -5301,24 +5327,41 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var data = {
-        product_id: this.products[this.selectedProduct].id,
+        product_id: this.selectProduction[this.selectedProduct].id,
         qty: this.qty,
         date: this.inputDate,
-        user_id: this.user,
-        soldTo: this.soldTo
+        user_id: this.user.id,
+        soldTo: this.soldTo,
+        model: this.productionType
       };
       this.$emit('sendSold', data);
       this.closeSold();
     }
   },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['PRODUCTS', 'MATERIALS'])), {}, {
+    selectProduction: function selectProduction() {
+      if (this.productionType === 'product') {
+        return this.PRODUCTS;
+      }
+
+      if (this.productionType === 'material') {
+        return this.MATERIALS;
+      }
+    }
+  }),
   data: function data() {
     return {
+      production: this.selectProduction,
       qty: 0,
       soldTo: '',
       selectedProduct: 0,
       inputDate: new Date().toISOString().slice(0, 10),
-      message: ''
+      message: '',
+      productionType: 'product'
     };
+  },
+  beforeMount: function beforeMount() {
+    this.production = this.PRODUCTS;
   }
 });
 
@@ -5447,6 +5490,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ProductUploadReport",
@@ -5456,7 +5505,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       reportData: [],
       localDate: this.commonDate,
       clientsUpload: [],
-      lineToggle: 0
+      lineToggle: 0,
+      light: ''
     };
   },
   props: {
@@ -5499,6 +5549,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return dates;
+    },
+    lightUp: function lightUp(item) {
+      this.light = item;
+    },
+    lightUpCl: function lightUpCl(item) {
+      this.lightUpClient = '';
+      this.lightUpProduction = '';
+      this.lightUpClient = item;
     },
     decreaseMonth: function decreaseMonth() {
       var currentDate = new Date(Date.parse(this.localDate));
@@ -11283,7 +11341,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.date-line[data-v-4d66abb9] {\n    /*border-bottom: 1px solid silver;*/\n    margin-bottom: 10px;\n}\n.item[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n    padding: 5px;\n}\n.monthBtn[data-v-4d66abb9] {\n    width: 100px;\n}\n.date-block[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.date-line[data-v-4d66abb9] {\n    /*border-bottom: 1px solid silver;*/\n    margin-bottom: 10px;\n}\n.item[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n    padding: 5px;\n}\n.monthBtn[data-v-4d66abb9] {\n    width: 100px;\n}\n.date-block[data-v-4d66abb9] {\n    border-bottom: 1px solid silver;\n}\n.lightable[data-v-4d66abb9] {\n    cursor: pointer;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -46082,15 +46140,6 @@ var render = function() {
       _vm._v(" "),
       _c(
         "button",
-        {
-          staticClass: "btn btn-outline-dark",
-          on: { click: _vm.showShowNorm }
-        },
-        [_vm._v("Нормы расхода")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
         { staticClass: "btn btn-outline-dark", on: { click: _vm.showIncomes } },
         [_vm._v("Поступления материалов")]
       ),
@@ -46295,7 +46344,7 @@ var render = function() {
                   {
                     class: {
                       "text-secondary": !product.stock,
-                      "text-success": product.dayProduced
+                      "bg-success": product.dayProduced
                     }
                   },
                   [
@@ -50085,7 +50134,84 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("label", { attrs: { for: "product" } }, [_vm._v("Продукция")]),
+          _c("div", { staticClass: "form-check" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productionType,
+                  expression: "productionType"
+                }
+              ],
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "exampleRadios",
+                id: "exampleRadios1",
+                value: "product",
+                checked: ""
+              },
+              domProps: { checked: _vm._q(_vm.productionType, "product") },
+              on: {
+                change: function($event) {
+                  _vm.productionType = "product"
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "form-check-label",
+                attrs: { for: "exampleRadios1" }
+              },
+              [
+                _vm._v(
+                  "\n                            Продукция\n                        "
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-check" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.productionType,
+                  expression: "productionType"
+                }
+              ],
+              staticClass: "form-check-input",
+              attrs: {
+                type: "radio",
+                name: "exampleRadios",
+                id: "exampleRadios2",
+                value: "material"
+              },
+              domProps: { checked: _vm._q(_vm.productionType, "material") },
+              on: {
+                change: function($event) {
+                  _vm.productionType = "material"
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "form-check-label",
+                attrs: { for: "exampleRadios2" }
+              },
+              [
+                _vm._v(
+                  "\n                            Материалы\n                        "
+                )
+              ]
+            )
+          ]),
           _vm._v(" "),
           _c(
             "select",
@@ -50116,7 +50242,7 @@ var render = function() {
                 }
               }
             },
-            _vm._l(_vm.products, function(product, index) {
+            _vm._l(_vm.selectProduction, function(product, index) {
               return _c("option", { domProps: { value: index } }, [
                 _vm._v(_vm._s(product.title))
               ])
@@ -50126,7 +50252,8 @@ var render = function() {
           _vm._v(" "),
           _c("label", { attrs: { for: "qty" } }, [
             _vm._v(
-              "Количество, " + _vm._s(_vm.products[_vm.selectedProduct].unit)
+              "Количество, " +
+                _vm._s(_vm.selectProduction[_vm.selectedProduct].unit)
             )
           ]),
           _vm._v(" "),
@@ -50306,19 +50433,45 @@ var render = function() {
                             "div",
                             { key: product.id, staticClass: "row item" },
                             [
-                              _c("div", { staticClass: "col-4" }, [
-                                _vm._v(
-                                  "\n                                                " +
-                                    _vm._s(product.title) +
-                                    "\n                                            "
-                                )
-                              ]),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "col-4 lightable",
+                                  class: {
+                                    "bg-info": _vm.light === product.title
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.lightUp(product.title)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                                " +
+                                      _vm._s(product.title) +
+                                      "\n                                            "
+                                  )
+                                ]
+                              ),
                               _vm._v(" "),
                               _c("div", { staticClass: "col-4" }, [
                                 _c("div", { staticClass: "row" }, [
-                                  _c("div", { staticClass: "col" }, [
-                                    _vm._v(_vm._s(product.client))
-                                  ])
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "col lightable",
+                                      class: {
+                                        "bg-info": _vm.light === product.client
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.lightUp(product.client)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(product.client))]
+                                  )
                                 ])
                               ]),
                               _vm._v(" "),

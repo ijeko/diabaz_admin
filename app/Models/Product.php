@@ -23,7 +23,7 @@ class Product extends Model
     }
     public function getSoldQty ()
     {
-        $summ = $this->hasMany(Sold::class)->sum('qty');
+        $summ = $this->hasMany(Sold::class)->where('isMaterial', 0)->sum('qty');
         return $summ;
     }
     public function getProducedByDate($today)
@@ -40,8 +40,8 @@ class Product extends Model
     {
         return $this->hasMany(Produced::class);
     }
-    public function sold ()
-    {
-        return $this->hasMany(Sold::class);
-    }
+//    public function sold ()
+//    {
+//        return $this->hasMany(Sold::class);
+//    }
 }

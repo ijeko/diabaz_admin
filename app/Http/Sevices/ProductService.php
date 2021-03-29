@@ -128,15 +128,15 @@ class ProductService
         json($sold);
     }
 
-    public function AddSold($data)
-    {
-        $Factory = new SoldFactory();
-        $item = $Factory->make(Sold::class, $data);
-        $check = CheckerService::CheckProductionStock($item);
-        if ($check) $item->save();
-        else   return \response(['error' => 'Не достаточно продукции: ' . $item->product()->first()->title]);
-
-    }
+//    public function AddSold($data)
+//    {
+//        $Factory = new SoldFactory();
+//        $item = $Factory->make(Sold::class, $data);
+//        $check = CheckerService::CheckProductionStock($item);
+//        if ($check) $item->save();
+//        else   return \response(['error' => 'Не достаточно продукции: ' . $item->product()->first()->title]);
+//
+//    }
 
 //    public function Stock()
 //    {
@@ -167,6 +167,7 @@ class ProductService
         }
         return $asMaterial;
     }
+
 
     public function GetPerMonth($year, $month, $process, $id)
     {

@@ -17,13 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:api')->group(function () {
+
+
+
+
 // Products
 Route::get('/products', [App\Http\Controllers\ProductionController::class, 'index']);
 Route::delete('/products/admin', [App\Http\Controllers\ProductionController::class, 'Remove']);
 Route::put('/products/admin', [App\Http\Controllers\ProductionController::class, 'Edit']);
 Route::post('/products/admin', [App\Http\Controllers\ProductionController::class, 'Add']);
 Route::get('/products/sold', [App\Http\Controllers\ProductionController::class, 'GetSoldOnDate']);
-Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
+Route::post('/products/sold', [App\Http\Controllers\SoldController::class, 'AddSold']);
 Route::get('/products/operations', [App\Http\Controllers\ProductionController::class, 'Operations']);
 Route::delete('/products/operations', [App\Http\Controllers\ProductionController::class, 'Remove']);
 //Route::get('/products/stock', [App\Http\Controllers\ProductionController::class, 'GetStockByProduct']);
@@ -70,3 +76,4 @@ Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'Dele
 // Reports
 Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
 Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
+});

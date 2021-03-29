@@ -7,6 +7,7 @@ namespace App\Http\Sevices;
 use App\Models\Produced;
 use App\Models\Product;
 use App\Models\Sold;
+use Illuminate\Database\Eloquent\Model;
 
 class CheckerService
 {
@@ -33,10 +34,12 @@ class CheckerService
 
     }
 
-    public static function CheckProductionStock(Sold $sold)
+    public static function CheckProductionStock(Sold $sold, Model $model)
     {
-        $stock = $sold->product()->first()->inStock();
-        if ($stock<=$sold->qty) return false;
+//        $stock = $sold->product()->first()->inStock();
+//        if ($stock<=$sold->qty) return false;
+//        else return true;
+        if ($sold->qty >= $model->inStock()) return false;
         else return true;
     }
 

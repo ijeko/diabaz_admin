@@ -41,7 +41,9 @@ import {mapActions, mapGetters} from 'vuex'
 
 export default {
     name: "adminUsers",
-    props: {},
+    props: {
+        user: ''
+    },
     data() {
         return {
             isNewFormVisible: false,

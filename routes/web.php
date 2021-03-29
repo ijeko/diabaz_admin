@@ -15,15 +15,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
+})->name('home');
+Route::get('/access' , function (){
+    return view('access');
+})->name('acc');
 Auth::routes();
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/inputdata', [App\Http\Controllers\HomeController::class, 'inputdata'])->name('inputdata');
-    Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('admin');
 //Route::get('/reports/{any}', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports');
+    Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('admin')->middleware('admin');
     Route::get('/{any}', [\App\Http\Controllers\ReportsController::class, 'index'])->where('any', '.*');
-
 });
 
 
