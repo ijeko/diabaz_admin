@@ -2796,6 +2796,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "AddMatNorm",
@@ -2824,11 +2829,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
 
       if (title && unit) {
-        var _data = {
+        var data = {
           title: title.title,
           unit: unit.unit
         };
-        return _data;
+        return data;
       } else return false;
     },
     close: function close() {
@@ -2872,6 +2877,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     remove: function remove(id) {
+      var _this = this;
+
       axios["delete"]('/api/matnorm/remove', {
         headers: {
           'Content-Type': 'application/json'
@@ -2880,13 +2887,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: id
         }
       }).then(function (response) {
-        return data;
+        this.$emit('update', {
+          prodID: this.selectedProduct
+        });
+        return response.data;
       })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-      this.$emit('update', {
-        prodID: this.selectedProduct
+        if (error.response) {
+          _this.message = error.response.data.errors;
+        }
+
+        return error;
       });
     }
   })
@@ -3137,6 +3147,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editInputs",
@@ -3157,7 +3177,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       process: '',
       isSelected: '',
       selectProd: '',
-      isAddFormVisible: false
+      isAddFormVisible: false,
+      message: ''
     };
   },
   watch: {
@@ -3218,6 +3239,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     remove: function remove(model, id) {
+      var _this2 = this;
+
       var data = {
         model: model,
         id: id
@@ -3230,12 +3253,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           },
           params: data
         }).then(function (response) {
-          return data;
+          this.clearData();
+          return response.data;
         })["catch"](function (error) {
-          // handle error
-          console.log(error);
+          if (error.response) {
+            _this2.message = error.response.data.errors;
+          }
+
+          return error;
         });
-        this.clearData();
       }
     },
     selectProductForNorm: function selectProductForNorm(event) {
@@ -3279,6 +3305,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3381,7 +3412,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           unit: this.newMachineUnit
         });
 
-        axios.put('api/machines', {
+        axios.put('api/machines/admin', {
           data: _data
         }, {
           headers: {
@@ -3398,7 +3429,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     deleteMachine: function deleteMachine(id) {
-      axios["delete"]('/api/machines', {
+      var _this = this;
+
+      axios["delete"]('/api/machines/admin', {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3406,13 +3439,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: id
         }
       }).then(function (response) {
+        this.$emit('update');
+        this.$emit('close');
         return data;
       })["catch"](function (error) {
-        // handle error
-        console.log(error);
+        if (error.response) {
+          _this.message = error.response.data.errors;
+        }
+
+        return error;
       });
-      this.$emit('update');
-      this.$emit('close');
     }
   }),
   mounted: function mounted() {
@@ -3440,6 +3476,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3555,14 +3596,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           return _data;
         })["catch"](function (error) {
-          // handle error
-          console.log(error);
+          if (error.response) {
+            this.message = error.response.data.errors;
+          }
         });
         this.$emit('update');
         this.$emit('close');
       }
     },
     deleteMaterial: function deleteMaterial(id) {
+      var _this = this;
+
       axios["delete"]('/api/materials/admin', {
         headers: {
           'Content-Type': 'application/json'
@@ -3571,13 +3615,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: id
         }
       }).then(function (response) {
+        this.$emit('update');
+        this.$emit('close');
         return data;
       })["catch"](function (error) {
-        // handle error
-        console.log(error);
+        if (error.response) {
+          _this.message = error.response.data.errors;
+        }
+
+        return error;
       });
-      this.$emit('update');
-      this.$emit('close');
     }
   }),
   mounted: function mounted() {
@@ -3605,6 +3652,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3715,14 +3767,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           return data;
         })["catch"](function (error) {
-          // handle error
-          console.log(error);
+          if (error.response) {
+            this.message = error.response.data.errors;
+          }
         });
         this.$emit('update');
         this.$emit('close');
       }
     },
     deleteProduct: function deleteProduct(model, id) {
+      var _this = this;
+
       var data = {
         model: model,
         id: id
@@ -3733,13 +3788,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         params: data
       }).then(function (response) {
+        this.$emit('update');
+        this.$emit('close');
         return data;
       })["catch"](function (error) {
-        // handle error
-        console.log(error);
+        if (error.response) {
+          _this.message = error.response.data.errors;
+        }
+
+        return error;
       });
-      this.$emit('update');
-      this.$emit('close');
     }
   }),
   mounted: function mounted() {
@@ -3767,6 +3825,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4060,7 +4123,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           name: this.name,
           unit: this.unit
         });
-        axios.post('/api/machines', {
+        axios.post('/api/machines/admin', {
           data: data
         }, {
           headers: {
@@ -4078,7 +4141,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // handle error
           console.log(error);
         });
-        alert('OK');
       }
     }
   }),
@@ -4411,6 +4473,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -46081,11 +46148,16 @@ var render = function() {
         0
       ),
       _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-outline-dark", on: { click: _vm.showIncomes } },
-        [_vm._v("Поступления материалов")]
-      ),
+      _vm.user.role != "gorny"
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-dark",
+              on: { click: _vm.showIncomes }
+            },
+            [_vm._v("Поступления материалов")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.isShowNormVisible
         ? _c("show-norm", { on: { closeShowNorm: _vm.closeShowNorm } })
@@ -46361,11 +46433,16 @@ var render = function() {
         [_vm._v("+ Произведено")]
       ),
       _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-outline-dark", on: { click: _vm.showSold } },
-        [_vm._v("+ Отгружено")]
-      )
+      _vm.user.role != "gorny"
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-dark",
+              on: { click: _vm.showSold }
+            },
+            [_vm._v("+ Отгружено")]
+          )
+        : _vm._e()
     ],
     1
   )
@@ -46855,6 +46932,17 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
+      _vm.message.auth
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            _vm._l(_vm.message.auth, function(error, index) {
+              return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+            }),
+            0
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _vm._l(_vm.selectedNorm, function(item) {
         return _c("div", { key: item.id, staticClass: "normItem" }, [
           _c("div", { staticClass: "normTitle" }, [
@@ -47083,6 +47171,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body" }, [
+                  _vm.message.auth
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "alert alert-danger",
+                          attrs: { role: "alert" }
+                        },
+                        _vm._l(_vm.message.auth, function(error, index) {
+                          return _c("span", { key: index }, [
+                            _vm._v(_vm._s(error))
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "select",
                     {
@@ -47238,6 +47342,22 @@ var render = function() {
                   _vm._v(
                     "\n                            Отгрузки за месяц\n                            "
                   ),
+                  _vm.message.auth
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "alert alert-danger",
+                          attrs: { role: "alert" }
+                        },
+                        _vm._l(_vm.message.auth, function(error, index) {
+                          return _c("span", { key: index }, [
+                            _vm._v(_vm._s(error))
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "div",
                     {
@@ -47680,6 +47800,17 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
+      _vm.message.auth
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            _vm._l(_vm.message.auth, function(error, index) {
+              return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+            }),
+            0
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("label", [_vm._v("Название техники")]),
       _vm._v(" "),
       _c("input", {
@@ -47820,6 +47951,17 @@ var render = function() {
             "div",
             { staticClass: "alert alert-danger", attrs: { role: "alert" } },
             [_vm._v("\n            " + _vm._s(_vm.message) + "\n        ")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.message.auth
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            _vm._l(_vm.message.auth, function(error, index) {
+              return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+            }),
+            0
           )
         : _vm._e(),
       _vm._v(" "),
@@ -47990,6 +48132,17 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
+      _vm.message.auth
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            _vm._l(_vm.message.auth, function(error, index) {
+              return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+            }),
+            0
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("label", [_vm._v("Название продукции")]),
       _vm._v(" "),
       _c("input", {
@@ -48133,6 +48286,17 @@ var render = function() {
             "div",
             { staticClass: "alert alert-danger", attrs: { role: "alert" } },
             [_vm._v("\n            " + _vm._s(_vm.messageFront) + "\n        ")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.message.auth
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            _vm._l(_vm.message.auth, function(error, index) {
+              return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+            }),
+            0
           )
         : _vm._e(),
       _vm._v(" "),
@@ -48845,6 +49009,17 @@ var render = function() {
                     "\n            "
                 )
               ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.message.auth
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              _vm._l(_vm.message.auth, function(error, index) {
+                return _c("span", { key: index }, [_vm._v(_vm._s(error))])
+              }),
+              0
             )
           : _vm._e(),
         _vm._v(" "),

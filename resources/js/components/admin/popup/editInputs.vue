@@ -34,6 +34,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+                                </div>
                                 <select class="form-control"
                                         v-model="selectedProduct"
                                         name="products"
@@ -92,6 +97,11 @@
                         <div class="card">
                             <div class="card-header">
                                 Отгрузки за месяц
+                                <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+                                </div>
                                 <div class="btn-group mr-2" role="group" aria-label="Second group">
                                     <button type="button" class="btn btn-secondary"
                                             @click="decreaseMonth"
@@ -245,7 +255,8 @@ export default {
             process: '',
             isSelected: '',
             selectProd: '',
-            isAddFormVisible: false
+            isAddFormVisible: false,
+            message: ''
 
         }
     },
@@ -316,13 +327,16 @@ export default {
                         params: data
                     })
                     .then(function (response) {
-                        return data
+                        this.clearData()
+                        return response.data
                     })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
+                    .catch(error => {
+                        if (error.response) {
+                            this.message = error.response.data.errors
+                        }
+                        return error
                     })
-                this.clearData()
+
             }
         },
         selectProductForNorm(event) {

@@ -5,6 +5,11 @@
         <div v-if="message" class="alert alert-danger" role="alert">
             {{ message }}
         </div>
+        <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+        </div>
         <div class="normItem" v-for="item in selectedNorm"
              :key="item.id"
         >
@@ -99,13 +104,15 @@ export default {
                     params: {id: id}
                 })
                 .then(function (response) {
-                    return data
+                    this.$emit('update', {prodID: this.selectedProduct})
+                    return response.data
                 })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
-            this.$emit('update', {prodID: this.selectedProduct})
         }
     }
 }

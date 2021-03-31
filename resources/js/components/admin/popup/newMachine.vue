@@ -104,7 +104,7 @@ export default {
                     name: this.name,
                     unit: this.unit
                 })
-                axios.post('/api/machines',
+                axios.post('/api/machines/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -119,7 +119,6 @@ export default {
                         // handle error
                         console.log(error);
                     })
-                alert('OK')
             }
         }
     },

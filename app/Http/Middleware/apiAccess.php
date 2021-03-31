@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class AdminMiddleware
+class apiAccess
 {
     /**
      * Handle an incoming request.
@@ -23,7 +23,7 @@ class AdminMiddleware
         if(auth()->user()->checkRole($roles)) {
             return $next($request);
         }
-        return redirect(route('acc'));
+        return response(['errors' => ['auth' => 'Доступ запрещен']], 401);
 
     }
 }

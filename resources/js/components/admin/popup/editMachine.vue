@@ -6,6 +6,11 @@
             <div v-if="message" class="alert alert-danger" role="alert">
                 {{ message }}
             </div>
+            <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+            </div>
             <label>Название техники</label>
             <input v-model="newMachineName" class="form-control">
             <label>Краткое название на английском</label>
@@ -101,7 +106,7 @@ export default {
                     name: this.newMachineSlug,
                     unit: this.newMachineUnit
                 })
-                axios.put('api/machines',
+                axios.put('api/machines/admin',
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -118,20 +123,22 @@ export default {
             }
         },
         deleteMachine(id) {
-            axios.delete('/api/machines',
+            axios.delete('/api/machines/admin',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}
                 })
                 .then(function (response) {
+                    this.$emit('update')
+                    this.$emit('close')
                     return data
                 })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
-            this.$emit('update')
-            this.$emit('close')
         }
     },
     mounted() {

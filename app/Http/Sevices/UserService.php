@@ -35,7 +35,7 @@ class UserService
             ];
             $user->find($data['id'])
                 ->update($newData);
-        } else return $this->validator($data)->validated();
+        } else return $this->validator($data)->validate();
     }
 
     public function AddUser($data)
@@ -57,7 +57,7 @@ class UserService
             ];
             $user = $Factory->make(User::class, $newData);
             $user->save();
-        } else return $validator->validated();
+        } else return $validator->validate();
     }
 
     public function Delete ($data)

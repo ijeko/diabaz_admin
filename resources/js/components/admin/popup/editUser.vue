@@ -6,6 +6,11 @@
             <div v-if="messageFront" class="alert alert-danger" role="alert">
                 {{ messageFront }}
             </div>
+            <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+            </div>
             <label>ФИО</label>
             <input v-model="newUserName" class="form-control">
             <div v-if="message.name" class="alert alert-danger" role="alert">

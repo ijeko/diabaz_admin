@@ -13,7 +13,7 @@
             </div>
         </div>
 <!--        <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>-->
-        <button class="btn btn-outline-dark" @click="showIncomes">Поступления материалов</button>
+        <button v-if="user.role != 'gorny'" class="btn btn-outline-dark" @click="showIncomes">Поступления материалов</button>
         <show-norm v-if="isShowNormVisible"
         @closeShowNorm="closeShowNorm"
         ></show-norm>

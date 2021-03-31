@@ -6,6 +6,11 @@
             <div v-if="message" class="alert alert-danger" role="alert">
                 {{ message }}
             </div>
+            <div v-if="message.auth" class="alert alert-danger" role="alert">
+            <span v-for="(error, index) of message.auth"
+                  :key="index"
+            >{{ error }}</span>
+            </div>
             <label>Название продукции</label>
             <input v-model="newProductName" class="form-control">
             <label>Краткое название на английском</label>
@@ -110,8 +115,9 @@ export default {
                         return data
                     })
                     .catch(function (error) {
-                        // handle error
-                        console.log(error);
+                        if (error.response) {
+                            this.message = error.response.data.errors
+                        }
                     })
                 this.$emit('update')
                 this.$emit('close')
@@ -125,14 +131,16 @@ export default {
                     params: data
                 })
                 .then(function (response) {
+                    this.$emit('update')
+                    this.$emit('close')
                     return data
                 })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
-            this.$emit('update')
-            this.$emit('close')
         }
     },
     mounted() {

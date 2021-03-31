@@ -60,7 +60,7 @@
             @sendSold="sendSold"
         ></enter-sold>
         <button class="btn btn-outline-dark" @click="showPopup">+ Произведено</button>
-        <button class="btn btn-outline-dark" @click="showSold">+ Отгружено</button>
+        <button v-if="user.role != 'gorny'" class="btn btn-outline-dark" @click="showSold">+ Отгружено</button>
     </div>
 </template>
 
