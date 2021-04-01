@@ -23,7 +23,8 @@ class Product extends Model
     }
     public function getSoldQty ()
     {
-        $summ = $this->hasMany(Sold::class)->where('isMaterial', 0)->sum('qty');
+        $total = $this->hasMany(Sold::class, 'product_id')->get()->where('isMaterial', 0);
+        $summ = $total->sum('qty');
         return $summ;
     }
 

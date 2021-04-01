@@ -41,9 +41,9 @@ class Material extends Model
 
     public function getSoldQty()
     {
-        $summ = $this->hasMany(Sold::class, 'product_id')
-            ->where('isMaterial', 1)
-            ->sum('qty');
+        $total = $this->hasMany(Sold::class, 'product_id')->get()
+            ->where('isMaterial', 1);
+        $summ = $total->sum('qty');
         return $summ;
     }
 

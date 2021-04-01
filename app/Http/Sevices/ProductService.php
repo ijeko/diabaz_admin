@@ -33,7 +33,7 @@ class ProductService
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
         $products = [];
-        foreach ($this->product->get() as $product) {
+        foreach ($this->product->all() as $product) {
             array_push($products, [
                 'id' => $product->id,
                 'title' => $product->title,
