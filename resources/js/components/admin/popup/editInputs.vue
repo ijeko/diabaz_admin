@@ -326,7 +326,7 @@ export default {
                         headers: {'Content-Type': 'application/json'},
                         params: data
                     })
-                    .then(function (response) {
+                    .then(response => {
                         this.clearData()
                         return response.data
                     })

@@ -29,6 +29,9 @@ class ProductService
 
     public function get($date)
     {
+        $time = strtotime($date);
+        $targetMonth = date('m', $time);
+        $targetYear = date('Y', $time);
         $products = [];
         foreach ($this->product->get() as $product) {
             array_push($products, [
@@ -36,8 +39,11 @@ class ProductService
                 'title' => $product->title,
                 'name' => $product->name,
                 'totalProduced' => $product->getProducedQty(),
-                'dayProduced' => $product->getProducedByDate($date),
-                'sold' => $product->getSoldQty(),
+                'dayProduced' => $product->produced()
+                    ->whereYear('date', $targetYear)
+                    ->whereMonth('date', $targetMonth)
+                    ->sum('qty'),
+                'sold' => $product->getSoldQtyMonthly($targetMonth),
                 'stock' => round($product->getProducedQty() - $product->getSoldQty() - $this->asMaterial($product->id), 2),
                 'unit' => $product->unit
             ]);

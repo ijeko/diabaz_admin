@@ -41,7 +41,21 @@ class Material extends Model
 
     public function getSoldQty()
     {
-        $summ = $this->hasMany(Sold::class, 'product_id')->where('isMaterial', 1)->sum('qty');
+        $summ = $this->hasMany(Sold::class, 'product_id')
+            ->where('isMaterial', 1)
+            ->sum('qty');
+        return $summ;
+    }
+
+    public function getSoldQtyMonthly()
+    {
+        $month = \Carbon\Carbon::now()->format('m');
+        $monthly = $this->hasMany(Sold::class, 'product_id')
+            ->whereMonth('date', $month)
+            ->get();
+        $summ = $monthly
+            ->where('isMaterial', 1)
+            ->sum('qty');
         return $summ;
     }
 
@@ -49,7 +63,6 @@ class Material extends Model
     {
         $used = 0;
         foreach (Materialnorm::all()->where('material_id', $this->id) as $product) {
-
             $used = $used + Produced::whereProductId($product->product_id)->sum('qty') * $product->norma;
         }
         return $this->getIncomeSumm() - $this->getSoldQty() - $used;

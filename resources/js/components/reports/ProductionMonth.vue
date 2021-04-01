@@ -28,8 +28,8 @@
                             <th class="cells text-dark"
                                 v-for="day in daysInMonth()"
                                 :key="day"
-                                :class="{'bg-warning': isWeekend(day) }"
-                            >{{ day }}
+                                :class="{'bg-warning': isWeekend(day) }">
+                                {{ day }}
                             </th>
                         </tr>
                         </thead>

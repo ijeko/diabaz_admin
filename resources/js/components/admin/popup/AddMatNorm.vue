@@ -81,7 +81,13 @@ export default {
         },
         addItem () {
             let material= this.MATERIALS[this.selectedMat]
-            this.selectedNorm.push({id:null,title: material.title, norma: 0, unit: material.unit, material_id: material.id, product_id: this.selectedProduct})
+            this.selectedNorm.push({
+                id:null,title: material.title,
+                norma: 0,
+                unit: material.unit,
+                material_id: material.id,
+                product_id: this.selectedProduct
+            })
             // console.log(this.selectedNorm)
         },
         test() {
@@ -103,7 +109,7 @@ export default {
                     headers: {'Content-Type': 'application/json'},
                     params: {id: id}
                 })
-                .then(function (response) {
+                .then(response => {
                     this.$emit('update', {prodID: this.selectedProduct})
                     return response.data
                 })

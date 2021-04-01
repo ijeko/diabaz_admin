@@ -26,6 +26,18 @@ class Product extends Model
         $summ = $this->hasMany(Sold::class)->where('isMaterial', 0)->sum('qty');
         return $summ;
     }
+
+    public function getSoldQtyMonthly ($month)
+    {
+        $monthly = $this->hasMany(Sold::class, 'product_id')
+            ->whereMonth('date', $month)
+            ->get();
+        $summ = $monthly
+            ->where('isMaterial', 0)
+            ->sum('qty');
+        return $summ;
+    }
+
     public function getProducedByDate($today)
     {
         $summ = $this->hasMany(Produced::class)->where('date', $today)->sum('qty');

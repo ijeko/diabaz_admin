@@ -35,14 +35,15 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
     name: "newMaterial",
     data() {
-        return {}
+        return {
+            message: ''
+        }
     },
     props: {
         selectedProduct: '',
         newProductName: '',
         newProductSlug: '',
         newProductUnit: '',
-        message: ''
     },
     computed: {
         ...mapGetters([
@@ -111,16 +112,17 @@ export default {
                     {
                         headers: {'Content-Type': 'application/json'}
                     })
-                    .then(function (response) {
-                        return data
+                    .then(response => {
+                        this.$emit('update')
+                        this.$emit('close')
+                        return response.data
                     })
-                    .catch(function (error) {
+                    .catch(error => {
                         if (error.response) {
                             this.message = error.response.data.errors
                         }
+                        return error
                     })
-                this.$emit('update')
-                this.$emit('close')
             }
         },
         deleteProduct(model, id) {
@@ -130,10 +132,10 @@ export default {
                     headers: {'Content-Type': 'application/json'},
                     params: data
                 })
-                .then(function (response) {
+                .then(response => {
                     this.$emit('update')
                     this.$emit('close')
-                    return data
+                    return response.data
                 })
                 .catch(error => {
                     if (error.response) {
@@ -165,7 +167,7 @@ export default {
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    z-index: 98;
+    z-index: 1;
 }
 
 .formBox {
@@ -173,13 +175,13 @@ export default {
     flex-shrink: 0;
     flex-grow: 0;
     background: #fff;
-    width: 600px;
+    width: auto;
     max-width: 100%;
     overflow: visible;
     transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
     transform: scale(0.9);
     opacity: 1;
-    z-index: 99;
+    z-index: 1;
 }
 
 .actions {

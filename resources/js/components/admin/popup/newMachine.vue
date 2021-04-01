@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="formBox">
             <div class="text-right" @click="close">&times;</div>
-            <h3 class="text-center mb-4">Новая продукция</h3>
+            <h3 class="text-center mb-4">Добавить технику</h3>
             <div v-if="message" class="alert alert-danger" role="alert">
                 {{ message }}
             </div>
@@ -108,16 +108,17 @@ export default {
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
-                    }).then(response => {
-                    this.info = response
-                    if (response.data === 200) {
-                        this.$emit('close')
+                    })
+                    .then(response => {
                         this.$emit('update')
-                    } else return false
-                })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
+                        this.$emit('close')
+                        return response.data
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            this.message = error.response.data.errors
+                        }
+                        return error
                     })
             }
         }
@@ -144,19 +145,22 @@ export default {
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 }
 
 .formBox {
+    position: center;
     margin: 50px 0;
     flex-shrink: 0;
     flex-grow: 0;
     background: #fff;
-    width: 600px;
+    width: auto;
     max-width: 100%;
     overflow: visible;
     transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
     transform: scale(0.9);
     opacity: 1;
+    z-index: 1;
 }
 
 .normItem {

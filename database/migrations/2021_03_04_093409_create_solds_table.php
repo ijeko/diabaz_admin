@@ -20,7 +20,7 @@ class  CreateSoldsTable extends Migration
             $table->float('qty');
             $table->integer('user_id');
             $table->string('soldTo');
-            $table->boolean('isMaterial');
+            $table->boolean('isMaterial')->default('0');
             $table->timestamps();
         });
     }

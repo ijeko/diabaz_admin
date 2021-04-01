@@ -2,11 +2,11 @@
     <div class="card">
         <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
             {{ dateFormated.year }}
-            <div class="btn btn-link btn-sm"
-                 @mousedown="GET_PRODUCTS(yesterday)"
-                 @mouseup="GET_PRODUCTS(currentDate)"
-            >Показать за вчера
-            </div>
+<!--            <div class="btn btn-link btn-sm"-->
+<!--                 @mousedown="GET_PRODUCTS(yesterday)"-->
+<!--                 @mouseup="GET_PRODUCTS(currentDate)"-->
+<!--            >Показать за вчера-->
+<!--            </div>-->
         </div>
         <div class="card-body">
             <div v-if="message" class="alert alert-danger" role="alert">

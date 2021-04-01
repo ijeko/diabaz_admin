@@ -8,6 +8,7 @@ class ReportsService
 {
     public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products)
     {
+
         $dayProductionReport = [];
         foreach ($products->all() as $product) {
             $daily = [];
@@ -57,7 +58,7 @@ class ReportsService
             ]);
             array_push($totalSold, [
                 'title' => $product->title,
-                'totalSold' => $product->getSoldQty(),
+                'totalSold' => $product->getSoldQtyMonthly($targetMonth),
                 'unit' => $product->unit
             ]);
         }

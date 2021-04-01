@@ -111,16 +111,17 @@ export default {
                     {data},
                     {
                         headers: {'Content-Type': 'application/json'}
-                    }).then(response => {
-                    this.info = response
-                    if (response.data === 200) {
-                        this.$emit('close')
+                    })
+                    .then(response => {
                         this.$emit('update')
-                    } else return false
-                })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
+                        this.$emit('close')
+                        return response.data
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            this.message = error.response.data.errors
+                        }
+                        return error
                     })
             }
         }
@@ -140,13 +141,15 @@ export default {
     bottom: 0;
     flex-shrink: 0;
     flex-grow: 0;
-    width: 100%;
+    width: auto;
     min-height: 100%;
     margin: auto;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
+    z-index: 1;
+
 }
 
 .formBox {
@@ -160,6 +163,8 @@ export default {
     transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
     transform: scale(0.9);
     opacity: 1;
+    z-index: 1;
+
 }
 
 .normItem {
