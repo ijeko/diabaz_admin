@@ -2,11 +2,11 @@
     <div class="card">
         <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
             {{ dateFormated.year }}
-<!--            <div class="btn btn-link btn-sm"-->
-<!--                 @mousedown="GET_PRODUCTS(yesterday)"-->
-<!--                 @mouseup="GET_PRODUCTS(currentDate)"-->
-<!--            >Показать за вчера-->
-<!--            </div>-->
+            <!--            <div class="btn btn-link btn-sm"-->
+            <!--                 @mousedown="GET_PRODUCTS(yesterday)"-->
+            <!--                 @mouseup="GET_PRODUCTS(currentDate)"-->
+            <!--            >Показать за вчера-->
+            <!--            </div>-->
         </div>
         <div class="card-body">
             <div v-if="message" class="alert alert-danger" role="alert">
@@ -41,7 +41,7 @@
                     </td>
                 </tr>
             </table>
-
+            <component-loader v-if="isLoading"></component-loader>
         </div>
         <enter-produced
             v-if="isEnterVisible"
@@ -73,20 +73,21 @@ export default {
     components: {},
     mounted() {
         // this.GET_SOLD(this.date)
-        this.GET_PRODUCTS(this.currentDate)
+        this.action()
     },
     data: function () {
         return {
             isEnterVisible: '',
             isSoldVisible: false,
             message: '',
-            errorProduced: ''
+            errorProduced: '',
+            isLoading: true
         }
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
         currentDate: function (newcurrentDate, oldcurrentDate) {
-            this.GET_PRODUCTS(this.currentDate)
+            this.action()
         }
     },
     props: {
@@ -106,15 +107,15 @@ export default {
         ]),
         currentDate() {
             var date = {date: this.date}
-            this.GET_PRODUCTS(date)
+            this.GET_PRODUCTS(date).then(res => {
+                this.isLoading = false
+            })
             return date
         },
         yesterday() {
             let currentDate = new Date(Date.parse(this.date))
             currentDate.setDate(currentDate.getDate() - 1);
-            // this.GET_PRODUCTS({date: currentDate})
             return {date: currentDate.toISOString().slice(0, 10)}
-            // console.log(currentDate.toISOString().slice(0, 10))
         }
     },
     methods: {
@@ -136,9 +137,14 @@ export default {
         closeSold() {
             this.isSoldVisible = ''
         },
+        action () {
+            this.isLoading = true
+            return this.GET_PRODUCTS(this.currentDate).then(res => {
+                this.isLoading = false
+            })
+        },
         sendProduced(data) {
             data = JSON.stringify(data)
-            // this.ADD_PRODUCED(JSON.stringify(data))
             axios.post('/api/produced/add',
                 {data},
                 {
@@ -150,12 +156,9 @@ export default {
                     return response.data
                 })
                 .catch(response => {
-                    // handle error
-                    // this.errorProduced = response
                     console.log(response.message);
                 })
-            this.GET_PRODUCTS(this.currentDate)
-            this.GET_MATERIAL_QTY()
+            this.action()
             this.closePopup()
         },
         sendSold(data) {
@@ -166,15 +169,13 @@ export default {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(response => {
-                    // commit('SET_PRODUCED', response.data)
                     this.message = response.data
                     return response.data
                 })
                 .catch(function (error) {
-                    // handle error
                     console.log(error);
                 })
-            this.GET_PRODUCTS(this.currentDate)
+            this.action()
             this.closeSold()
         }
     }

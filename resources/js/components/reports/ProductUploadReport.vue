@@ -1,5 +1,6 @@
 <template>
     <div>
+        <component-loader v-if="isLoading"></component-loader>
         <div class="card mt-4">
             <div class="card-header">Отгрузки за месяц:
                 <div class="btn-group mr-2" role="group" aria-label="Second group">
@@ -115,7 +116,8 @@ export default {
             localDate: this.commonDate,
             clientsUpload: [],
             lineToggle: 0,
-            light: ''
+            light: '',
+            isLoading:''
         }
     },
     props: {
@@ -176,6 +178,7 @@ export default {
                 0).getDate();
         },
         getReport() {
+            this.isLoading = true
             let data = {date: this.localDate, days: this.daysInMonth()}
             axios.get('/api/reports/upload', {
                 headers: {'Content-Type': 'application/json'},
@@ -183,6 +186,7 @@ export default {
             })
                 .then(response => {
                     this.reportData = response.data
+                    this.isLoading = false
                     return response.data
                 })
                 .catch(function (error) {

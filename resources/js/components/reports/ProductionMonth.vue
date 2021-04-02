@@ -20,6 +20,7 @@
                 </div>
             </div>
             <div class="card-body">
+                <component-loader v-if="isLoading"></component-loader>
                 <div class="table-responsive text-nowrap">
                     <table class="table table-striped">
                         <thead>
@@ -94,6 +95,7 @@ export default {
             date: new Date(),
             reportData: [],
             localDate: this.commonDate,
+            isLoading: ''
         }
     },
     props: {
@@ -137,6 +139,7 @@ export default {
                 0).getDate();
         },
         getReport() {
+            this.isLoading = true
             let data = {date: this.localDate, days: this.daysInMonth()}
             axios.get('/api/reports/monthly', {
                 headers: {'Content-Type': 'application/json'},
@@ -144,6 +147,7 @@ export default {
             })
                 .then(response => {
                     this.reportData = response.data
+                    this.isLoading = false
                     return response.data
                 })
                 .catch(function (error) {

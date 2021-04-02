@@ -91,27 +91,28 @@ export default {
         //         })
         // },
         GET_MATERIALS: ({commit}) => {
-            axios.get('/api/materials', {
+            return axios.get('/api/materials', {
                 headers: {'Content-Type': 'application/json'}
             })
-                .then(function (response) {
+                .then(response => {
                     commit('SET_MATERIALS', response.data);
-                    return response.data
+                    return response.status
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
                 })
+
         },
         GET_PRODUCTS: ({commit}, data) => {
-            axios.get('/api/products', {
+           return  axios.get('/api/products', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
 
             })
-                .then(function (response) {
+                .then(response => {
                     commit('SET_PRODUCTS', response.data);
-                    return response.data
+                    return response.status
                 })
                 .catch(function (error) {
                     // handle error
@@ -207,12 +208,12 @@ export default {
                 })
         },
         GET_MACHINES: ({commit}) => {
-            axios.get('/api/machines', {
+            return axios.get('/api/machines', {
                 headers: {'Content-Type': 'application/json'}
             })
-                .then(function (response) {
+                .then(response => {
                     commit('SET_MACHINES', response.data);
-                    return response.data
+                    return response.status
                 })
                 .catch(function (error) {
                     // handle error

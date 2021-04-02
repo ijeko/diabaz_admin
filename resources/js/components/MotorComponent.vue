@@ -18,7 +18,7 @@
                     </td>
                 </tr>
             </table>
-
+<component-loader v-if="isLoading"></component-loader>
         </div>
         <enter-motohour
             v-if="isEnterVisible"
@@ -40,12 +40,15 @@ export default {
     name: 'MachinesComponent',
     components: {},
     mounted() {
-        this.GET_MACHINES()
+        this.GET_MACHINES().then(res => {
+            this.isLoading = false
+        })
     },
     data: function () {
         return {
             isEnterVisible: '',
-            produced: {}
+            produced: {},
+            isLoading: true,
         }
     },
     props: {
