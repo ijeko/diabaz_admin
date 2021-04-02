@@ -6039,9 +6039,7 @@ Vue.component('admin-edit-user-component', __webpack_require__(/*! ./components/
 Vue.component('admin-new-user-component', __webpack_require__(/*! ./components/admin/popup/newUser.vue */ "./resources/js/components/admin/popup/newUser.vue").default); //reports
 
 Vue.component('production-month-component', __webpack_require__(/*! ./components/reports/ProductionMonth.vue */ "./resources/js/components/reports/ProductionMonth.vue").default);
-Vue.component('product-upload-component', __webpack_require__(/*! ./components/reports/ProductUploadReport.vue */ "./resources/js/components/reports/ProductUploadReport.vue").default); //loader
-
-Vue.component('component-loader', __webpack_require__(/*! ./components/loaders/componentLoader */ "./resources/js/components/loaders/componentLoader.vue").default);
+Vue.component('product-upload-component', __webpack_require__(/*! ./components/reports/ProductUploadReport.vue */ "./resources/js/components/reports/ProductUploadReport.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
