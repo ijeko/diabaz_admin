@@ -53,7 +53,7 @@ Vue.component('add-mat-norm', require('./components/admin/popup/AddMatNorm.vue')
 Vue.component('admin-user-component', require('./components/admin/users.vue').default);
 Vue.component('admin-edit-user-component', require('./components/admin/popup/editUser.vue').default);
 Vue.component('admin-new-user-component', require('./components/admin/popup/newUser.vue').default);
-
+Vue.component('component-loader', require('./components/loaders/componentLoader').default);
 
 //reports
 Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);
