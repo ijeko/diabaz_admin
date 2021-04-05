@@ -27,7 +27,7 @@ class ProductService
         $this->norm = new Materialnorm();
     }
 
-    public function get($date)
+    public function Get($date)
     {
         $time = strtotime($date);
         $targetMonth = date('m', $time);
@@ -51,25 +51,25 @@ class ProductService
         return $products;
     }
 
-    public function GetProductionNorm($prodID)
+    public function GetMaterialsNormsOf(Product $product)
     {
-        $array = array();
-
-        $AllUsedMaterials = $this->product->find($prodID)->materialNorm()->get();
-        $materials = new Material();
-        foreach ($AllUsedMaterials as $item) {
-            $id = $item->id;
-            $title = $materials->find($item->material_id)->title;
-            $norma = $item->norma;
-            $unit = $materials->find($item->material_id)->unit;
-            array_push($array, ['id' => $id,
+        $materialsForProduct = array();
+        $usedMaterialsNorms = $product->materialNorm()->get();
+        foreach ($usedMaterialsNorms as $usedMaterialNorma) {
+            $id = $usedMaterialNorma->id;
+            $title = $usedMaterialNorma->title;
+            $norma = $usedMaterialNorma->norma;
+            $unit = $usedMaterialNorma->material()->first()->unit;
+            array_push($materialsForProduct, [
+                'id' => $id,
                 'title' => $title,
                 'norma' => $norma,
+                'material_id' => $usedMaterialNorma->material_id,
+                'product_id' => $usedMaterialNorma->product_id,
                 'unit' => $unit,
-                'material_id' => $item->material_id,
-                'product_id' => $prodID]);
+            ]);
         }
-        return json_encode($array);
+        return json_encode($materialsForProduct);
     }
 
     public function EditProduct($data)
@@ -79,29 +79,25 @@ class ProductService
         $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
     }
 
-    public function EditProductionNorm($normsFromVue)
+    public function EditMaterialsNormFor($changedNorm)
     {
         $now = Carbon::now();
         $newNorms = [];
-        $norm = new Materialnorm();
-        foreach ($normsFromVue as $item) {
+//        $norm = new Materialnorm();
+        foreach ($changedNorm->get() as $norm) {
             // проверяем сушествует ли уже норма
-            if ($item->id != null) {
-//                если существует, проверяем внесены ли изменения
-                if ($norm->find($item->id)->norma != $item->norma) {
-//                    если изменения внесены - обновляем запись в БД
-                    $norm->find($item->id)->update(['norma' => $item->norma]);
-                } //                Если изменений нет, ничего не выполняется
+            if ($norm->exists()) {
+                dd(__METHOD__);
+                $norm->update();
             } else {
-
                 //            если записи не существует - создается новый объект и пишется в бд
                 $newNorms[] = [
-                    'title' => $item->title,
-                    'product_id' => $item->product_id,
-                    'material_id' => $item->material_id,
-                    'norma' => $item->norma,
-                    'created_at' => $now,
-                    'updated_at' => $now
+                    'title' => $normm->title,
+                    'product_id' => $norm->product_id,
+                    'material_id' => $norm->material_id,
+                    'norma' => $norm->norma,
+//                    'created_at' => $now,
+//                    'updated_at' => $now
                 ];
             }
 

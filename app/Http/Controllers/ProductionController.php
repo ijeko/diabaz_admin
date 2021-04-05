@@ -4,9 +4,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Factories\Factory;
+use App\Factories\ModelFactory;
 use App\Factories\ProductFactory;
-use App\Http\Sevices\MaterialService;
-use App\Http\Sevices\ModelFactory;
 use App\Http\Sevices\ProductService;
 use App\Models\Materialnorm;
 use App\Models\Product;
@@ -14,32 +14,44 @@ use Illuminate\Http\Request;
 
 class ProductionController extends Controller
 {
-    public function __construct()
+    private $productService;
+    /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+    private $product;
+
+    public function __construct(ProductService $productService, Product $product, ProductFactory $productFactory)
     {
-        $this->products = new ProductService();
-        $this->materials = new MaterialService();
+        $this->productService = $productService;
+        $this->product = $product;
+        $this->productFactory = $productFactory;
     }
 
-    public function index(Request $request)
+    public function GetAllProductsMonthlyProduced(Request $request)
     {
-
-        return json_encode($this->products->get($request->date));
+        return json_encode($this->productService->Get($request->date));
     }
 
-    public function ShowNorm(Request $request)
+    public function GetMaterialsNormsForProduct(Request $request)
     {
-        return response($this->products->GetProductionNorm($request->prodID));
 
+        return response($this->productService
+            ->GetMaterialsNormsOf($this->product->find($request->prodID)));
     }
 
     public function EditNorm(Request $request)
     {
-        return $this->products->EditProductionNorm(json_decode($request->data));
+$config = json_decode($request->data);
+        $Factory = new ModelFactory();
+        $model = $Factory->makeAnyModel('MaterialNorm', $config);
+//dd($model->get());
+        return $this->productService->EditMaterialsNormFor($model);
     }
 
     public function Edit(Request $request)
     {
-        return $this->products->EditProduct(json_decode($request->data));
+        return $this->productService->EditProduct(json_decode($request->data));
     }
 
     public function RemoveNorm(Request $request)
@@ -65,14 +77,14 @@ class ProductionController extends Controller
 
     public function Add(Request $request)
     {
-        return $this->products->newProduct(json_decode($request->data, 1));
+        return $this->productService->newProduct(json_decode($request->data, 1));
     }
 
     public function GetSoldOnDate(Request $request)
     {
         {
             $data = $request;
-            return $this->products->getSold($data);
+            return $this->productService->getSold($data);
 
         }
     }
@@ -86,14 +98,16 @@ class ProductionController extends Controller
 
     public function GetStockByProduct(Request $request)
     {
-        return $this->products->Stock();
+        return $this->productService->Stock();
     }
-    public function Operations(Request $request) {
+
+    public function Operations(Request $request)
+    {
         $time = strtotime($request->date);
         $month = date('m', $time);
         $year = date('Y', $time);
         $process = $request->process;
-        return $this->products->GetPerMonth($year, $month, $process, $request->product);
+        return $this->productService->GetPerMonth($year, $month, $process, $request->product);
     }
 
 }

@@ -4,6 +4,8 @@
 namespace App\Factories;
 
 
+use App\Models\Product;
+
 abstract class Factory
 {
     function __construct($namespace = 'App\\Models')
