@@ -18,19 +18,38 @@ class ProductionController extends Controller
     /**
      * @var ProductFactory
      */
-    private $productFactory;
+    private $factory;
     private $product;
 
     public function __construct(ProductService $productService, Product $product, ProductFactory $productFactory)
     {
         $this->productService = $productService;
         $this->product = $product;
-        $this->productFactory = $productFactory;
+        $this->factory = $productFactory;
     }
 
-    public function GetAllProductsMonthlyProduced(Request $request)
+    public function GetProducts(Request $request): array
     {
-        return json_encode($this->productService->Get($request->date));
+        return $this->productService->GetProductsProducedAndSold($request->date);
+    }
+
+    public function AddNewProduct(Request $request)
+    {
+        $attributes = json_decode($request->data, 1);
+        return $this->productService->AddNewProductWith($attributes);
+    }
+
+    public function EditProduct(Request $request)
+    {
+        $newAttributes = json_decode($request->data, 1);
+        return $this->productService->SaveProductWith($newAttributes);
+    }
+
+    public function Remove(Request $request)
+    {
+        $model = $request->model;
+        $id = $request->id;
+        return $this->productService->Remove($model, $id);
     }
 
     public function GetMaterialsNormsForProduct(Request $request)
@@ -40,74 +59,14 @@ class ProductionController extends Controller
             ->GetMaterialsNormsOf($this->product->find($request->prodID)));
     }
 
-    public function EditNorm(Request $request)
+    public function EditMaterialNormsOfProduct(Request $request)
     {
-$config = json_decode($request->data);
-        $Factory = new ModelFactory();
-        $model = $Factory->makeAnyModel('MaterialNorm', $config);
-//dd($model->get());
-        return $this->productService->EditMaterialsNormFor($model);
+        $newNorms = json_decode($request->data, 1);
+        return $this->productService->EditMaterialsNormWith($newNorms);
     }
 
-    public function Edit(Request $request)
+    public function DeleteNormFromProduction(Request $request)
     {
-        return $this->productService->EditProduct(json_decode($request->data));
+        Materialnorm::destroy($request->id);
     }
-
-    public function RemoveNorm(Request $request)
-    {
-        $model = new Materialnorm();
-        $norm = $model->find($request->id);
-        if ($norm) {
-            $norm->delete();
-        }
-        echo 'Nothing to delete';
-    }
-
-    public function Remove(Request $request)
-    {
-        $Factory = new ProductFactory();
-        $model = $Factory->makeAnyModel($request->model);
-        $model = $model->find($request->id);
-        if ($model) {
-            $model->delete();
-        }
-        echo 'Nothing to delete';
-    }
-
-    public function Add(Request $request)
-    {
-        return $this->productService->newProduct(json_decode($request->data, 1));
-    }
-
-    public function GetSoldOnDate(Request $request)
-    {
-        {
-            $data = $request;
-            return $this->productService->getSold($data);
-
-        }
-    }
-
-//    public function AddSold(Request $request)
-//    {
-//
-//        $data = json_decode($request->data, 1);
-//        return $this->products->AddSold($data);
-//    }
-
-    public function GetStockByProduct(Request $request)
-    {
-        return $this->productService->Stock();
-    }
-
-    public function Operations(Request $request)
-    {
-        $time = strtotime($request->date);
-        $month = date('m', $time);
-        $year = date('Y', $time);
-        $process = $request->process;
-        return $this->productService->GetPerMonth($year, $month, $process, $request->product);
-    }
-
 }

@@ -9,7 +9,7 @@ use App\Models\Product;
 use App\Models\Sold;
 use Illuminate\Database\Eloquent\Model;
 
-class CheckerService
+class CheckerService extends Service
 {
     public static function CheckMaterials(Produced $produced)
     {
@@ -36,14 +36,11 @@ class CheckerService
 
     public static function CheckProductionStock(Sold $sold, Model $model)
     {
-//        $stock = $sold->product()->first()->inStock();
-//        if ($stock<=$sold->qty) return false;
-//        else return true;
         if ($sold->qty >= $model->inStock()) return false;
         else return true;
     }
 
-    public static function CheckExists($model)
+    public static function IsNewAdminItemExits($model)
     {
         if ($model->whereTitle($model->title)->exists()) {
             return response()->

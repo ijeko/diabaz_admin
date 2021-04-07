@@ -7,7 +7,7 @@ namespace App\Http\Sevices;
 use App\Models\Motohour;
 use App\Models\Produced;
 
-class MotohoursService
+class MotohoursService extends Service
 {
     private $motohour;
 

@@ -16,7 +16,6 @@ abstract class Factory
     public function makeAnyModel($source, $config = [])
     {
         $name = $this->namespace . '\\' . $source;
-
         if (class_exists($name)) {
             return new $name($config);
         }

@@ -4,18 +4,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Sevices\MaterialService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
 {
-    public function __construct()
-    {
-        $this->materials = new MaterialService();
-    }
-
     public function index()
     {
         return $this->materials->get();

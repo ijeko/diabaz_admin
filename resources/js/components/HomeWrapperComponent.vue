@@ -44,12 +44,14 @@ export default {
     },
     computed: {
         dateFormated() {
-           var dateSplit = this.date.split('-')
-            var day = dateSplit[2]
-            var mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-            var month = mnths[parseInt(dateSplit[1])-1]
-            var year = dateSplit[0]
-            return {day: day, month: month, year: year}
+            const dateSplit = this.date.split('-')
+            const day = dateSplit[2]
+            const mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+            const ofMnths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
+            const month = mnths[parseInt(dateSplit[1]) - 1]
+            const ofMonth = ofMnths[parseInt(dateSplit[1]) - 1]
+            const year = dateSplit[0]
+            return {day: day, month: month, ofMonth: ofMonth, year: year}
         }
     }
 }

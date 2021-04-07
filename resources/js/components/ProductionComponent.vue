@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Произведенная продукция на {{ dateFormated.day }} {{ dateFormated.month }}
+        <div class="card-header">Произведенная продукция за {{ dateFormated.ofMonth }}
             {{ dateFormated.year }}
             <!--            <div class="btn btn-link btn-sm"-->
             <!--                 @mousedown="GET_PRODUCTS(yesterday)"-->
@@ -26,15 +26,15 @@
                 </tr>
                 <tr v-for="(product, index) in PRODUCTS"
                     :key="index">
-                    <td :class="{'text-secondary' : !product.stock, 'bg-success' : product.dayProduced}"
+                    <td :class="{'text-secondary' : !product.stock, 'bg-success' : product.monthProduced}"
                     >
                         {{ product.title }}
                     </td>
                     <td :class="{'text-secondary' : !product.dayProduced}">
-                        {{ product.dayProduced }} {{ product.unit }}
+                        {{ product.monthProduced }} {{ product.unit }}
                     </td>
-                    <td :class="{'text-secondary' : !product.sold}">
-                        {{ product.sold }} {{ product.unit }}
+                    <td :class="{'text-secondary' : !product.monthSold}">
+                        {{ product.monthSold }} {{ product.unit }}
                     </td>
                     <td :class="{'text-secondary' : !product.stock}">
                         {{ product.stock }} {{ product.unit }}

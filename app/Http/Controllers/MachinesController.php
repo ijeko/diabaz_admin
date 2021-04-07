@@ -4,60 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Http\Sevices\MachinesService;
 use App\Models\Machine;
+use App\Models\Motohour;
 use Illuminate\Http\Request;
 
 class MachinesController extends Controller
 {
-    //
-    public function __construct()
+    private $machine;
+    private $machineService;
+
+    public function __construct(Machine $machine, MachinesService $machineService)
     {
-        $this->machines = new MachinesService();
+        $this->machine = $machine;
+        $this->machineService = $machineService;
     }
 
-    public function index()
+    public function GetMachineListWithMonthUsage(Request $request)
     {
-
-        return $this->machines->get()->toJson();;
+        $date = $request->date;
+        return $this->machineService->GetMachinesWithUsageOn($date);
     }
 
-    public function ShowNorm(Request $request)
+    public function AddNewMachine(Request $request)
     {
-        return response($this->machines->GetMachineNorm($request->id));
-
+        $attributes = json_decode($request->data, 1);
+        return $this->machineService->AddNewMachineWith($attributes);
     }
 
-    public function EditNorm(Request $request)
+    public function EditMachine(Request $request)
     {
-        return $this->machines->EditMachineNorm(json_decode($request->data));
+        $newAttributes = json_decode($request->data, 1);
+        return $this->machineService->SaveMachineWith($newAttributes);
     }
 
-    public function Edit(Request $request)
-    {
-        return $this->machines->EditMachine(json_decode($request->data));
-    }
-
-    public function RemoveNorm(Request $request)
-    {
-        $model = new MachineNorm();
-        $norm = $model->find($request->id);
-        if ($norm) {
-            $norm->delete();
-        }
-        echo 'Nothing to delete';
-    }
 
     public function Remove(Request $request)
     {
-        $model = new Machine();
-        $machine = $model->find($request->id);
-        if ($machine) {
-            $machine->delete();
-        }
-        echo 'Nothing to delete';
-    }
-    public function Add (Request $request)
-    {
-        return $this->machines->newMachine(json_decode($request->data));
+        $machine = $request->data;
+        Machine::destroy($machine);
     }
 
+    public function AddUsage(Request $request)
+    {
+        $usage = json_decode($request->data, 1);
+        Motohour::create($usage);
+    }
 }

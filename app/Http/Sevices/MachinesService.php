@@ -4,10 +4,11 @@
 namespace App\Http\Sevices;
 
 
+use App\Factories\MachineFactory;
 use App\Models\Machine;
 use Illuminate\Http\Response;
 
-class MachinesService
+class MachinesService extends Service
 {
     private $machine;
 
@@ -16,42 +17,36 @@ class MachinesService
         $this->machine = new Machine();
     }
 
-    public function get()
+    public function GetMachinesWithUsageOn($date): array
     {
-        return $this->machine->get();
-    }
-
-
-    public function EditMachine($data)
-    {
-        $records = $this->machine->find($data->id);
-
-        $records->update(['title' => $data->title, 'name' => $data->name, 'unit' => $data->unit]);
-    }
-
-
-    public function newMachine($data)
-    {
-        if ($this->machine->where('title', $data->title)->exists()) {
-            return response()->
-            json([
-                'name' => '',
-                'title' => 'Значение уже используется'
+        $target = $this->ParseDateBy($date);
+        $machinesData = [];
+        foreach (Machine::all() as $machine) {
+            array_push($machinesData, [
+                'id' => $machine->id,
+                'title' => $machine->title,
+                'name' => $machine->name,
+                'monthUsage' => $machine->MonthlyUsage($target['year'], $target['month']),
+                'totalUsage' => $machine->Usage(),
+                'unit' => $machine->unit
             ]);
         }
-        if ($this->machine->where('name', $data->name)->exists()) {
-            return response()->
-            json([
-                'name' => 'Значение уже используется',
-                'title' => ''
-            ]);
-        }else {
-            $this->machine->title = $data->title;
-            $this->machine->name = $data->name;
-            $this->machine->unit = $data->unit;
-            $this->machine->save();
-            return Response::HTTP_OK;
-        }
+        return $machinesData;
     }
 
+    public function SaveMachineWith($newAttributes)
+    {
+        return Machine::where('name', $newAttributes['name'])->update($newAttributes);
+    }
+
+    public function AddNewMachineWith($attributes)
+    {
+        $Factory = new MachineFactory();
+        $machine = $Factory->make(Machine::class, $attributes);
+
+        if (CheckerService::IsNewAdminItemExits($machine)) {
+            return \response(['error' => 'Запись уже существует'], '403');
+        } else $machine->save();
+        return \response('Запись добавлена', '200');
+    }
 }

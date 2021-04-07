@@ -9,7 +9,7 @@ use App\Models\Produced;
 use App\Models\Product;
 use http\Client\Response;
 
-class ProducedService
+class ProducedService extends Service
 {
     private $produced;
 
@@ -26,6 +26,18 @@ class ProducedService
         return $this->produced->where('date', $today)->get();
     }
 
+    public function GetPerMonth($date, $id)
+    {
+        $Factory = new ProducedFactory();
+        $producedItems = $Factory->make(Produced::class);
+        $target = $this->ParseDateBy($date);
+        return $producedItems
+            ->whereYear('date', $target['year'])
+            ->whereMonth('date', $target['month'])
+            ->where('product_id', $id)
+            ->get();
+    }
+
     public function save($data)
     {
         $Factory = new ProducedFactory();
@@ -39,7 +51,7 @@ class ProducedService
         if ($check)
             return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
         else $item->save();
-
+        return \response('Data saved', '200');
     }
 
     public function getProduced()

@@ -43,7 +43,7 @@
                                         v-model="selectedProduct"
                                         name="products"
                                         id="products"
-                                        @change="getReport('Produced')"
+                                        @change="getProduced()"
                                 >
                                     <option
                                         v-for="(product, index) in PRODUCTS"
@@ -122,7 +122,7 @@
                                         v-model="selectedProduct"
                                         name="uploads"
                                         id="uploads"
-                                        @change="getReport('Sold')"
+                                        @change="getSold()"
                                 >
                                     <option
                                         v-for="(product, index) in PRODUCTS"
@@ -261,9 +261,9 @@ export default {
         }
     },
     watch: {
-        // эта функция запускается при любом изменении вопроса
         localDate: function (newLocalDate, oldCLocalDate) {
-            this.getReport(this.process)
+            this.getProduced()
+            this.getSold()
         },
     },
     methods: {
@@ -302,10 +302,24 @@ export default {
             this.localDate = new Date().toISOString().slice(0, 10)
             this.$emit('setDate', this.localDate)
         },
-        getReport(process) {
-            this.process = process
-            let data = {date: this.localDate, product: this.selectedProduct, process: this.process}
-            axios.get('/api/products/operations', {
+        getProduced () {
+            let data = {date: this.localDate, product: this.selectedProduct}
+            axios.get('/api/admin/produced', {
+                headers: {'Content-Type': 'application/json'},
+                params: data
+            })
+                .then(response => {
+                    this.responseData = response.data
+                    return response.data
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+        },
+        getSold () {
+            let data = {date: this.localDate, product: this.selectedProduct}
+            axios.get('/api/admin/sold', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })

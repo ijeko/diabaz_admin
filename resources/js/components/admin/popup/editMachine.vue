@@ -35,14 +35,14 @@ export default {
     name: "editMachine",
     data() {
         return {
-            message: ''
+            message: '',
+            newMachineName: '',
+            newMachineSlug: '',
+            newMachineUnit: '',
         }
     },
     props: {
         selectedMachine: '',
-        newMachineName: '',
-        newMachineSlug: '',
-        newMachineUnit: '',
     },
     computed: {
         ...mapGetters([
@@ -91,7 +91,6 @@ export default {
             this.$emit('close')
         },
         machineInfo() {
-            // alert(this.PRODUCTS[this.selectedProduct].title)
             this.newMachineName = this.MACHINES[this.selectedMachine].title
             this.newMachineSlug = this.MACHINES[this.selectedMachine].name
             this.newMachineUnit = this.MACHINES[this.selectedMachine].unit

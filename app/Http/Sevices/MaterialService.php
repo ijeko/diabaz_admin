@@ -12,8 +12,9 @@ use App\Models\MaterialMinimum;
 use App\Models\Sold;
 use Illuminate\Http\Response;
 
-class MaterialService
+class MaterialService extends Service
 {
+
     public function __construct()
     {
         $this->material = new Material();

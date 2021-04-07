@@ -4,7 +4,7 @@
 namespace App\Http\Sevices;
 
 
-class ReportsService
+class ReportsService extends Service
 {
     public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products)
     {
