@@ -69,4 +69,17 @@ class ProductionController extends Controller
     {
         Materialnorm::destroy($request->id);
     }
+
+    public function AddSpoiledProduct(Request $request)
+    {
+        $product = json_decode($request->data, 1);;
+        return $this->productService->AddSpoiled($product);
+    }
+
+    public function GetAdminSpoiledItems (Request $request)
+    {
+        $date = $request->date;
+        $product_id = $request->product;
+        return $this->productService->GetSpoiledPerMonth($date, $product_id);
+    }
 }

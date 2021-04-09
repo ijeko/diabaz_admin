@@ -4,31 +4,36 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Sevices\MaterialService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
 {
-    public function index()
+    private $material;
+    private $materialService;
+    public function __construct(Material $material, MaterialService $materialService)
     {
-        return $this->materials->get();
-    }
-
-    public function GetIncomes(Request $request)
-    {
-        return $this->materials->GetIncomesOnDate($request->date);
-    }
-
-    public function AddIncome(Request $request)
-    {
-        return $this->materials->SaveNewIncome(json_decode($request->data));
+        $this->material = $material;
+        $this->materialService = $materialService;
     }
 
     public function GetMaterials()
     {
-        return json_encode($this->materials->GetMaterialQty());
+        return json_encode($this->materialService->GetMaterialsWithQty());
     }
+
+    public function GetMaterialsIncome(Request $request)
+    {
+        return $this->materialService->GetPerMonth($request->date);
+    }
+
+    public function AddIncome(Request $request)
+    {
+        return $this->materialService->SaveNewIncome(json_decode($request->data));
+    }
+
 
     public function Remove(Request $request)
     {
@@ -52,12 +57,12 @@ class MaterialsController extends Controller
 
     public function Add(Request $request)
     {
-        return $this->materials->newMaterial(json_decode($request->data, 1));
+        return $this->materialService->newMaterial(json_decode($request->data, 1));
     }
 
     public function Edit(Request $request)
     {
-        return $this->materials->EditMaterial(json_decode($request->data, 1));
+        return $this->materialService->EditMaterial(json_decode($request->data, 1));
     }
 
 

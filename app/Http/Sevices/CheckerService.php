@@ -34,10 +34,13 @@ class CheckerService extends Service
 
     }
 
-    public static function CheckProductionStock(Sold $sold, Model $model)
+    public static function CheckProductionStock(Model $toCheck)
     {
-        if ($sold->qty >= $model->inStock()) return false;
-        else return true;
+        $product = $toCheck->product()->first();
+        if ($toCheck->qty >= $product->inStock())
+            return false;
+        else
+            return true;
     }
 
     public static function IsNewAdminItemExits($model)

@@ -21,15 +21,20 @@ class MaterialService extends Service
         $this->income = new MaterialIncome();
     }
 
-    public function getInfo($id, $param)
+    public function GetPerMonth($date)
     {
-        $test = $this->material->find($id)->$param;
-        return $test;
-    }
-
-    public function get()
-    {
-        return $this->material->All();
+        $target = $this->ParseDateBy($date);
+        $monthlyMaterialIncomes = [];
+        foreach (Material::all() as $material) {
+            array_push($monthlyMaterialIncomes, [
+                'id' => $material->id,
+                'title' => $material->title,
+                'qty' => $material->getMonthlyIncomeSumm($target['month']),
+                'unit' => $material->unit
+            ]);
+        }
+        dd($monthlyMaterialIncomes);
+        return $monthlyMaterialIncomes;
     }
 
     public function GetIncomesOnDate($date)
@@ -46,25 +51,17 @@ class MaterialService extends Service
         $this->income->save();
     }
 
-    public static function GetMaterialQty()
+    public static function GetMaterialsWithQty()
     {
-        $materials = new Material();
-        $sold = new Sold();
-        $materials = $materials->get();
         $materialQty = [];
-        foreach ($materials as $material) {
-            $used = 0;
-            $sold = $material->getSoldQty();
-            foreach ($material->norma() as $norma) {
-                $used = $used + $norma->product()->find($norma->product_id)->getProducedQty() * $norma->norma;
-            }
+        foreach (Material::all() as $material) {
             array_push($materialQty, [
                 'id' => $material->id,
                 'title' => $material->title,
                 'name' => $material->name,
                 'income' => round($material->getIncomeSumm(), 2),
-                'used' => $used,
-                'stock' => round($material->getIncomeSumm() - $used - $sold, 2),
+                'used' => $material->used(),
+                'stock' => round($material->inStock(), 2),
                 'unit' => $material->unit,
                 'minQty' => $material->minQty
             ]);
@@ -82,9 +79,9 @@ class MaterialService extends Service
     {
         $Factory = new MaterialFactory();
         $model = $Factory->make(Material::class, $data);
-        $check = CheckerService::CheckExists($model);
-        if ($check) return $check;
-        else $model->save();
-        return Response::HTTP_OK;
+        if (CheckerService::IsNewAdminItemExits($model)) {
+            return \response(['error' => 'Запись уже существует'], '403');
+        } else $model->save();
+        return \response('Запись добавлена', '200');
     }
 }

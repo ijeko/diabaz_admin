@@ -36,6 +36,8 @@ Route::middleware(['apiAccess:admin|office'])->group(function (){
     Route::post('/products/admin', [App\Http\Controllers\ProductionController::class, 'AddNewProduct']);
     Route::get('/admin/produced', [App\Http\Controllers\ProducedController::class, 'GetAdminProducedItems']);
     Route::get('/admin/sold', [App\Http\Controllers\SoldController::class, 'GetAdminSoldItems']);
+    Route::post('/products/spoiled', [App\Http\Controllers\ProductionController::class, 'AddSpoiledProduct']);
+    Route::get('/admin/spoiled', [App\Http\Controllers\ProductionController::class, 'GetAdminSpoiledItems']);
     Route::put('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'Edit']);
     Route::post('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'Add']);
     Route::put('/machines/admin', [App\Http\Controllers\MachinesController::class, 'EditMachine']);
@@ -53,7 +55,7 @@ Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);
     Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'GetMaterialsNormsForProduct']);
     Route::post('/motohours', [App\Http\Controllers\MachinesController::class, 'AddUsage']);
-    Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetIncomes']);
+    Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetMaterialsIncome']);
     Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
 });

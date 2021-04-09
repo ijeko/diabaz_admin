@@ -2005,11 +2005,14 @@ __webpack_require__.r(__webpack_exports__);
       var dateSplit = this.date.split('-');
       var day = dateSplit[2];
       var mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+      var ofMnths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
       var month = mnths[parseInt(dateSplit[1]) - 1];
+      var ofMonth = ofMnths[parseInt(dateSplit[1]) - 1];
       var year = dateSplit[0];
       return {
         day: day,
         month: month,
+        ofMonth: ofMonth,
         year: year
       };
     }
@@ -2143,19 +2146,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -2196,7 +2192,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     var _this = this;
 
-    this.GET_MACHINES().then(function (res) {
+    this.GET_MACHINES(this.currentDate).then(function (res) {
       _this.isLoading = false;
     });
   },
@@ -2217,16 +2213,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     date: ''
   },
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES', 'MOTOHOURS'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES'])), {}, {
     currentDate: function currentDate() {
       var date = {
         date: this.date
       };
-      this.GET_MOTOHOURS(date);
+      this.GET_MACHINES(date);
       return date;
     }
   }),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_MACHINES', 'GET_MOTOHOURS', 'ADD_MOTOHOURS'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_MACHINES', 'ADD_MOTOHOURS'])), {}, {
     showPopup: function showPopup() {
       this.isEnterVisible = true;
     },
@@ -2235,30 +2231,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     sendMotohour: function sendMotohour(data) {
       this.ADD_MOTOHOURS(JSON.stringify(data));
-      console.log(data);
-      this.GET_MOTOHOURS(this.currentDate);
+      this.GET_MACHINES(this.currentDate);
       this.closePopup();
-    },
-    producedOf: function producedOf(id) {
-      var p = [];
-      this.currentDate;
-
-      var _iterator = _createForOfIteratorHelper(this.MOTOHOURS),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var mh = _step.value;
-
-          if (mh.machine_id === id) {
-            return mh.qty;
-          }
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
     }
   })
 });
@@ -2283,6 +2257,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -2436,15 +2411,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (response) {
         // commit('SET_PRODUCED', response.data)
         _this3.message = response.data;
+
+        _this3.action();
+
+        _this3.closePopup();
+
         return response.data;
       })["catch"](function (response) {
         console.log(response.message);
       });
-      this.action();
-      this.closePopup();
+    },
+    sendSpoiled: function sendSpoiled(data) {
+      var _this4 = this;
+
+      data = JSON.stringify(data);
+      axios.post('/api/products/spoiled/', {
+        data: data
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        // commit('SET_PRODUCED', response.data)
+        _this4.message = response.data;
+
+        _this4.action();
+
+        _this4.closePopup();
+
+        return response.data;
+      })["catch"](function (response) {
+        console.log(response.message);
+      });
     },
     sendSold: function sendSold(data) {
-      var _this4 = this;
+      var _this5 = this;
 
       data = JSON.stringify(data);
       axios.post('/api/products/sold', {
@@ -2454,13 +2455,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           'Content-Type': 'application/json'
         }
       }).then(function (response) {
-        _this4.message = response.data;
+        _this5.message = response.data;
+
+        _this5.action();
+
+        _this5.closeSold();
+
         return response.data;
       })["catch"](function (error) {
         console.log(error);
       });
-      this.action();
-      this.closeSold();
     }
   })
 });
@@ -2840,7 +2844,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       title: '',
-      selectMat: '',
       selectProd: '',
       selectedMat: [],
       norma: 0,
@@ -2875,13 +2878,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addItem: function addItem() {
       var material = this.MATERIALS[this.selectedMat];
       this.selectedNorm.push({
-        id: null,
+        // id:null,
         title: material.title,
         norma: 0,
-        unit: material.unit,
+        // unit: material.unit,
         material_id: material.id,
         product_id: this.selectedProduct
-      }); // console.log(this.selectedNorm)
+      });
     },
     test: function test() {
       var _iterator = _createForOfIteratorHelper(this.selectedNorm),
@@ -2892,12 +2895,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var item = _step.value;
 
           if (item.norma <= 0) {
-            console.log(this.selectedNorm);
             this.message = 'Расход должен быть больше 0';
             return false;
           }
-        } // console.log(this.selectedNorm)
-
+        }
       } catch (err) {
         _iterator.e(err);
       } finally {
@@ -3191,6 +3192,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "editInputs",
@@ -3212,13 +3237,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       isSelected: '',
       selectProd: '',
       isAddFormVisible: false,
+      producedOrSpoiled: 'produced',
       message: ''
     };
   },
   watch: {
-    // эта функция запускается при любом изменении вопроса
     localDate: function localDate(newLocalDate, oldCLocalDate) {
-      this.getReport(this.process);
+      this.getProduced();
+    },
+    producedOrSpoiled: function producedOrSpoiled(newProducedOrSpoiled, oldProducedOrSpoiled) {
+      this.getProduced();
     }
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['GET_PRODUCTS', 'GET_NORM_BY_MATERIAL'])), {}, {
@@ -3250,16 +3278,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.localDate = new Date().toISOString().slice(0, 10);
       this.$emit('setDate', this.localDate);
     },
-    getReport: function getReport(process) {
+    getProduced: function getProduced() {
       var _this = this;
 
-      this.process = process;
       var data = {
         date: this.localDate,
-        product: this.selectedProduct,
-        process: this.process
+        product: this.selectedProduct
       };
-      axios.get('/api/products/operations', {
+      var $url = '/api/admin/' + this.producedOrSpoiled;
+      axios.get($url, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -3272,8 +3299,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
       });
     },
-    remove: function remove(model, id) {
+    getSold: function getSold() {
       var _this2 = this;
+
+      var data = {
+        date: this.localDate,
+        product: this.selectedProduct
+      };
+      axios.get('/api/admin/sold', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: data
+      }).then(function (response) {
+        _this2.responseData = response.data;
+        return response.data;
+      })["catch"](function (error) {
+        // handle error
+        console.log(error);
+      });
+    },
+    remove: function remove(model, id) {
+      var _this3 = this;
 
       var data = {
         model: model,
@@ -3287,12 +3334,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           },
           params: data
         }).then(function (response) {
-          _this2.clearData();
+          _this3.clearData();
 
           return response.data;
         })["catch"](function (error) {
           if (error.response) {
-            _this2.message = error.response.data.errors;
+            _this3.message = error.response.data.errors;
           }
 
           return error;
@@ -3375,14 +3422,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   name: "editMachine",
   data: function data() {
     return {
-      message: ''
+      message: '',
+      newMachineName: '',
+      newMachineSlug: '',
+      newMachineUnit: ''
     };
   },
   props: {
-    selectedMachine: '',
-    newMachineName: '',
-    newMachineSlug: '',
-    newMachineUnit: ''
+    selectedMachine: ''
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['MACHINES'])), {}, {
     validation: function validation() {
@@ -3431,7 +3478,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$emit('close');
     },
     machineInfo: function machineInfo() {
-      // alert(this.PRODUCTS[this.selectedProduct].title)
       this.newMachineName = this.MACHINES[this.selectedMachine].title;
       this.newMachineSlug = this.MACHINES[this.selectedMachine].name;
       this.newMachineUnit = this.MACHINES[this.selectedMachine].unit;
@@ -5358,6 +5404,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popup",
   props: {
@@ -5383,7 +5439,10 @@ __webpack_require__.r(__webpack_exports__);
         date: this.inputDate,
         user_id: this.user.id
       };
-      this.$emit('sendProduced', data);
+
+      if (this.spoilCheck) {
+        this.$emit('sendSpoiled', data);
+      } else this.$emit('sendProduced', data);
     }
   },
   data: function data() {
@@ -5391,7 +5450,8 @@ __webpack_require__.r(__webpack_exports__);
       qty: 0,
       selectedProduct: 0,
       inputDate: new Date().toISOString().slice(0, 10),
-      message: ''
+      message: '',
+      spoilCheck: ''
     };
   }
 });
@@ -6036,7 +6096,8 @@ Vue.component('admin-edit-inputs-component', __webpack_require__(/*! ./component
 Vue.component('add-mat-norm', __webpack_require__(/*! ./components/admin/popup/AddMatNorm.vue */ "./resources/js/components/admin/popup/AddMatNorm.vue").default);
 Vue.component('admin-user-component', __webpack_require__(/*! ./components/admin/users.vue */ "./resources/js/components/admin/users.vue").default);
 Vue.component('admin-edit-user-component', __webpack_require__(/*! ./components/admin/popup/editUser.vue */ "./resources/js/components/admin/popup/editUser.vue").default);
-Vue.component('admin-new-user-component', __webpack_require__(/*! ./components/admin/popup/newUser.vue */ "./resources/js/components/admin/popup/newUser.vue").default); //reports
+Vue.component('admin-new-user-component', __webpack_require__(/*! ./components/admin/popup/newUser.vue */ "./resources/js/components/admin/popup/newUser.vue").default);
+Vue.component('component-loader', __webpack_require__(/*! ./components/loaders/componentLoader */ "./resources/js/components/loaders/componentLoader.vue").default); //reports
 
 Vue.component('production-month-component', __webpack_require__(/*! ./components/reports/ProductionMonth.vue */ "./resources/js/components/reports/ProductionMonth.vue").default);
 Vue.component('product-upload-component', __webpack_require__(/*! ./components/reports/ProductUploadReport.vue */ "./resources/js/components/reports/ProductUploadReport.vue").default);
@@ -6384,12 +6445,13 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    GET_MACHINES: function GET_MACHINES(_ref9) {
+    GET_MACHINES: function GET_MACHINES(_ref9, data) {
       var commit = _ref9.commit;
       return axios.get('/api/machines', {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        params: data
       }).then(function (response) {
         commit('SET_MACHINES', response.data);
         return response.status;
@@ -46454,9 +46516,9 @@ var render = function() {
             _vm._s(_vm.dateFormated.day) +
             " " +
             _vm._s(_vm.dateFormated.month) +
-            "\n            " +
+            "\n        " +
             _vm._s(_vm.dateFormated.year) +
-            "\n        "
+            "\n    "
         )
       ]),
       _vm._v(" "),
@@ -46474,12 +46536,11 @@ var render = function() {
                   _c("td", [_vm._v(_vm._s(machine.title))]),
                   _vm._v(" "),
                   _c("td", [
-                    _vm._v(_vm._s(_vm.producedOf(machine.id)) + " "),
-                    !_vm.producedOf(machine.id)
-                      ? _c("span", [_vm._v("0")])
-                      : _vm._e(),
                     _vm._v(
-                      " " + _vm._s(machine.unit) + "\n                    "
+                      _vm._s(machine.monthUsage) +
+                        " " +
+                        _vm._s(machine.unit) +
+                        "\n                "
                     )
                   ])
                 ])
@@ -46518,7 +46579,7 @@ var staticRenderFns = [
     return _c("tr", [
       _c("th", [_vm._v("Техника")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Моточасы / км ")])
+      _c("th", [_vm._v("Моточасы / км")])
     ])
   }
 ]
@@ -46550,10 +46611,8 @@ var render = function() {
     [
       _c("div", { staticClass: "card-header" }, [
         _vm._v(
-          "Произведенная продукция на " +
-            _vm._s(_vm.dateFormated.day) +
-            " " +
-            _vm._s(_vm.dateFormated.month) +
+          "Произведенная продукция за " +
+            _vm._s(_vm.dateFormated.ofMonth) +
             "\n        " +
             _vm._s(_vm.dateFormated.year) +
             "\n        "
@@ -46604,7 +46663,7 @@ var render = function() {
                     {
                       class: {
                         "text-secondary": !product.stock,
-                        "bg-success": product.dayProduced
+                        "bg-success": product.monthProduced
                       }
                     },
                     [
@@ -46622,7 +46681,7 @@ var render = function() {
                     [
                       _vm._v(
                         "\n                    " +
-                          _vm._s(product.dayProduced) +
+                          _vm._s(product.monthProduced) +
                           " " +
                           _vm._s(product.unit) +
                           "\n                "
@@ -46630,15 +46689,19 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _c("td", { class: { "text-secondary": !product.sold } }, [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(product.sold) +
-                        " " +
-                        _vm._s(product.unit) +
-                        "\n                "
-                    )
-                  ]),
+                  _c(
+                    "td",
+                    { class: { "text-secondary": !product.monthSold } },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(product.monthSold) +
+                          " " +
+                          _vm._s(product.unit) +
+                          "\n                "
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
                   _c("td", { class: { "text-secondary": !product.stock } }, [
                     _vm._v(
@@ -46664,7 +46727,11 @@ var render = function() {
         ? _c("enter-produced", {
             staticClass: "popup",
             attrs: { products: _vm.PRODUCTS, user: _vm.user },
-            on: { closePopup: _vm.closePopup, sendProduced: _vm.sendProduced }
+            on: {
+              closePopup: _vm.closePopup,
+              sendProduced: _vm.sendProduced,
+              sendSpoiled: _vm.sendSpoiled
+            }
           })
         : _vm._e(),
       _vm._v(" "),
@@ -47420,6 +47487,89 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "form-check" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.producedOrSpoiled,
+                          expression: "producedOrSpoiled"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "radio",
+                        name: "exampleRadios",
+                        id: "exampleRadios1",
+                        value: "produced",
+                        checked: ""
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.producedOrSpoiled, "produced")
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.producedOrSpoiled = "produced"
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "exampleRadios1" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                    Произведено\n                                "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-check" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.producedOrSpoiled,
+                          expression: "producedOrSpoiled"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "radio",
+                        name: "exampleRadios",
+                        id: "exampleRadios2",
+                        value: "spoiled"
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.producedOrSpoiled, "spoiled")
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.producedOrSpoiled = "spoiled"
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "exampleRadios2" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                    Списано\n                                "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
                   _vm.message.auth
                     ? _c(
                         "div",
@@ -47465,7 +47615,7 @@ var render = function() {
                               : $$selectedVal[0]
                           },
                           function($event) {
-                            return _vm.getReport("Produced")
+                            return _vm.getProduced()
                           }
                         ]
                       }
@@ -47518,21 +47668,43 @@ var render = function() {
                                   ]),
                                   _vm._v(" "),
                                   _c("td", { staticClass: "text-center" }, [
-                                    _c(
-                                      "span",
-                                      {
-                                        staticClass: "btn btn-link m-0",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.remove(
-                                              "Produced",
-                                              produced.id
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Удалить")]
-                                    )
+                                    _vm.producedOrSpoiled === "produced"
+                                      ? _c(
+                                          "span",
+                                          {
+                                            staticClass: "btn btn-link m-0",
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.remove(
+                                                  "Produced",
+                                                  produced.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Удалить")]
+                                        )
+                                      : _vm._e()
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm.producedOrSpoiled === "spoiled"
+                                      ? _c(
+                                          "span",
+                                          {
+                                            staticClass: "btn btn-link m-0",
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.remove(
+                                                  "Spoiled",
+                                                  produced.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Удалить")]
+                                        )
+                                      : _vm._e()
                                   ])
                                 ])
                               : _vm._e()
@@ -47682,7 +47854,7 @@ var render = function() {
                               : $$selectedVal[0]
                           },
                           function($event) {
-                            return _vm.getReport("Sold")
+                            return _vm.getSold()
                           }
                         ]
                       }
@@ -50435,15 +50607,70 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "mt-3" }, [
-        _c(
-          "button",
+      _c("input", {
+        directives: [
           {
-            staticClass: "btn btn-outline-dark mt-30",
-            on: { click: _vm.sendProduced }
-          },
-          [_vm._v("Сохранить")]
-        )
+            name: "model",
+            rawName: "v-model",
+            value: _vm.spoilCheck,
+            expression: "spoilCheck"
+          }
+        ],
+        attrs: { type: "checkbox", id: "jack", value: "check" },
+        domProps: {
+          checked: Array.isArray(_vm.spoilCheck)
+            ? _vm._i(_vm.spoilCheck, "check") > -1
+            : _vm.spoilCheck
+        },
+        on: {
+          change: function($event) {
+            var $$a = _vm.spoilCheck,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false
+            if (Array.isArray($$a)) {
+              var $$v = "check",
+                $$i = _vm._i($$a, $$v)
+              if ($$el.checked) {
+                $$i < 0 && (_vm.spoilCheck = $$a.concat([$$v]))
+              } else {
+                $$i > -1 &&
+                  (_vm.spoilCheck = $$a
+                    .slice(0, $$i)
+                    .concat($$a.slice($$i + 1)))
+              }
+            } else {
+              _vm.spoilCheck = $$c
+            }
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "jack" } }, [_vm._v("Списать продукцию")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mt-3" }, [
+        !_vm.spoilCheck
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark mt-30",
+                on: { click: _vm.sendProduced }
+              },
+              [_vm._v("Добавить\n            ")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mt-3" }, [
+        _vm.spoilCheck
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark mt-30",
+                on: { click: _vm.sendProduced }
+              },
+              [_vm._v("Списать\n            ")]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mt-3" }, [

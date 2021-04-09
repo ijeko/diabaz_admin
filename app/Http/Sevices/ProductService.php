@@ -4,10 +4,13 @@
 namespace App\Http\Sevices;
 
 
+use App\Factories\MaterialFactory;
+use App\Factories\ModelFactory;
 use App\Factories\ProductFactory;
 use App\Models\Material;
 use App\Models\Materialnorm;
 use App\Models\Product;
+use App\Models\Spoiled;
 
 class ProductService extends Service
 {
@@ -30,7 +33,7 @@ class ProductService extends Service
                     ->sum('qty'),
                 'monthSold' => $product->getSoldQtyMonthly($target['month']),
                 'totalSold' => $product->getSoldQty(),
-                'stock' => round($product->getProducedQty() - $product->getSoldQty() - $this->ProductUsedAsMaterialQty($product->id), 2),
+                'stock' => round($product->inStock() - $this->ProductUsedAsMaterialQty($product->id), 2),
                 'unit' => $product->unit
             ]);
         }
@@ -86,6 +89,29 @@ class ProductService extends Service
             $norm->update($normData);
         }
         return \response('New data saved', '200');
+    }
+
+    public function AddSpoiled($attributes)
+    {
+        $Factory = new ModelFactory();
+        $spoiled = $Factory->make(Spoiled::class, $attributes);
+        if (CheckerService::CheckProductionStock($spoiled)) {
+            $spoiled->save();
+        }
+        else
+            return \response(['error' => 'Не хватает: ' . $spoiled->title]);
+    }
+
+    public function GetSpoiledPerMonth($date, $id)
+    {
+        $Factory = new MaterialFactory();
+        $spoiledItems = $Factory->make(Spoiled::class);
+        $target = $this->ParseDateBy($date);
+        return $spoiledItems
+            ->whereYear('date', $target['year'])
+            ->whereMonth('date', $target['month'])
+            ->where('product_id', $id)
+            ->get();
     }
 
 //TODO Удалить если метод не используется

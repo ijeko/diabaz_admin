@@ -9,26 +9,28 @@ use League\Flysystem\SafeStorage;
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = ['title', 'unit', 'name'];
 
-    public function materialNorm ()
+    public function materialNorm()
     {
         return $this->hasMany(Materialnorm::class);
     }
 
-    public function getProducedQty ()
+    public function getProducedQty()
     {
         $summ = $this->hasMany(Produced::class)->sum('qty');
         return $summ;
     }
-    public function getSoldQty ()
+
+    public function getSoldQty()
     {
         $total = $this->hasMany(Sold::class, 'product_id')->get()->where('isMaterial', 0);
         $summ = $total->sum('qty');
         return $summ;
     }
 
-    public function getSoldQtyMonthly ($month)
+    public function getSoldQtyMonthly($month)
     {
         $monthly = $this->hasMany(Sold::class, 'product_id')
             ->whereMonth('date', $month)
@@ -36,6 +38,22 @@ class Product extends Model
         $summ = $monthly
             ->where('isMaterial', 0)
             ->sum('qty');
+        return $summ;
+    }
+
+    public function getSpoiledQty()
+    {
+        $total = $this->hasMany(Spoiled::class, 'product_id');
+        $summ = $total->sum('qty');
+        return $summ;
+    }
+
+    public function getSpoiledQtyMonthly($month)
+    {
+        $monthly = $this->hasMany(Spoiled::class, 'product_id')
+            ->whereMonth('date', $month)
+            ->get();
+        $summ = $monthly->sum('qty');
         return $summ;
     }
 
@@ -47,9 +65,10 @@ class Product extends Model
 
     public function inStock()
     {
-        return $this->getProducedQty() - $this->getSoldQty();
+        return $this->getProducedQty() - $this->getSoldQty() - $this->getSpoiledQty();
     }
-    public function produced ()
+
+    public function produced()
     {
         return $this->hasMany(Produced::class);
     }

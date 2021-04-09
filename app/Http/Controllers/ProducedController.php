@@ -29,9 +29,8 @@ class ProducedController extends Controller
 
     public function add(Request $request)
     {
-        $data = json_decode($request->data);
-
-        return $this->produced->save($data);
+        $data = json_decode($request->data, 1);
+        Produced::create($data);
 
     }
     public function GetAdminProducedItems(Request $request)

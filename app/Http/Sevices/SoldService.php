@@ -16,7 +16,7 @@ class SoldService extends Service
         $Factory = new SoldFactory();
         $sold = $Factory->make(Sold::class, $data);
         $sold->isMaterial = $model->isMaterial;
-        if (CheckerService::CheckProductionStock($sold, $model)) $sold->save();
+        if (CheckerService::CheckProductionStock($sold)) $sold->save();
         else   return \response(['error' => 'Не хватает: ' . $model->title]);
     }
 

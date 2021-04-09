@@ -23,7 +23,7 @@ class SoldController extends Controller
         $data = json_decode($request->data, 1);
         $Factory = new ModelFactory();
         $model = $Factory->makeAnyModel(ucfirst($data['model']));
-        return $this->service->AddSold($model->find($data['product_id']), $data);
+        return $this->soldService->AddSold($model->find($data['product_id']), $data);
     }
 
     public function GetAdminSoldItems (Request $request)

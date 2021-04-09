@@ -15,16 +15,20 @@ class Material extends Model
     private $unit;
     private $name;
     private $qty;
+    /**
+     * @var string
+     */
+    private $year;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->isMaterial = 1;
+        $this->year = \Carbon\Carbon::now()->format('y');
     }
 
     public function norma()
     {
-//        dd(__METHOD__, $this->hasMany(Materialnorm::class)->get());
         return $this->hasMany(Materialnorm::class)->get();
     }
 
@@ -34,10 +38,15 @@ class Material extends Model
         return $summ;
     }
 
-    public function minimum()
+    public function getMonthlyIncomeSumm($month)
     {
-        return $this->hasOne(MaterialMinimum::class);
+        $summ = $this->hasMany(MaterialIncome::class)
+            ->whereYear('date', $this->year)
+            ->whereMonth('date', $month)
+            ->sum('qty');
+        return $summ;
     }
+
 
     public function getSoldQty()
     {
@@ -61,10 +70,19 @@ class Material extends Model
 
     public function inStock()
     {
+//        $used = 0;
+//        foreach (Materialnorm::all()->where('material_id', $this->id) as $product) {
+//            $used = $used + Produced::whereProductId($product->product_id)->sum('qty') * $product->norma;
+//        }
+        return $this->getIncomeSumm() - $this->getSoldQty() - $this->used();
+    }
+
+    public function used()
+    {
         $used = 0;
-        foreach (Materialnorm::all()->where('material_id', $this->id) as $product) {
-            $used = $used + Produced::whereProductId($product->product_id)->sum('qty') * $product->norma;
+        foreach ($this->norma() as $norma) {
+            $used = $used + Produced::where('product_id', $norma->product_id)->sum('qty') * $norma->norma;
         }
-        return $this->getIncomeSumm() - $this->getSoldQty() - $used;
+        return $used;
     }
 }
