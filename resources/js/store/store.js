@@ -207,9 +207,10 @@ export default {
                     console.log(error);
                 })
         },
-        GET_MACHINES: ({commit}) => {
+        GET_MACHINES: ({commit}, data) => {
             return axios.get('/api/machines', {
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
+                params: data
             })
                 .then(response => {
                     commit('SET_MACHINES', response.data);

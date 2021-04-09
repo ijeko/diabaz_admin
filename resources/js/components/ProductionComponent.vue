@@ -50,6 +50,7 @@
             :user="user"
             @closePopup="closePopup"
             @sendProduced="sendProduced"
+            @sendSpoiled="sendSpoiled"
         ></enter-produced>
         <enter-sold
             v-if="isSoldVisible"
@@ -153,13 +154,33 @@ export default {
                 .then(response => {
                     // commit('SET_PRODUCED', response.data)
                     this.message = response.data
+                    this.action()
+                    this.closePopup()
                     return response.data
                 })
                 .catch(response => {
                     console.log(response.message);
                 })
-            this.action()
-            this.closePopup()
+
+        },
+        sendSpoiled(data) {
+            data = JSON.stringify(data)
+            axios.post('/api/products/spoiled/',
+                {data},
+                {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(response => {
+                    // commit('SET_PRODUCED', response.data)
+                    this.message = response.data
+                    this.action()
+                    this.closePopup()
+                    return response.data
+                })
+                .catch(response => {
+                    console.log(response.message);
+                })
+
         },
         sendSold(data) {
             data = JSON.stringify(data)
@@ -170,13 +191,14 @@ export default {
                 })
                 .then(response => {
                     this.message = response.data
+                    this.action()
+                    this.closeSold()
                     return response.data
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
-            this.action()
-            this.closeSold()
+
         }
     }
 }

@@ -34,6 +34,25 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios"
+                                           id="exampleRadios1"
+                                           value="produced"
+                                           v-model="producedOrSpoiled"
+                                           checked>
+                                    <label class="form-check-label" for="exampleRadios1">
+                                        Произведено
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios"
+                                           id="exampleRadios2"
+                                           value="spoiled"
+                                           v-model="producedOrSpoiled">
+                                    <label class="form-check-label" for="exampleRadios2">
+                                        Списано
+                                    </label>
+                                </div>
                                 <div v-if="message.auth" class="alert alert-danger" role="alert">
             <span v-for="(error, index) of message.auth"
                   :key="index"
@@ -70,7 +89,12 @@
                                                     {{ PRODUCTS.find(x => x.id === produced.product_id).unit }}</span>
                                                 </td>
                                                 <td class="text-center"><span class="btn btn-link m-0"
+                                                                              v-if="producedOrSpoiled === 'produced'"
                                                                               @click="remove('Produced', produced.id)">Удалить</span>
+                                                </td>
+                                                <td class="text-center"><span class="btn btn-link m-0"
+                                                                              v-if="producedOrSpoiled === 'spoiled'"
+                                                                              @click="remove('Spoiled', produced.id)">Удалить</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -256,6 +280,7 @@ export default {
             isSelected: '',
             selectProd: '',
             isAddFormVisible: false,
+            producedOrSpoiled: 'produced',
             message: ''
 
         }
@@ -263,8 +288,11 @@ export default {
     watch: {
         localDate: function (newLocalDate, oldCLocalDate) {
             this.getProduced()
-            this.getSold()
         },
+        producedOrSpoiled: function (newProducedOrSpoiled, oldProducedOrSpoiled)
+        {
+            this.getProduced()
+        }
     },
     methods: {
         ...mapActions([
@@ -302,9 +330,10 @@ export default {
             this.localDate = new Date().toISOString().slice(0, 10)
             this.$emit('setDate', this.localDate)
         },
-        getProduced () {
+        getProduced() {
             let data = {date: this.localDate, product: this.selectedProduct}
-            axios.get('/api/admin/produced', {
+            let $url = '/api/admin/' + this.producedOrSpoiled
+            axios.get($url, {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })
@@ -317,7 +346,7 @@ export default {
                     console.log(error);
                 })
         },
-        getSold () {
+        getSold() {
             let data = {date: this.localDate, product: this.selectedProduct}
             axios.get('/api/admin/sold', {
                 headers: {'Content-Type': 'application/json'},

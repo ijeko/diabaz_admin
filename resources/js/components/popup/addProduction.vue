@@ -23,9 +23,19 @@
                     <input v-model="qty" class="form-control" type="number" id="qty">
                 </form>
             </div>
-
+            <input type="checkbox" id="jack" value="check" v-model="spoilCheck">
+            <label for="jack">Списать продукцию</label>
             <div class="mt-3">
-                <button class="btn btn-outline-dark mt-30" @click="sendProduced">Сохранить</button>
+                <button class="btn btn-outline-dark mt-30"
+                        v-if="!spoilCheck"
+                        @click="sendProduced">Добавить
+                </button>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-outline-dark mt-30"
+                        v-if="spoilCheck"
+                        @click="sendProduced">Списать
+                </button>
             </div>
             <div class="mt-3">
                 <button class="btn btn-outline-danger mt-30" @click="closePopup">Закрыть</button>
@@ -61,7 +71,10 @@ export default {
                 date: this.inputDate,
                 user_id: this.user.id
             }
-            this.$emit('sendProduced', data)
+            if (this.spoilCheck) {
+                this.$emit('sendSpoiled', data)
+            } else
+                this.$emit('sendProduced', data)
         }
     },
     data() {
@@ -69,7 +82,8 @@ export default {
             qty: 0,
             selectedProduct: 0,
             inputDate: new Date().toISOString().slice(0, 10),
-            message: ''
+            message: '',
+            spoilCheck: ''
 
         }
     }
