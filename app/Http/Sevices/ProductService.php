@@ -47,8 +47,10 @@ class ProductService extends Service
 
         if (CheckerService::IsNewAdminItemExits($product)) {
             return \response(['error' => 'Запись уже существует'], '403');
-        } else $product->save();
-        return \response('Запись добавлена', '200');
+        } else {
+            $product->save();
+            return \response('Запись добавлена', '200');
+        }
     }
 
 

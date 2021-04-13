@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+
         <div class="card-header">Произведенная продукция за {{ dateFormated.ofMonth }}
             {{ dateFormated.year }}
             <!--            <div class="btn btn-link btn-sm"-->
@@ -87,7 +88,7 @@ export default {
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
-        currentDate: function (newcurrentDate, oldcurrentDate) {
+        DATE: function (newcurrentDate, oldcurrentDate) {
             this.action()
         }
     },
@@ -104,20 +105,22 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS',
+            `PRODUCTS`,
+            `DATE`
         ]),
-        currentDate() {
-            var date = {date: this.date}
-            this.GET_PRODUCTS(date).then(res => {
-                this.isLoading = false
-            })
-            return date
-        },
-        yesterday() {
-            let currentDate = new Date(Date.parse(this.date))
-            currentDate.setDate(currentDate.getDate() - 1);
-            return {date: currentDate.toISOString().slice(0, 10)}
-        }
+        // currentDate() {
+        //     var date = {date: this.date}
+        //     this.GET_PRODUCTS(date).then(res => {
+        //         this.isLoading = false
+        //     })
+        //     this.$emit('setDate', this.date)
+        //     return date
+        // },
+        // yesterday() {
+        //     let currentDate = new Date(Date.parse(this.date))
+        //     currentDate.setDate(currentDate.getDate() - 1);
+        //     return {date: currentDate.toISOString().slice(0, 10)}
+        // }
     },
     methods: {
         ...mapActions([
@@ -140,7 +143,7 @@ export default {
         },
         action () {
             this.isLoading = true
-            return this.GET_PRODUCTS(this.currentDate).then(res => {
+            return this.GET_PRODUCTS({date: this.DATE}).then(res => {
                 this.isLoading = false
             })
         },
@@ -198,7 +201,6 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 })
-
         }
     }
 }

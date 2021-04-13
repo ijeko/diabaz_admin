@@ -4,18 +4,20 @@
 namespace App\Http\Controllers;
 
 
+use App\Builders\ProductBuilder;
 use App\Http\Sevices\MaterialService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
 {
-    private $material;
+
     private $materialService;
-    public function __construct(Material $material, MaterialService $materialService)
+
+    public function __construct(MaterialService $materialService)
     {
-        $this->material = $material;
         $this->materialService = $materialService;
     }
 
@@ -24,46 +26,47 @@ class MaterialsController extends Controller
         return json_encode($this->materialService->GetMaterialsWithQty());
     }
 
-    public function GetMaterialsIncome(Request $request)
+    public function AddNewMaterial(Request $request)
     {
-        return $this->materialService->GetPerMonth($request->date);
+        $attributes = json_decode($request->data, 1);
+        return $this->materialService->AddNewMaterialWith($attributes);
     }
 
-    public function AddIncome(Request $request)
+    public function EditMaterial(Request $request)
     {
-        return $this->materialService->SaveNewIncome(json_decode($request->data));
+        $newAttributes = json_decode($request->data, 1);
+        return $this->materialService->SaveMaterialWith($newAttributes);
     }
 
-
-    public function Remove(Request $request)
+    public function RemoveMaterial(Request $request)
     {
-        $model = new Material();
-        $material = $model->find($request->id);
-        if ($material) {
-            $material->delete();
-        }
-        echo 'Nothing to delete';
+        Material::destroy($request->id);
+    }
+
+    public function GetMonthlyMaterialIncome(Request $request)
+    {
+        $prd = new Product();
+        $builder = new ProductBuilder($prd->find(15));
+        $builder->BuildDailyIn();
+        dd($builder->getProduct());
+        return $this->materialService->GetMonthlyMaterialIncome($request->date);
+    }
+
+    public function GetMaterialIncomesPerMonth(Request $request)
+    {
+        $material = $request->id;
+        $date = $request->date;
+        return $this->materialService->IncomesPerMonthOf($material, $date);
+    }
+
+    public function AddNewMaterialIncome(Request $request)
+    {
+        $newIncome = json_decode($request->data, 1);
+        MaterialIncome::create($newIncome);
     }
 
     public function RemoveIncome(Request $request)
     {
-        $model = new MaterialIncome();
-        $income = $model->find($request->id);
-        if ($income) {
-            $income->delete();
-        }
-        echo 'Nothing to delete';
+        MaterialIncome::destroy($request->id);
     }
-
-    public function Add(Request $request)
-    {
-        return $this->materialService->newMaterial(json_decode($request->data, 1));
-    }
-
-    public function Edit(Request $request)
-    {
-        return $this->materialService->EditMaterial(json_decode($request->data, 1));
-    }
-
-
 }

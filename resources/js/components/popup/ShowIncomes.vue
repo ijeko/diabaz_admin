@@ -7,11 +7,10 @@
         <div class="incomeItem" v-for="item in INCOMES"
              :key="item.id"
         >
-            <div class="normTitle"> {{ materialById(item.material_id).title }}</div>
-            <div class="normValue">{{ item.qty }} {{ materialById(item.material_id).unit }}</div>
+            <div class="normTitle"> {{item.title }}</div>
+            <div class="normValue">{{ item.qty }} {{ item.unit }}</div>
             <div class="del" @click="remove(item.id)">&times;</div>
         </div>
-
         <button class="btn btn-outline-success mt-4" style="width: 100%" @click="showAddForm">
             Новое поступление
         </button>

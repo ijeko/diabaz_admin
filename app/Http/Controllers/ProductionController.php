@@ -30,6 +30,7 @@ class ProductionController extends Controller
 
     public function GetProducts(Request $request): array
     {
+
         return $this->productService->GetProductsProducedAndSold($request->date);
     }
 

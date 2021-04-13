@@ -9,7 +9,8 @@ export default {
         materialsQty: [],
         motohours: [],
         sold: [],
-        stock: []
+        stock: [],
+        date: new Date().toISOString().slice(0, 10)
 
     },
     getters: {    // Fetch the total number of items in the cart
@@ -42,6 +43,9 @@ export default {
         },
         MATERIAL_QTY: state => {
             return state.materialsQty
+        },
+        DATE: state => {
+            return state.date
         }
     },
     mutations: {
@@ -74,6 +78,9 @@ export default {
         },
         SET_MATERIALS_QTY: (state, data) => {
             state.materialsQty = data;
+        },
+        SET_DATE: (state, date) => {
+            state.date = date
         }
     },
     actions: {
@@ -105,7 +112,7 @@ export default {
 
         },
         GET_PRODUCTS: ({commit}, data) => {
-           return  axios.get('/api/products', {
+            return axios.get('/api/products', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
 
@@ -295,6 +302,15 @@ export default {
                     console.log(error);
                 })
         },
+        SET_DATE: ({commit}, date) => {
+            axios.get('/api/workdate',
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    params: {currentDate: date}
+                })
+            console.log(date)
+            commit('SET_DATE', date);
+        }
     }
 
 };

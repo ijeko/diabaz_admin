@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="card mt-4">
+            {{localDate}}1
             <div class="card-header">
                 <!--            {{ Date.parse(localDate) }}-->
                 Произведено продукции за месяц:

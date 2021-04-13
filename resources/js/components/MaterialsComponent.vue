@@ -1,7 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Остатки материалов на {{ dateFormated.day }} {{ dateFormated.month }}
-            {{ dateFormated.year }}г.
+        <div class="card-header">Остатки материалов
         </div>
         <div class="card-body">
             <div class="materials"

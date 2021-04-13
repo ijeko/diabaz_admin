@@ -24,7 +24,7 @@ class Material extends Model
     {
         parent::__construct($attributes);
         $this->isMaterial = 1;
-        $this->year = \Carbon\Carbon::now()->format('y');
+        $this->year = \Carbon\Carbon::now()->format('Y');
     }
 
     public function norma()
@@ -70,10 +70,6 @@ class Material extends Model
 
     public function inStock()
     {
-//        $used = 0;
-//        foreach (Materialnorm::all()->where('material_id', $this->id) as $product) {
-//            $used = $used + Produced::whereProductId($product->product_id)->sum('qty') * $product->norma;
-//        }
         return $this->getIncomeSumm() - $this->getSoldQty() - $this->used();
     }
 

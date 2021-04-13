@@ -21,7 +21,7 @@ class MaterialService extends Service
         $this->income = new MaterialIncome();
     }
 
-    public function GetPerMonth($date)
+    public function GetMonthlyMaterialIncome($date)
     {
         $target = $this->ParseDateBy($date);
         $monthlyMaterialIncomes = [];
@@ -33,7 +33,7 @@ class MaterialService extends Service
                 'unit' => $material->unit
             ]);
         }
-        dd($monthlyMaterialIncomes);
+
         return $monthlyMaterialIncomes;
     }
 
@@ -69,16 +69,21 @@ class MaterialService extends Service
         return $materialQty;
     }
 
-    public function EditMaterial($data)
+    public function IncomesPerMonthOf($material, $date)
     {
-        $material = new Material();
-        $material->find($data['id'])->update($data);
+        return false;
     }
 
-    public function newMaterial($data)
+    public function SaveMaterialWith($newAttributes)
+    {
+        Material::where('name', $newAttributes['name'])->update($newAttributes);
+        return \response('Информация о материале изменена', '200');
+    }
+
+    public function AddNewMaterialWith($attributes)
     {
         $Factory = new MaterialFactory();
-        $model = $Factory->make(Material::class, $data);
+        $model = $Factory->make(Material::class, $attributes);
         if (CheckerService::IsNewAdminItemExits($model)) {
             return \response(['error' => 'Запись уже существует'], '403');
         } else $model->save();
