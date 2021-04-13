@@ -46,9 +46,10 @@ class MaterialsController extends Controller
     public function GetMonthlyMaterialIncome(Request $request)
     {
         $prd = new Product();
-        $builder = new ProductBuilder($prd->find(15));
-        $builder->BuildDailyIn();
-        dd($builder->getProduct());
+        $builder = new ProductBuilder();
+        $builder->InitiateExisting($prd->find(15));
+        $builder->BuildStock();
+        dd(__METHOD__, $builder->getProduct());
         return $this->materialService->GetMonthlyMaterialIncome($request->date);
     }
 

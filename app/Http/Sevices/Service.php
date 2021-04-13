@@ -4,13 +4,18 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\BuilderManager;
+use App\Builders\ProductBuilder;
 use App\Factories\ModelFactory;
-use App\Factories\ProductFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 abstract class Service
 {
+
+
+    public function __construct ()
+    {
+    }
+
     public function Remove($model, $id)
     {
         $Factory = new ModelFactory();

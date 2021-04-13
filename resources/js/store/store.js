@@ -4,7 +4,7 @@ export default {
         products: [],
         produced: [],
         machines: [],
-        selectedNorm: [],
+        productMaterialNorms: [],
         incomes: [],
         materialsQty: [],
         motohours: [],
@@ -35,8 +35,8 @@ export default {
         STOCK: state => {
             return state.stock
         },
-        SELECTED_NORM: state => {
-            return state.selectedNorm
+        PRODUCT_MATERIAL_NORMS: state => {
+            return state.productMaterialNorms
         },
         INCOMES: state => {
             return state.incomes
@@ -71,7 +71,7 @@ export default {
             state.machines = data;
         },
         SET_SELECTED_NORM: (state, data) => {
-            state.selectedNorm = data;
+            state.productMaterialNorms = data;
         },
         SET_INCOMES: (state, data) => {
             state.incomes = data;

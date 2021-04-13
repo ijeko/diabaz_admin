@@ -228,7 +228,7 @@
                                     >{{ product.title }}
                                     </option>
                                 </select>
-                                <div v-if="isSelected" class="normItem" v-for="item in SELECTED_NORM"
+                                <div v-if="isSelected" class="normItem" v-for="item in PRODUCT_MATERIAL_NORMS.materialsNorms"
                                      :key="item.id"
                                 >
                                     <div class="normTitle">{{ item.title }}</div>
@@ -240,7 +240,7 @@
                                     Изменить
                                 </button>
                                 <add-mat-norm v-if="isAddFormVisible"
-                                              :selectedNorm="SELECTED_NORM"
+                                              :selectedNorm="PRODUCT_MATERIAL_NORMS"
                                               :selectedProduct="selectProd"
                                               @close="showAddForm"
                                               @update="GET_NORM_BY_MATERIAL"
@@ -396,7 +396,7 @@ export default {
     computed: {
         ...mapGetters([
             'PRODUCTS',
-            'SELECTED_NORM'
+            'PRODUCT_MATERIAL_NORMS'
         ])
     },
     mounted() {

@@ -4,8 +4,12 @@
 namespace App\Builders;
 
 
+use Illuminate\Database\Eloquent\Model;
+
 interface Builder
 {
+    public  function InitiateExisting (Model $object);
+
     public function BuildMonthlyIn ();
 
     public function BuildDailyIn ();
@@ -18,8 +22,11 @@ interface Builder
 
     public function BuildDailySpoil ();
 
-    public function BuildStock ();
+    public function BuildProductWithMaterialNorms ();
 
-    public function BuildInstance ();
+    public function BuildProductWithUsedMaterials();
+
+
+    public function BuildStock ();
 
 }

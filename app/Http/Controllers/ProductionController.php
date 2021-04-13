@@ -28,10 +28,10 @@ class ProductionController extends Controller
         $this->factory = $productFactory;
     }
 
-    public function GetProducts(Request $request): array
+    public function GetProducts(Request $request)
     {
 
-        return $this->productService->GetProductsProducedAndSold($request->date);
+        return $this->productService->CreateProductsForDashboard();
     }
 
     public function AddNewProduct(Request $request)

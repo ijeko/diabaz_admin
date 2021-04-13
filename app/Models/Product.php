@@ -14,7 +14,7 @@ class Product extends Model
 
     public function materialNorm()
     {
-        return $this->hasMany(Materialnorm::class);
+        return $this->hasMany(Materialnorm::class, 'product_id');
     }
 
     public function getProducedQty()
@@ -70,10 +70,15 @@ class Product extends Model
 
     public function produced()
     {
-        return $this->hasMany(Produced::class);
+        return $this->hasMany(Produced::class, 'product_id');
     }
-//    public function sold ()
-//    {
-//        return $this->hasMany(Sold::class);
-//    }
+    public function sold ()
+    {
+        return $this->hasMany(Sold::class, 'product_id');
+    }
+
+    public function Spoiled ()
+    {
+        return $this->hasMany(Spoiled::class, 'product_id');
+    }
 }

@@ -4,6 +4,8 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\BuilderManager;
+use App\Builders\ProductBuilder;
 use App\Factories\MaterialFactory;
 use App\Factories\ModelFactory;
 use App\Factories\ProductFactory;
@@ -15,35 +17,24 @@ use App\Models\Spoiled;
 class ProductService extends Service
 {
 
-    public function GetProductsProducedAndSold($date): array
+    public function CreateProductsForDashboard()
     {
-        $target = $this->ParseDateBy($date);
-
-        $products = [];
-
+        $manager = new BuilderManager();
+        $builder = new ProductBuilder();
+        $manager->SetBuilder($builder);
+        $result = collect();
         foreach (Product::all() as $product) {
-            array_push($products, [
-                'id' => $product->id,
-                'title' => $product->title,
-                'name' => $product->name,
-                'totalProduced' => $product->getProducedQty(),
-                'monthProduced' => $product->produced()
-                    ->whereYear('date', $target['year'])
-                    ->whereMonth('date', $target['month'])
-                    ->sum('qty'),
-                'monthSold' => $product->getSoldQtyMonthly($target['month']),
-                'totalSold' => $product->getSoldQty(),
-                'stock' => round($product->inStock() - $this->ProductUsedAsMaterialQty($product->id), 2),
-                'unit' => $product->unit
-            ]);
+            $manager->MakeProductsForDashboard($product);
+            $result->push($builder->GetProduct());
         }
-        return $products;
+        return $result;
     }
 
     public function AddNewProductWith($attributes)
     {
-        $Factory = new ProductFactory();
-        $product = $Factory->make(Product::class, $attributes);
+        $builder = new ProductBuilder();
+        $product = $builder->GetProduct();
+        $product->fill($attributes);
 
         if (CheckerService::IsNewAdminItemExits($product)) {
             return \response(['error' => 'Запись уже существует'], '403');
@@ -61,23 +52,29 @@ class ProductService extends Service
 
     public function GetMaterialsNormsOf(Product $product)
     {
-        $materialsForProduct = array();
-        $usedMaterialsNorms = $product->materialNorm()->get();
-        foreach ($usedMaterialsNorms as $usedMaterialNorma) {
-            $id = $usedMaterialNorma->id;
-            $title = $usedMaterialNorma->title;
-            $norma = $usedMaterialNorma->norma;
-            $unit = $usedMaterialNorma->material()->first()->unit;
-            array_push($materialsForProduct, [
-                'id' => $id,
-                'title' => $title,
-                'norma' => $norma,
-                'material_id' => $usedMaterialNorma->material_id,
-                'product_id' => $usedMaterialNorma->product_id,
-                'unit' => $unit,
-            ]);
-        }
-        return json_encode($materialsForProduct);
+        $builder = new ProductBuilder();
+        $builder->InitiateExisting($product);
+        $builder->BuildProductWithMaterialNorms();
+        return $builder->GetProduct();
+
+
+//        $materialsForProduct = array();
+//        $usedMaterialsNorms = $product->materialNorm()->get();
+//        foreach ($usedMaterialsNorms as $usedMaterialNorma) {
+//            $id = $usedMaterialNorma->id;
+//            $title = $usedMaterialNorma->title;
+//            $norma = $usedMaterialNorma->norma;
+//            $unit = $usedMaterialNorma->material()->first()->unit;
+//            array_push($materialsForProduct, [
+//                'id' => $id,
+//                'title' => $title,
+//                'norma' => $norma,
+//                'material_id' => $usedMaterialNorma->material_id,
+//                'product_id' => $usedMaterialNorma->product_id,
+//                'unit' => $unit,
+//            ]);
+//        }
+//        return json_encode($materialsForProduct);
     }
 
 
@@ -99,8 +96,7 @@ class ProductService extends Service
         $spoiled = $Factory->make(Spoiled::class, $attributes);
         if (CheckerService::CheckProductionStock($spoiled)) {
             $spoiled->save();
-        }
-        else
+        } else
             return \response(['error' => 'Не хватает: ' . $spoiled->title]);
     }
 
