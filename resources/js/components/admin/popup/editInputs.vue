@@ -17,21 +17,7 @@
                     <div class="card-body">
                         <div class="card">
                             <div class="card-header">
-                                Производство за месяц
-                                <div class="btn-group mr-2" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-secondary"
-                                            @click="decreaseMonth"
-                                    > <
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary monthBtn"
-                                            @click="resetMonth"
-                                    >{{ dateFormated.ofMonth }}
-                                    </button>
-                                    <button type="button" class="btn btn-secondary"
-                                            @click="increaseMonth"
-                                    > >
-                                    </button>
-                                </div>
+                                Производство за {{dateFormated.ofMonth}} {{ dateFormated.year}}
                             </div>
                             <div class="card-body">
                                 <div class="form-check">
@@ -62,7 +48,7 @@
                                         v-model="selectedProduct"
                                         name="products"
                                         id="products"
-                                        @change="getProduced()"
+                                        @change="getProductWithPayload()"
                                 >
                                     <option
                                         v-for="(product, index) in PRODUCTS"
@@ -82,11 +68,13 @@
 
                                             </tr>
                                             <tr v-if="selectedProduct"
-                                                v-for="produced in responseData"
-                                                :key="produced.id">
-                                                <td class="text-center"><span>{{ produced.date }}</span></td>
-                                                <td class="text-center"><span>{{ produced.qty }}
-                                                    {{ PRODUCTS.find(x => x.id === produced.product_id).unit }}</span>
+                                                v-for="item in productPayload"
+                                                :key="item.id">
+                                                <td class="text-center"><span>{{ item.date }}</span></td>
+                                                <td class="text-center"><span>
+                                                    {{ item.qty }}
+                                                    {{product.unit }}
+                                                </span>
                                                 </td>
                                                 <td class="text-center"><span class="btn btn-link m-0"
                                                                               v-if="producedOrSpoiled === 'produced'"
@@ -120,25 +108,11 @@
                     <div class="card-body">
                         <div class="card">
                             <div class="card-header">
-                                Отгрузки за месяц
+                                Отгрузки за {{dateFormated.ofMonth}} {{ dateFormated.year}}
                                 <div v-if="message.auth" class="alert alert-danger" role="alert">
             <span v-for="(error, index) of message.auth"
                   :key="index"
             >{{ error }}</span>
-                                </div>
-                                <div class="btn-group mr-2" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-secondary"
-                                            @click="decreaseMonth"
-                                    > <
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary monthBtn"
-                                            @click="resetMonth"
-                                    >{{ dateFormated.ofMonth }}
-                                    </button>
-                                    <button type="button" class="btn btn-secondary"
-                                            @click="increaseMonth"
-                                    > >
-                                    </button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -146,7 +120,7 @@
                                         v-model="selectedProduct"
                                         name="uploads"
                                         id="uploads"
-                                        @change="getSold()"
+                                        @change="getProductWithPayload()"
                                 >
                                     <option
                                         v-for="(product, index) in PRODUCTS"
@@ -167,12 +141,13 @@
 
                                             </tr>
                                             <tr v-if="selectedProduct"
-                                                v-for="upload in responseData"
+                                                v-for="upload in product.dailySold"
                                                 :key="upload.id">
                                                 <td class="text-center"><span>{{ upload.date }}</span></td>
                                                 <td class="text-center">{{ upload.soldTo }}</td>
                                                 <td class="text-center"><span>{{ upload.qty }}
-                                                    {{ PRODUCTS.find(x => x.id === upload.product_id).unit }}</span>
+                                                    {{ product.unit }}
+                                                </span>
                                                 </td>
                                                 <td class="text-center"><span class="btn btn-link m-0"
                                                                               @click="remove('Sold', upload.id)">Удалить</span>
@@ -217,7 +192,7 @@
                             <div class="card-header">
                                 Для редактирования выберите продукт
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" v-if="!isAddFormVisible">
                                 <label>Продукт:</label>
                                 <select v-model="selectProd" class="form-control mb-4"
                                         @change="selectProductForNorm($event)">
@@ -228,7 +203,8 @@
                                     >{{ product.title }}
                                     </option>
                                 </select>
-                                <div v-if="isSelected" class="normItem" v-for="item in PRODUCT_MATERIAL_NORMS.materialsNorms"
+                                <div v-if="isSelected" class="normItem"
+                                     v-for="item in PRODUCT_MATERIAL_NORMS.materialsNorms"
                                      :key="item.id"
                                 >
                                     <div class="normTitle">{{ item.title }}</div>
@@ -239,13 +215,17 @@
                                         @click="showAddForm">
                                     Изменить
                                 </button>
+
+                            </div>
+                            <div class="card-body">
                                 <add-mat-norm v-if="isAddFormVisible"
-                                              :selectedNorm="PRODUCT_MATERIAL_NORMS"
+                                              :productWithMaterials="PRODUCT_MATERIAL_NORMS"
                                               :selectedProduct="selectProd"
                                               @close="showAddForm"
-                                              @update="GET_NORM_BY_MATERIAL"
+                                              @update="GET_PRODUCT_WITH_MATERIALS"
                                 ></add-mat-norm>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -271,7 +251,7 @@ export default {
     data() {
         return {
             date: new Date(),
-            responseData: [],
+            product: '',
             localDate: this.commonDate,
             clientsUpload: [],
             lineToggle: 0,
@@ -286,18 +266,17 @@ export default {
         }
     },
     watch: {
-        localDate: function (newLocalDate, oldCLocalDate) {
-            this.getProduced()
+        dateFormated: function (newdateFormated, olddateFormated) {
+            this.selectedProduct = ''
         },
-        producedOrSpoiled: function (newProducedOrSpoiled, oldProducedOrSpoiled)
-        {
-            this.getProduced()
+        producedOrSpoiled: function (newProducedOrSpoiled, oldProducedOrSpoiled) {
+            this.selectedProduct = ''
         }
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS',
-            'GET_NORM_BY_MATERIAL'
+            'GET_PRODUCT_WITH_MATERIALS'
         ]),
         showAddForm() {
             if (this.isAddFormVisible === true) {
@@ -310,55 +289,23 @@ export default {
         clearData() {
             this.selectedProduct = ''
         },
-        decreaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        increaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        resetMonth() {
-            this.localDate = new Date().toISOString().slice(0, 10)
-            this.$emit('setDate', this.localDate)
-        },
-        getProduced() {
-            let data = {date: this.localDate, product: this.selectedProduct}
-            let $url = '/api/admin/' + this.producedOrSpoiled
+        getProductWithPayload() {
+            let data = {product: this.selectedProduct}
+            let $url = '/api/admin/product'
             axios.get($url, {
                 headers: {'Content-Type': 'application/json'},
                 params: data
             })
                 .then(response => {
-                    this.responseData = response.data
+                    this.product = response.data
+                  console.log(this.product)
                     return response.data
                 })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-        },
-        getSold() {
-            let data = {date: this.localDate, product: this.selectedProduct}
-            axios.get('/api/admin/sold', {
-                headers: {'Content-Type': 'application/json'},
-                params: data
-            })
-                .then(response => {
-                    this.responseData = response.data
-                    return response.data
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
         },
         remove(model, id) {
@@ -390,14 +337,22 @@ export default {
                 return false
             }
             let data = {prodID: id}
-            this.GET_NORM_BY_MATERIAL(data)
+            this.GET_PRODUCT_WITH_MATERIALS(data)
         },
     },
     computed: {
         ...mapGetters([
             'PRODUCTS',
             'PRODUCT_MATERIAL_NORMS'
-        ])
+        ]),
+        productPayload ()
+        {
+            if (this.producedOrSpoiled === 'produced')
+            {
+                return this.product.dailyProduction
+            }
+            else return this.product.dailySpoiled
+        }
     },
     mounted() {
         this.GET_PRODUCTS()

@@ -28,7 +28,7 @@ class ProductionController extends Controller
         $this->factory = $productFactory;
     }
 
-    public function GetProducts(Request $request)
+    public function GetProducts()
     {
 
         return $this->productService->CreateProductsForDashboard();
@@ -77,10 +77,9 @@ class ProductionController extends Controller
         return $this->productService->AddSpoiled($product);
     }
 
-    public function GetAdminSpoiledItems (Request $request)
+    public function GetProductForAdminDashboard (Request $request)
     {
-        $date = $request->date;
         $product_id = $request->product;
-        return $this->productService->GetSpoiledPerMonth($date, $product_id);
+        return $this->productService->GetProducedSoldSpoiled($product_id);
     }
 }

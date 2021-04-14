@@ -10,7 +10,8 @@ export default {
         motohours: [],
         sold: [],
         stock: [],
-        date: new Date().toISOString().slice(0, 10)
+        date: new Date().toISOString().slice(0, 10),
+        formatedDate: ''
 
     },
     getters: {    // Fetch the total number of items in the cart
@@ -46,7 +47,11 @@ export default {
         },
         DATE: state => {
             return state.date
+        },
+        FORMATED_DATE: state => {
+            return state.formatedDate
         }
+
     },
     mutations: {
         SET_MATERIALS: (state, data) => {
@@ -70,7 +75,7 @@ export default {
         SET_MACHINES: (state, data) => {
             state.machines = data;
         },
-        SET_SELECTED_NORM: (state, data) => {
+        SET_PRODUCT_MATERIAL_NORMS: (state, data) => {
             state.productMaterialNorms = data;
         },
         SET_INCOMES: (state, data) => {
@@ -81,7 +86,11 @@ export default {
         },
         SET_DATE: (state, date) => {
             state.date = date
+        },
+        SET_FORMATED_DATE: (state, date) => {
+            state.formatedDate = date
         }
+
     },
     actions: {
         // GET_MATERIALS: ({commit}) => {
@@ -243,14 +252,14 @@ export default {
                     console.log(error);
                 })
         },
-        GET_NORM_BY_MATERIAL: ({commit}, data) => {
+        GET_PRODUCT_WITH_MATERIALS: ({commit}, data) => {
             axios.get('/api/matnorm/get',
                 {
                     headers: {'Content-Type': 'application/json'},
                     params: data
                 })
                 .then(function (response) {
-                    commit('SET_SELECTED_NORM', response.data);
+                    commit('SET_PRODUCT_MATERIAL_NORMS', response.data);
                     console.log(response.data)
                     return response.data
                 })
@@ -310,6 +319,9 @@ export default {
                 })
             console.log(date)
             commit('SET_DATE', date);
+        },
+        SET_FORMATED_DATE: ({commit}, date) => {
+            commit('SET_FORMATED_DATE', date);
         }
     }
 

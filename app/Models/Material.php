@@ -29,7 +29,17 @@ class Material extends Model
 
     public function norma()
     {
-        return $this->hasMany(Materialnorm::class)->get();
+        return $this->hasMany(Materialnorm::class);
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(MaterialIncome::class);
+    }
+
+    public function sold()
+    {
+        return $this->hasMany(MaterialIncome::class, 'product_id')->where('isMaterial', 1);
     }
 
     public function getIncomeSumm()
