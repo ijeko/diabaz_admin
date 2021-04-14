@@ -34,10 +34,8 @@ Route::middleware(['apiAccess:admin'])->group(function () {
 Route::middleware(['apiAccess:admin|office'])->group(function () {
     Route::put('/products/admin', [App\Http\Controllers\ProductionController::class, 'EditProduct']);
     Route::post('/products/admin', [App\Http\Controllers\ProductionController::class, 'AddNewProduct']);
-    Route::get('/admin/produced', [App\Http\Controllers\ProducedController::class, 'GetAdminProducedItems']);
-    Route::get('/admin/sold', [App\Http\Controllers\SoldController::class, 'GetAdminSoldItems']);
     Route::post('/products/spoiled', [App\Http\Controllers\ProductionController::class, 'AddSpoiledProduct']);
-    Route::get('/admin/spoiled', [App\Http\Controllers\ProductionController::class, 'GetAdminSpoiledItems']);
+    Route::get('/admin/product', [App\Http\Controllers\ProductionController::class, 'GetProductForAdminDashboard']);
     Route::put('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'EditMaterial']);
     Route::post('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'AddNewMaterial']);
     Route::put('/machines/admin', [App\Http\Controllers\MachinesController::class, 'EditMachine']);

@@ -56,36 +56,18 @@ class ProductService extends Service
         $builder->InitiateExisting($product);
         $builder->BuildProductWithMaterialNorms();
         return $builder->GetProduct();
-
-
-//        $materialsForProduct = array();
-//        $usedMaterialsNorms = $product->materialNorm()->get();
-//        foreach ($usedMaterialsNorms as $usedMaterialNorma) {
-//            $id = $usedMaterialNorma->id;
-//            $title = $usedMaterialNorma->title;
-//            $norma = $usedMaterialNorma->norma;
-//            $unit = $usedMaterialNorma->material()->first()->unit;
-//            array_push($materialsForProduct, [
-//                'id' => $id,
-//                'title' => $title,
-//                'norma' => $norma,
-//                'material_id' => $usedMaterialNorma->material_id,
-//                'product_id' => $usedMaterialNorma->product_id,
-//                'unit' => $unit,
-//            ]);
-//        }
-//        return json_encode($materialsForProduct);
     }
 
 
     public function EditMaterialsNormWith($newNorms)
     {
         foreach ($newNorms as $normData) {
-            $norm = Materialnorm::firstOrCreate([
-                'product_id' => $normData['product_id'],
-                'material_id' => $normData['material_id']
-            ], $normData);
-            $norm->update($normData);
+            Materialnorm::updateOrCreate(
+                [
+                    'product_id' => $normData['product_id'],
+                    'material_id' => $normData['material_id']
+                ],
+                $normData);
         }
         return \response('New data saved', '200');
     }
@@ -100,41 +82,13 @@ class ProductService extends Service
             return \response(['error' => 'Не хватает: ' . $spoiled->title]);
     }
 
-    public function GetSpoiledPerMonth($date, $id)
+    public function GetProducedSoldSpoiled($product)
     {
-        $Factory = new MaterialFactory();
-        $spoiledItems = $Factory->make(Spoiled::class);
-        $target = $this->ParseDateBy($date);
-        return $spoiledItems
-            ->whereYear('date', $target['year'])
-            ->whereMonth('date', $target['month'])
-            ->where('product_id', $id)
-            ->get();
-    }
 
-//TODO Удалить если метод не используется
-
-//    public function getSold($data)
-//    {
-//        $today = $data->date;
-//
-//        foreach ($this->product->all() as $product) {
-//            $productSold = $this->sold->where('date', $today)->where('product_id', $product->id)->get()->sum('qty');
-//            $sold[] = ['product_id' => $product->id, 'qty' => $productSold];
-//        }
-//
-//        return response()->
-//        json($sold);
-//    }
-
-    public function ProductUsedAsMaterialQty($id): int
-    {
-        $asMaterial = 0;
-        foreach (Material::all() as $material) {
-            if (Product::find($id)->name === $material->name) {
-                $asMaterial = $material->getIncomeSumm();
-            }
-        }
-        return $asMaterial;
+        $builder = new ProductBuilder();
+        $manager = new BuilderManager();
+        $manager->SetBuilder($builder);
+        $manager->MakeProductForAdminDashboard(Product::find($product));
+        return $builder->GetProduct();
     }
 }

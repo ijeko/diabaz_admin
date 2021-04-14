@@ -58,6 +58,9 @@ Vue.component('component-loader', require('./components/loaders/componentLoader'
 //reports
 Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);
 Vue.component('product-upload-component', require('./components/reports/ProductUploadReport.vue').default);
+
+//CustomComponents
+Vue.component('month-selector-component', require('./components/CustomComponents/MonthSelector.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

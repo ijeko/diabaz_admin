@@ -1,10 +1,11 @@
 <template>
     <div class="container">
-        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>
+        <month-selector-component></month-selector-component>
+<!--        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>-->
         <div class="editButtons">
             <admin-edit-inputs-component
                 :user="user"
-                :dateFormated="dateFormated"
+                :dateFormated="FORMATED_DATE"
                 :commonDate="date"
                 @setDate="setDate"
             ></admin-edit-inputs-component>
@@ -52,6 +53,7 @@
 <script>
 import AdminMaterials from "./admin/materials";
 import AdminMachines from "./admin/machines";
+import {mapGetters} from 'vuex'
 
 export default {
     name: "AdminWrapperComponent",
@@ -70,6 +72,9 @@ export default {
 
     },
     computed: {
+        ...mapGetters([
+            'FORMATED_DATE'
+        ]),
         dateFormated() {
             const dateSplit = this.date.split('-')
             const day = dateSplit[2]

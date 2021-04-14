@@ -5,54 +5,64 @@ namespace App\Builders;
 
 
 use App\Http\Sevices\DateParser;
+use App\Models\Material;
+use App\Models\Produced;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductBuilder implements Builder
+class MaterialBuilder implements Builder
 {
-    protected $product;
+    protected $material;
     protected $date;
 
     public function __construct()
     {
         $this->reset();
         $this->date = session('currentDate');
+        $this->date = DateParser::Parse($this->date);
     }
 
     public function InitiateExisting(Model $object)
     {
-        $this->product = $object;
+        $this->material = $object;
     }
 
     public function BuildMonthlyIn()
     {
-        $date = DateParser::Parse($this->date);
-        $monthlyProduction = $this->product->produced()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
+        $monthlyIncome = $this->material->incomes()
+            ->whereYear('date', $this->date['year'])
+            ->whereMonth('date', $this->date['month'])
             ->sum('qty');
-        $this->product->monthlyProduction = round($monthlyProduction, 2);
+        $this->material->monthlyIncome = round($monthlyIncome, 2);
     }
 
     public function BuildDailyIn()
     {
-        $date = DateParser::Parse($this->date);
-        $dailyProduction = $this->product->produced()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
+        $dailyPIncome = $this->material->incomes()
+            ->whereYear('date', $this->date['year'])
+            ->whereMonth('date', $this->date['month'])
             ->get(['id', 'date', 'qty']);
-        $this->product->dailyProduction = $dailyProduction;
+        $this->material->dailyIncome = $dailyPIncome;
     }
 
     public function BuildMonthlyOut()
     {
-        $date = DateParser::Parse($this->date);
-        $monthlySold = $this->product->sold()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
-            ->where('isMaterial', 0)
+        $monthlySold = $this->material->sold()
+            ->whereYear('date', $this->date['year'])
+            ->whereMonth('date', $this->date['month'])
+//            ->where('isMaterial', 1)
             ->sum('qty');
-        $this->product->monthlySold = round($monthlySold, 2);
+        $this->material->monthlyUsed = round($monthlySold, 2);
+        $usageNorms = $this->material->norma();
+        $monthlyUsed = 0;
+        foreach ($usageNorms as $norma)
+        {
+            $monthlyUsed = $monthlyUsed + Produced::where('product_id', $norma->product_id)
+                    ->whereYear('date', $this->date['year'])
+                    ->whereMonth('date', $this->date['month'])
+                    ->sum('qty') * $norma->norma;
+        }
+        $this->material->monthlyUsed = $monthlyUsed;
     }
 
     public function BuildDailyOut()
@@ -61,7 +71,7 @@ class ProductBuilder implements Builder
         $dailySold = $this->product->sold()
             ->whereYear('date', $date['year'])
             ->whereMonth('date', $date['month'])
-            ->where('isMaterial', 0)
+//            ->where('isMaterial', 0)
             ->get(['id', 'date', 'qty']);
         $this->product->dailySold = $dailySold;
     }
@@ -122,12 +132,12 @@ class ProductBuilder implements Builder
 
     public function reset(): void
     {
-        $this->product = new Product();
+        $this->product = new Material();
     }
 
     public function GetProduct()
     {
-        $result = $this->product;
+        $result = $this->material;
         $this->reset();
 
         return $result;

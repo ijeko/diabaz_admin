@@ -21,4 +21,12 @@ class BuilderManager
         $this->builder->BuildStock();
     }
 
+    public function MakeProductForAdminDashboard ($product)
+    {
+        $this->builder->InitiateExisting($product);
+        $this->builder->BuildDailyIn();
+        $this->builder->BuildDailySpoil();
+        $this->builder->BuildDailyOut();
+    }
+
 }
