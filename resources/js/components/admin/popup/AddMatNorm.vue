@@ -10,7 +10,7 @@
                   :key="index"
             >{{ error }}</span>
         </div>
-        <div class="normItem" v-for="item in selectedNorm"
+        <div class="normItem" v-for="item in selectedNormе"
              :key="item.id"
         >
             <div class="normTitle">
