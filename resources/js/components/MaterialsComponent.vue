@@ -1,20 +1,22 @@
 <template>
     <div class="card">
-        <div class="card-header">Остатки материалов
-        </div>
-        <div class="card-body">
-            <div class="materials"
-                 v-for="(material, index) in MATERIALS"
-                 :key="index">
-                <div class="material-name">
-                    <div>{{ material.title }} <span v-if="material.stock<=material.minQty"
-                                                    class="badge badge-pill badge-danger">Мало</span>
-                    </div>
-                </div>
-                <div class="material-qty">{{ material.stock }} {{ material.unit }}</div>
+        <div class="card-header">Остатки материалов</div>
+        <div class="card-body ">
+          <div class="list-group">
+            <div  class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+              <span class="w-50 text-center">Материалы</span>
+              <span class="w-50 text-center">Остатки</span>
             </div>
+          </div>
+          <div class="list-group overflow-auto mat">
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+               :class="{ 'list-group-item-danger': material.stock<=material.minQty}"
+               v-for="(material, index) in MATERIALS"
+               :key="index"
+            ><span>{{material.title}}</span><span>{{ material.stock }} {{ material.unit }}</span></a>
+
+          </div>
         </div>
-        <!--        <button class="btn btn-outline-dark" @click="showShowNorm">Нормы расхода</button>-->
         <button v-if="user.role != 'gorny'" class="btn btn-outline-dark" @click="showIncomes">Поступления материалов
         </button>
         <show-norm v-if="isShowNormVisible"
@@ -97,5 +99,8 @@ export default {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px dotted silver;
+}
+.mat {
+  height: 400px;
 }
 </style>

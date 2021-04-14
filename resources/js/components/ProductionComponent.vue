@@ -8,7 +8,7 @@
             <!--            >Показать за вчера-->
             <!--            </div>-->
         </div>
-        <div class="card-body">
+<!--        <div class="card-body">-->
             <div v-if="message" class="alert alert-danger" role="alert">
                 {{message.error}}
                 <div v-for="(item, index) in message.data"
@@ -17,32 +17,54 @@
                     {{ item.title }} - {{ item.qty }}ед. {{errorProduced}}
                 </div>
             </div>
-            <table>
-                <tr>
-                    <th>Продукция</th>
-                    <th>Произведено</th>
-                    <th>Отгружено</th>
-                    <th>Склад</th>
-                </tr>
-                <tr v-for="(product, index) in PRODUCTS"
-                    :key="index">
-                    <td :class="{'text-secondary' : !product.stock, 'bg-success' : product.monthlyProduction}"
-                    >
-                        {{ product.title }}
-                    </td>
-                    <td :class="{'text-secondary' : !product.monthlyProduction}">
-                        {{ product.monthlyProduction }} {{ product.unit }}
-                    </td>
-                    <td :class="{'text-secondary' : !product.monthlySold}">
-                        {{ product.monthlySold }} {{ product.unit }}
-                    </td>
-                    <td :class="{'text-secondary' : !product.stock}">
-                        {{ product.stock }} {{ product.unit }}
-                    </td>
-                </tr>
-            </table>
+          <div class="card-body ">
+            <div class="list-group">
+              <div  class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                <span class="w-25 text-left">Продукция</span>
+                <span class="w-25 text-center">Произведено</span>
+                <span class="w-25 text-center">Отгружено</span>
+                <span class="w-25 text-center">Остатки</span>
+              </div>
+            </div>
+            <div class="list-group overflow-auto mat">
+              <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                 :class="{'text-secondary' : !product.stock, 'list-group-item-success' : product.monthlyProduction}"
+                 v-for="(product, index) in PRODUCTS"
+                 :key="index"
+              >
+                <span class="w-25 text-left">{{product.title}}</span>
+                <span class="w-25 text-center">{{ product.monthlyProduction }} {{ product.unit }}</span>
+                <span class="w-25 text-center">{{ product.monthlySold }} {{ product.unit }}</span>
+                <span class="w-25 text-center">{{ product.stock }} {{ product.unit }}</span>
+              </a>
+            </div>
+          </div>
+<!--            <table>-->
+<!--                <tr>-->
+<!--                    <th>Продукция</th>-->
+<!--                    <th>Произведено</th>-->
+<!--                    <th>Отгружено</th>-->
+<!--                    <th>Склад</th>-->
+<!--                </tr>-->
+<!--                <tr v-for="(product, index) in PRODUCTS"-->
+<!--                    :key="index">-->
+<!--                    <td :class="{'text-secondary' : !product.stock, 'bg-success' : product.monthlyProduction}"-->
+<!--                    >-->
+<!--                        {{ product.title }}-->
+<!--                    </td>-->
+<!--                    <td :class="{'text-secondary' : !product.monthlyProduction}">-->
+<!--                        {{ product.monthlyProduction }} {{ product.unit }}-->
+<!--                    </td>-->
+<!--                    <td :class="{'text-secondary' : !product.monthlySold}">-->
+<!--                        {{ product.monthlySold }} {{ product.unit }}-->
+<!--                    </td>-->
+<!--                    <td :class="{'text-secondary' : !product.stock}">-->
+<!--                        {{ product.stock }} {{ product.unit }}-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
             <component-loader v-if="isLoading"></component-loader>
-        </div>
+<!--        </div>-->
         <enter-produced
             v-if="isEnterVisible"
             class="popup"
@@ -60,7 +82,7 @@
             @closeSold="closeSold"
             @sendSold="sendSold"
         ></enter-sold>
-        <button class="btn btn-outline-dark" @click="showPopup">+ Произведено</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" @click="showPopup">+ Произведено</button>
         <button v-if="user.role != 'gorny'" class="btn btn-outline-dark" @click="showSold">+ Отгружено</button>
     </div>
 </template>
@@ -205,21 +227,24 @@ export default {
 }
 </script>
 <style scoped>
-table {
-    width: 100%;
-}
+/*table {*/
+/*    width: 100%;*/
+/*}*/
 
-tr {
-    /*display: flex;*/
-    /*justify-content: space-between;*/
-    border-bottom: 1px dotted silver;
-}
+/*tr {*/
+/*    !*display: flex;*!*/
+/*    !*justify-content: space-between;*!*/
+/*    border-bottom: 1px dotted silver;*/
+/*}*/
 
-td {
-    width: 25%;
-}
+/*td {*/
+/*    width: 25%;*/
+/*}*/
 
-td {
-    width: 25%;
+/*td {*/
+/*    width: 25%;*/
+/*}*/
+.mat {
+  height: 400px;
 }
 </style>

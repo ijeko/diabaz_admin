@@ -50,7 +50,6 @@ class MaterialsController extends Controller
         $builder = new MaterialBuilder();
         $builder->InitiateExisting($prd->find(16));
         $builder->BuildMonthlyIn();
-        dd(__METHOD__, $builder->getProduct());
         return $this->materialService->GetMonthlyMaterialIncome($request->date);
     }
 

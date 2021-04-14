@@ -4,7 +4,7 @@
                 @click="decreaseMonth"
         > <
         </button>
-        <button type="button" class="btn btn-outline-secondary monthBtn"
+        <button type="button" class="btn btn-outline-secondary monthBtn w-75"
                 @click="resetMonth"
         >{{ dateFormated.ofMonth }}
         </button>
@@ -79,4 +79,7 @@ export default {
 
 <style scoped>
 
+.monthBtn {
+  width: 100px;
+}
 </style>

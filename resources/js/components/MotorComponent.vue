@@ -27,7 +27,7 @@
             @closePopup="closePopup"
             @sendMotohour="sendMotohour"
         ></enter-motohour>
-        <button class="btn btn-outline-dark" @click="showPopup">Внести данные</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" @click="showPopup">Внести данные</button>
     </div>
 </template>
 

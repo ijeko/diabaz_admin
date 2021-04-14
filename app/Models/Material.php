@@ -81,12 +81,13 @@ class Material extends Model
     public function inStock()
     {
         return $this->getIncomeSumm() - $this->getSoldQty() - $this->used();
+
     }
 
     public function used()
     {
         $used = 0;
-        foreach ($this->norma() as $norma) {
+        foreach ($this->norma()->get() as $norma) {
             $used = $used + Produced::where('product_id', $norma->product_id)->sum('qty') * $norma->norma;
         }
         return $used;
