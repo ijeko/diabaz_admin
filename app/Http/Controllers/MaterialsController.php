@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 
 
 use App\Builders\MaterialBuilder;
-use App\Builders\ProductBuilder;
 use App\Http\Sevices\MaterialService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MaterialsController extends Controller
@@ -44,13 +42,10 @@ class MaterialsController extends Controller
         Material::destroy($request->id);
     }
 
-    public function GetMonthlyMaterialIncome(Request $request)
+    public function GetMonthlyMaterialIncome()
     {
-        $prd = new Material();
-        $builder = new MaterialBuilder();
-        $builder->InitiateExisting($prd->find(16));
-        $builder->BuildMonthlyIn();
-        return $this->materialService->GetMonthlyMaterialIncome($request->date);
+
+        return $this->materialService->GetMonthlyMaterialIncome();
     }
 
     public function GetMaterialIncomesPerMonth(Request $request)

@@ -78,11 +78,11 @@
                                                 </td>
                                                 <td class="text-center"><span class="btn btn-link m-0"
                                                                               v-if="producedOrSpoiled === 'produced'"
-                                                                              @click="remove('Produced', produced.id)">Удалить</span>
+                                                                              @click="remove('Produced', item.id)">Удалить</span>
                                                 </td>
                                                 <td class="text-center"><span class="btn btn-link m-0"
                                                                               v-if="producedOrSpoiled === 'spoiled'"
-                                                                              @click="remove('Spoiled', produced.id)">Удалить</span>
+                                                                              @click="remove('Spoiled', item.id)">Удалить</span>
                                                 </td>
                                             </tr>
                                         </table>

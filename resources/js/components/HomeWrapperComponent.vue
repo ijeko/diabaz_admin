@@ -1,19 +1,20 @@
 <template>
     <div class="container">
-        <div class="btn-group mr-2" role="group" aria-label="Second group">
-            <button type="button" class="btn btn-secondary"
-                    @click="decreaseMonth"
-            > <
-            </button>
-            <button type="button" class="btn btn-outline-secondary monthBtn"
-                    @click="resetMonth"
-            >{{ dateFormated.ofMonth }}
-            </button>
-            <button type="button" class="btn btn-secondary"
-                    @click="increaseMonth"
-            > >
-            </button>
-        </div>
+        <month-selector-component></month-selector-component>
+<!--        <div class="btn-group mr-2" role="group" aria-label="Second group">-->
+<!--            <button type="button" class="btn btn-secondary"-->
+<!--                    @click="decreaseMonth"-->
+<!--            > <-->
+<!--            </button>-->
+<!--            <button type="button" class="btn btn-outline-secondary monthBtn"-->
+<!--                    @click="resetMonth"-->
+<!--            >{{ dateFormated.ofMonth }}-->
+<!--            </button>-->
+<!--            <button type="button" class="btn btn-secondary"-->
+<!--                    @click="increaseMonth"-->
+<!--            > >-->
+<!--            </button>-->
+<!--        </div>-->
         <div class="row justify-content-between">
             <div class="col-md-6">
                 <materials-component
@@ -76,7 +77,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            `SET_DATE`
+            `SET_DATE`,
+            'SET_FORMATED_DATE'
         ]),
         setDate(date) {
            this.SET_DATE(date)
@@ -103,7 +105,7 @@ export default {
         },
     },
      mounted () {
-
+// this.SET_FORMATED_DATE(this.dateFormated)
     }
 }
 </script>

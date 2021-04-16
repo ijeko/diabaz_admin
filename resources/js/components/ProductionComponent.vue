@@ -14,7 +14,7 @@
                 <div v-for="(item, index) in message.data"
                      :key="index"
                 >
-                    {{ item.title }} - {{ item.qty }}ед. {{errorProduced}}
+                    {{ item.title }} - {{ item.qty }} {{item.unit}}
                 </div>
             </div>
           <div class="card-body ">
@@ -169,7 +169,7 @@ export default {
             })
         },
         sendProduced(data) {
-            data = JSON.stringify(data)
+            // data = JSON.stringify(data)
             axios.post('/api/produced/add',
                 {data},
                 {
@@ -182,8 +182,11 @@ export default {
                     this.closePopup()
                     return response.data
                 })
-                .catch(response => {
-                    console.log(response.message);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
 
         },
@@ -201,8 +204,11 @@ export default {
                     this.closePopup()
                     return response.data
                 })
-                .catch(response => {
-                    console.log(response.message);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
 
         },
@@ -219,8 +225,11 @@ export default {
                     this.closeSold()
                     return response.data
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(error => {
+                    if (error.response) {
+                        this.message = error.response.data.errors
+                    }
+                    return error
                 })
         }
     }

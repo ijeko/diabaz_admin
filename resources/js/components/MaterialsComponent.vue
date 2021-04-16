@@ -17,6 +17,8 @@
 
           </div>
         </div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" @click="showIncomes">Внести данные</button>
+
         <button v-if="user.role != 'gorny'" class="btn btn-outline-dark" @click="showIncomes">Поступления материалов
         </button>
         <show-norm v-if="isShowNormVisible"
@@ -26,6 +28,7 @@
                       @closeIncomes="closeIncomes"
                       :date="date"
                       :user="user"
+                      :key="this.DATE"
         ></show-incomes>
         <component-loader v-if="isLoading"
 
@@ -64,6 +67,7 @@ export default {
     computed: {
         ...mapGetters([
             'MATERIALS',
+            'DATE'
             // 'MATERIAL_QTY'
         ]),
     },

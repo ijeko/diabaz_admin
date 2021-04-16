@@ -4,7 +4,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Builders\MaterialBuilder;
 use App\Http\Sevices\ProducedService;
+use App\Models\Material;
 use App\Models\Produced;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
@@ -29,8 +31,9 @@ class ProducedController extends Controller
 
     public function add(Request $request)
     {
-        $data = json_decode($request->data, 1);
-        Produced::create($data);
+        // TODO Исправить метод проверки количества материалов для работы с билдерами.
+        $data = $request->data;
+      return $this->producedService->save($data);
 
     }
     public function GetAdminProducedItems(Request $request)

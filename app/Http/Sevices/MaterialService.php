@@ -4,13 +4,11 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\MaterialBuilder;
 use App\Factories\MaterialFactory;
-use App\Factories\ModelFactory;
+
 use App\Models\Material;
 use App\Models\MaterialIncome;
-use App\Models\MaterialMinimum;
-use App\Models\Sold;
-use Illuminate\Http\Response;
 
 class MaterialService extends Service
 {
@@ -21,34 +19,16 @@ class MaterialService extends Service
         $this->income = new MaterialIncome();
     }
 
-    public function GetMonthlyMaterialIncome($date)
+    public function GetMonthlyMaterialIncome()
     {
-        $target = $this->ParseDateBy($date);
-        $monthlyMaterialIncomes = [];
+        $builder = new MaterialBuilder();
+        $monthlyMaterialIncomes = collect();
         foreach (Material::all() as $material) {
-            array_push($monthlyMaterialIncomes, [
-                'id' => $material->id,
-                'title' => $material->title,
-                'qty' => $material->getMonthlyIncomeSumm($target['month']),
-                'unit' => $material->unit
-            ]);
+            $builder->InitiateExisting($material);
+            $builder->BuildMonthlyIn();
+            $monthlyMaterialIncomes->push($builder->GetProduct());
         }
-
         return $monthlyMaterialIncomes;
-    }
-
-    public function GetIncomesOnDate($date)
-    {
-        return $this->income->where('date', $date)->get();
-    }
-
-    public function SaveNewIncome($data)
-    {
-        $this->income->material_id = $data->material_id;
-        $this->income->date = $data->date;
-        $this->income->qty = $data->qty;
-        $this->income->user_id = $data->user_id;
-        $this->income->save();
     }
 
     public static function GetMaterialsWithQty()
@@ -82,11 +62,12 @@ class MaterialService extends Service
 
     public function AddNewMaterialWith($attributes)
     {
-        $Factory = new MaterialFactory();
-        $model = $Factory->make(Material::class, $attributes);
-        if (CheckerService::IsNewAdminItemExits($model)) {
+        $builder = new MaterialBuilder();
+        $material = $builder->GetProduct();
+        $material->fill($attributes);
+        if (CheckerService::IsNewAdminItemExits($material)) {
             return \response(['error' => 'Запись уже существует'], '403');
-        } else $model->save();
+        } else $material->save();
         return \response('Запись добавлена', '200');
     }
 }

@@ -18,8 +18,8 @@ abstract class Service
 
     public function Remove($model, $id)
     {
-        $Factory = new ModelFactory();
-        $Factory->makeAnyModel($model)->destroy($id);
+        $record = 'App\Models\\'.$model;
+       $record::destroy($id);
         return \response('Data deleted', '200');
     }
 

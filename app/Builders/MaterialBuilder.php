@@ -50,62 +50,69 @@ class MaterialBuilder implements Builder
         $monthlySold = $this->material->sold()
             ->whereYear('date', $this->date['year'])
             ->whereMonth('date', $this->date['month'])
-//            ->where('isMaterial', 1)
+            ->where('isMaterial', 1)
             ->sum('qty');
-        $this->material->monthlyUsed = round($monthlySold, 2);
-        $usageNorms = $this->material->norma();
+        $this->material->monthlySold = round($monthlySold, 2);
+        $usageNorms = $this->material->norma()->get();
         $monthlyUsed = 0;
-        foreach ($usageNorms as $norma)
-        {
+        foreach ($usageNorms as $norma) {
             $monthlyUsed = $monthlyUsed + Produced::where('product_id', $norma->product_id)
                     ->whereYear('date', $this->date['year'])
                     ->whereMonth('date', $this->date['month'])
                     ->sum('qty') * $norma->norma;
         }
-        $this->material->monthlyUsed = $monthlyUsed;
+        $this->material->monthlyUsed = round($monthlyUsed, 2);
     }
 
     public function BuildDailyOut()
     {
-        $date = DateParser::Parse($this->date);
-        $dailySold = $this->product->sold()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
-//            ->where('isMaterial', 0)
+        $dailySold = $this->material->sold()
+            ->whereYear('date', $this->date['year'])
+            ->whereMonth('date', $this->date['month'])
+            ->where('isMaterial', 0)
             ->get(['id', 'date', 'qty']);
-        $this->product->dailySold = $dailySold;
+        $this->material->dailySold = $dailySold;
+        $produceActions = Produced::all()
+            ->whereYear('date', $this->date['year'])
+            ->whereMonth('date', $this->date['month'])
+            ->get();
+        $dayUsed = collect();
+        foreach ($produceActions as $produced) {
+            $norma = $this->material
+                ->norma()
+                ->where('product_id', $produced->product_id)
+                ->first()
+                ->norma;
+            $dayUsed->push(['date' => $produced->date, 'qty' => $produced->qty * $norma]);
+        }
+        $this->material->dailyUsed = $dayUsed;
     }
 
     public function BuildMonthlySpoil()
     {
-
-        $date = DateParser::Parse($this->date);
-        $monthlySpoiled = $this->product->Spoiled()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
-            ->sum('qty');
-        $this->product->monthlySpoiled = round($monthlySpoiled, 2);
+        $this->material->monthlySpoil = 'Not available';
     }
 
     public function BuildDailySpoil()
     {
-
-        $date = DateParser::Parse($this->date);
-        $dailySpoiled = $this->product->Spoiled()
-            ->whereYear('date', $date['year'])
-            ->whereMonth('date', $date['month'])
-            ->get(['id', 'date', 'qty']);
-//        dd($dailySpoiled);
-        $this->product->dailySpoiled = $dailySpoiled;
+        $this->material->dailySpoil = 'Not available';
     }
 
     public function BuildStock()
     {
-        $produced = $this->product->produced()->sum('qty');
-        $sold = $this->product->sold()->where('isMaterial', 0)->sum('qty');
-        $spoiled = $this->product->Spoiled()->sum('qty');
-        $inStock = $produced - $sold - $spoiled;
-        $this->product->stock = round($inStock, 2);
+        $income = $this->material->incomes()->sum('qty');
+
+        $usageNorms = $this->material->norma()->get();
+        $used = 0;
+        foreach ($usageNorms as $norma) {
+            $used = $used + Produced::where('product_id', $norma->product_id)
+                    ->sum('qty') * $norma->norma;
+        }
+
+        $sold = $this->material->sold()->where('isMaterial', 1)->sum('qty');
+
+        $inStock = $income - $sold - $used;
+        $this->material->stock = round($inStock, 2);
     }
 
     public function BuildProductWithMaterialNorms()
@@ -127,12 +134,12 @@ class MaterialBuilder implements Builder
 
     public function BuildProductWithUsedMaterials()
     {
-        $this->product->usedMaterials = 'Not available';
+        $this->material->usedMaterials = 'Not available';
     }
 
     public function reset(): void
     {
-        $this->product = new Material();
+        $this->material = new Material();
     }
 
     public function GetProduct()

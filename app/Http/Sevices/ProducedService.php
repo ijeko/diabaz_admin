@@ -4,6 +4,8 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\MaterialBuilder;
+use App\Builders\ProductBuilder;
 use App\Factories\ProducedFactory;
 use App\Models\Produced;
 use App\Models\Product;
@@ -40,17 +42,24 @@ class ProducedService extends Service
 
     public function save($data)
     {
-        $Factory = new ProducedFactory();
-        $item = $Factory->makeProduction(Produced::class, [
-            'user_id' => $data->user_id,
-            'product_id' => $data->product_id,
-            'date' => $data->date,
-            'qty' => $data->qty
-        ]);
-        $check = CheckerService::CheckMaterials($item);
+        $productBuilder = new ProductBuilder();
+
+
+        $productBuilder->InitiateExisting(Product::find($data['product_id']));
+        $productBuilder->BuildProductWithMaterialNorms();
+        $product = $productBuilder->GetProduct();
+
+//        $Factory = new ProducedFactory();
+//        $item = $Factory->makeProduction(Produced::class, [
+//            'user_id' => $data->user_id,
+//            'product_id' => $data->product_id,
+//            'date' => $data->date,
+//            'qty' => $data->qty
+//        ]);
+        $check = CheckerService::CheckMaterials($product, $data['qty']);
         if ($check)
             return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
-        else $item->save();
+//        else $item->save();
         return \response('Data saved', '200');
     }
 

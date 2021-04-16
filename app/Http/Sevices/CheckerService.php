@@ -4,26 +4,28 @@
 namespace App\Http\Sevices;
 
 
-use App\Models\Produced;
+use App\Builders\MaterialBuilder;
+use App\Models\Material;
 use App\Models\Product;
-use App\Models\Sold;
 use Illuminate\Database\Eloquent\Model;
 
 class CheckerService extends Service
 {
-    public static function CheckMaterials(Produced $produced)
+    public static function CheckMaterials(Product $product, $qty)
     {
-        $product = $produced->product()->first();
-        $norms = $product->materialNorm()->get();
-        $materials = collect(MaterialService::GetMaterialQty());
+        $materialBuilder = new MaterialBuilder();
         $materialsNotEnough = [];
-        foreach ($norms as $checking) {
-            if ($checking->norma * $produced->qty > $materials->firstWhere('id', $checking->material_id)['stock']) {
-
+        foreach ($product->materialsNorms as $checking) {
+            $materialBuilder->InitiateExisting(Material::find($checking['material_id']));
+            $materialBuilder->BuildStock();
+            $material=$materialBuilder->GetProduct();
+            $materialNeed = $checking['norma'] * $qty;
+            if ( $materialNeed > $material->stock) {
                 array_push($materialsNotEnough, [
-                    'material_id' => $checking->material_id,
-                    'title' => $materials->firstWhere('id', $checking->material_id)['title'],
-                    'qty' => ($materials->firstWhere('id', $checking->material_id)['stock'] - $checking->norma * $produced->qty) * -1
+                    'material_id' => $checking['material_id'],
+                    'title' => $material->title,
+                    'qty' => $materialNeed - $material->stock,
+                    'unit' => $material->unit
                 ]);
             }
         }

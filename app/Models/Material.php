@@ -34,12 +34,12 @@ class Material extends Model
 
     public function incomes()
     {
-        return $this->hasMany(MaterialIncome::class);
+        return $this->hasMany(MaterialIncome::class, 'material_id');
     }
 
     public function sold()
     {
-        return $this->hasMany(MaterialIncome::class, 'product_id')->where('isMaterial', 1);
+        return $this->hasMany(Sold::class, 'product_id')->where('isMaterial', 1);
     }
 
     public function getIncomeSumm()

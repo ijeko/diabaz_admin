@@ -55,50 +55,7 @@
     </div>
   </div>
 
-  <!--    <div class=" body
-          ">-->
-          <!--        <div @click="closePopup">&times;</div>-->
-          <!--        <div class="container">-->
-          <!--            <div class="mt-1">-->
-          <!--                <div class="text-center"><h3>Произведено:</h3></div>-->
-          <!--                <div v-if="message" class="alert alert-danger" role="alert">-->
-          <!--                    {{ message }}-->
-          <!--                </div>-->
-          <!--                <form class="" action="">-->
-          <!--                    <label for="date">Дата:</label>-->
-          <!--                    <input v-model="inputDate" type="date" class="form-control" id="date">-->
-          <!--                    <label for="product">Материал</label>-->
-          <!--                    <select v-model="selectedProduct" name="product" id="product" class="form-control">-->
-          <!--                        &lt;!&ndash;                        <option value="asd" disabled>Продукция</option>&ndash;&gt;-->
-          <!--                        <option-->
-          <!--                            :value="index"-->
-          <!--                            v-for="(product, index) in products"-->
-          <!--                        >{{ product.title }}-->
-          <!--                        </option>-->
-          <!--                    </select>-->
-          <!--                    <label for="qty">Количество, {{ products[selectedProduct].unit }}</label>-->
-          <!--                    <input v-model="qty" class="form-control" type="number" id="qty">-->
-          <!--                </form>-->
-          <!--            </div>-->
-          <!--            <input type="checkbox" id="jack" value="check" v-model="spoilCheck">-->
-          <!--            <label for="jack">Списать продукцию</label>-->
-          <!--            <div class="mt-3">-->
-          <!--                <button class="btn btn-outline-dark mt-30"-->
-          <!--                        v-if="!spoilCheck"-->
-          <!--                        @click="sendProduced">Добавить-->
-          <!--                </button>-->
-          <!--            </div>-->
-          <!--            <div class="mt-3">-->
-          <!--                <button class="btn btn-outline-dark mt-30"-->
-          <!--                        v-if="spoilCheck"-->
-          <!--                        @click="sendProduced">Списать-->
-          <!--                </button>-->
-          <!--            </div>-->
-          <!--            <div class="mt-3">-->
-          <!--                <button class="btn btn-outline-danger mt-30" @click="closePopup">Закрыть</button>-->
-          <!--            </div>-->
-          <!--        </div>-->
-          <!--    </div>-->
+
 </template>
 
 <script>

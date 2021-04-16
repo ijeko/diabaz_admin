@@ -1,31 +1,70 @@
 <template>
-    <div class="wrapper">
-<!--         обновление при смене даты (может через креатед-->
-        <div class="text-right" @click="closeIncomes">&times;</div>
-        <h3 class="text-center mb-4">Поступление материалов на дату</h3>
-        <input type="date" v-model="localDate" @input="showIncomesOnDate" class="form-control">
-        <div class="incomeItem" v-for="item in INCOMES"
-             :key="item.id"
-        >
-            <div class="normTitle"> {{item.title }}</div>
-            <div class="normValue">{{ item.qty }} {{ item.unit }}</div>
-            <div class="del" @click="remove(item.id)">&times;</div>
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Поступление материалов за {{ FORMATED_DATE.ofMonth }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="list-group">
+                        <div  class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                            <span class="w-25 text-center">Материал</span>
+                            <span class="w-25 text-center">Количество</span>
+                        </div>
+                    </div>
+                    <div class="list-group overflow-auto mat">
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                           v-for="(material, index) in INCOMES"
+                           :key="index"
+                        >
+                            <span class="w-25 text-left">{{material.title}}</span>
+                            <span class="w-25 text-center">{{ material.monthlyIncome }} {{ material.unit }}</span>
+                        </a>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="modal-footer">
+<!--                    <button type="button" class="btn btn-primary" @click="sendMotohour" data-dismiss="modal">Сохранить</button>-->
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closePopup">Закрыть</button>-->
+                </div>
+            </div>
         </div>
-        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="showAddForm">
-            Новое поступление
-        </button>
-        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeIncomes">Закрыть</button>
-        <add-income-form v-if="isAddIncomesVisible"
-                         @closeAddForm="closeAddForm"
-                         @update="showIncomesOnDate"
-                         :user="user"
-        ></add-income-form>
     </div>
+<!--    <div class="wrapper">-->
+<!--        <div class="text-right" @click="closeIncomes">&times;</div>-->
+<!--        <h3 class="text-center mb-4">Поступление материалов на дату</h3>-->
+<!--        <input type="date" v-model="localDate" @input="showIncomesOnDate" class="form-control">-->
+<!--        <div class="incomeItem" v-for="item in INCOMES"-->
+<!--             :key="item.id"-->
+<!--        >-->
+<!--            <div class="normTitle"> {{item.title }}</div>-->
+<!--            <div class="normValue">{{ item.qty }} {{ item.unit }}</div>-->
+<!--            <div class="del" @click="remove(item.id)">&times;</div>-->
+<!--        </div>-->
+<!--        <button class="btn btn-outline-success mt-4" style="width: 100%" @click="showAddForm">-->
+<!--            Новое поступление-->
+<!--        </button>-->
+<!--        <button class="btn btn-outline-danger mt-2" style="width: 100%" @click="closeIncomes">Закрыть</button>-->
+<!--        <add-income-form v-if="isAddIncomesVisible"-->
+<!--                         @closeAddForm="closeAddForm"-->
+<!--                         @update="showIncomesOnDate"-->
+<!--                         :user="user"-->
+<!--        ></add-income-form>-->
+<!--    </div>-->
 
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AddIncomeForm from "./AddIncomeForm";
 
 export default {
@@ -47,8 +86,8 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'INCOMES',
-            'MATERIALS'
+            'FORMATED_DATE',
+            'INCOMES'
         ]),
 
 
@@ -57,6 +96,7 @@ export default {
         ...mapActions([
             'GET_INCOMES'
         ]),
+
         closeIncomes() {
             this.$emit('closeIncomes')
         },
@@ -67,7 +107,7 @@ export default {
             this.isAddIncomesVisible = false
         },
         showIncomesOnDate() {
-            this.GET_INCOMES({date: this.localDate})
+            this.GET_INCOMES()
         },
         materialById(id)
         {
@@ -93,52 +133,16 @@ export default {
                     // handle error
                     console.log(error);
                 })
-            this.GET_INCOMES({date: this.localDate})
+            this.GET_INCOMES()
         }
     },
     mounted() {
-        this.GET_INCOMES({date: this.localDate})
-    }
+    },
 }
 </script>
 
 <style scoped>
-.wrapper {
-    width: 500px;
-    height: auto;
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    z-index: 1;
-    background-color: white;
-    border: 2px solid black;
-    padding: 10px;
-}
-
-.incomeItem {
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px dotted silver;
-}
-.del {
-    background-color: rosybrown;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    color: white;
-    text-align: center;
-    /*font-size: 18px;*/
-    vertical-align: middle;
-}
-.del:hover {
-    background-color: red;
-    cursor: pointer;
-}
-.normTitle, .normValue {
-    width: 45%;
-}
-.normValue {
-    text-align: right;
+.mat {
+    height: 500px;
 }
 </style>

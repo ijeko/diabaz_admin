@@ -28,5 +28,4 @@ class BuilderManager
         $this->builder->BuildDailySpoil();
         $this->builder->BuildDailyOut();
     }
-
 }
