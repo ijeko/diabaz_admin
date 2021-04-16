@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Поступление материалов за {{ FORMATED_DATE.ofMonth }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeIncomes" >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -65,11 +65,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import AddIncomeForm from "./AddIncomeForm";
 
 export default {
     name: "Incomes",
-    components: {AddIncomeForm},
     data() {
         return {
             isAddIncomesVisible: false,
@@ -137,6 +135,7 @@ export default {
         }
     },
     mounted() {
+      this.GET_INCOMES()
     },
 }
 </script>
