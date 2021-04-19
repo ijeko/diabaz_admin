@@ -33,7 +33,6 @@ Vue.component('motor-component', require('./components/MotorComponent.vue').defa
 Vue.component('production-component', require('./components/ProductionComponent.vue').default);
 Vue.component('enter-produced', require('./components/popup/addProduction.vue').default);
 Vue.component('enter-sold', require('./components/popup/addSold.vue').default);
-Vue.component('show-norm-norm', require('./components/popup/ShowNorm.vue').default);
 Vue.component('show-incomes', require('./components/popup/ShowIncomes.vue').default);
 Vue.component('add-incomes', require('./components/popup/AddIncomeForm.vue').default);
 Vue.component('enter-motohour', require('./components/popup/addMotohours.vue').default);

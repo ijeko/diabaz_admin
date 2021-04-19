@@ -9,18 +9,12 @@ class MaterialIncome extends Model
 {
     use HasFactory;
 
-    private $year;
-    public function __construct(array $attributes = [])
+    protected $fillable = ['date', 'material_id', 'qty', 'user_id'];
+
+
+    public function material()
     {
-        parent::__construct($attributes);
-        $this->year = \Carbon\Carbon::now()->format('y');
+        return $this->belongsTo(Material::class, 'material_id');
     }
 
-    public function getMonthlyIncomeSumm($month)
-    {
-        $summ = $this->whereYear('date', $this->year)
-            ->whereMonth('date', $month)
-            ->sum('qty');
-        return $summ;
-    }
 }

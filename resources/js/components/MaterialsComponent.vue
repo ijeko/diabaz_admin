@@ -1,6 +1,7 @@
 <template>
   <div class="card">
-    <div class="card-header">{{stockIncomesText.title}} <span v-if="!stockIncomes">{{FORMATED_DATE.ofMonth}} {{FORMATED_DATE.year}}</span></div>
+    <div class="card-header">{{ stockIncomesText.title }} <span
+        v-if="!stockIncomes">{{ FORMATED_DATE.ofMonth }} {{ FORMATED_DATE.year }}</span></div>
     <div v-if="stockIncomes" class="card-body">
       <div class="list-group">
         <div class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
@@ -34,19 +35,26 @@
         </a>
       </div>
     </div>
-    <button type="button"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#staticBackdrop"
-            @click="stockIncomeSwitcher()"
-    >{{stockIncomesText.button}}
-    </button>
-    <!--        <show-incomes v-if="isIncomesVisible"-->
-    <!--                      @closeIncomes="closeIncomes"-->
-    <!--                      :date="date"-->
-    <!--                      :user="user"-->
-    <!--                      :key="this.DATE"-->
-    <!--        ></show-incomes>-->
+    <div class="btn-group-vertical" role="group" aria-label="Basic example">
+      <button type="button"
+              class="btn btn-outline-primary"
+              @click="stockIncomeSwitcher()"
+      >{{ stockIncomesText.button }}
+      </button>
+      <button type="button"
+              class="btn btn-outline-primary"
+              data-toggle="modal"
+              data-target="#staticBackdrop"
+              @click=""
+      >Добавить поступление
+      </button>
+    </div>
+    <add-incomes v-if="showAddIncome"
+                 @closeIncomes="showHideAddIncome"
+                 :date="date"
+                 :user="user"
+                 @update="update"
+    ></add-incomes>
     <component-loader v-if="isLoading"
 
     ></component-loader>
@@ -72,6 +80,7 @@ export default {
     return {
       materials: [],
       stockIncomes: true,
+      showAddIncome: true,
       // date: new Date(),
       isShowNormVisible: false,
       isIncomesVisible: false,
@@ -80,7 +89,7 @@ export default {
     }
   },
   watch: {
-    DATE(newDATE, oldDATE){
+    DATE(newDATE, oldDATE) {
       this.GET_INCOMES()
     }
   },
@@ -110,24 +119,20 @@ export default {
       'GET_MATERIALS',
       'GET_INCOMES'
     ]),
-    showShowNorm() {
-      return this.isShowNormVisible = true
-    },
-    closeShowNorm() {
-      return this.isShowNormVisible = false
+    showHideAddIncome() {
+      this.showAddIncome = this.showAddIncome !== true;
     },
     stockIncomeSwitcher() {
       this.stockIncomes = this.stockIncomes !== true;
-    },
-    closeIncomes() {
-      this.GET_MATERIALS()
-      return this.isIncomesVisible = false
     },
     loading(bool) {
       this.isLoading = bool === true;
     },
     hide() {
       this.isLoading = false
+    },
+    update() {
+      this.GET_MATERIALS()
     }
   },
 }
