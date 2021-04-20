@@ -28,4 +28,12 @@ class BuilderManager
         $this->builder->BuildDailySpoil();
         $this->builder->BuildDailyOut();
     }
+
+    public function MakeProductForMonthlyProductionReport($product)
+    {
+        $this->builder->InitiateExisting($product);
+        $this->builder->BuildDailyIn();
+        $this->builder->BuildMonthlyIn();
+        $this->builder->BuildMonthlySpoil();
+    }
 }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CheckerService extends Service
 {
-    public static function CheckMaterials(Product $product, $qty)
+    public static function CheckMaterialsForProduction(Product $product, $qty)
     {
         $materialBuilder = new MaterialBuilder();
         $materialsNotEnough = [];
@@ -36,10 +36,9 @@ class CheckerService extends Service
 
     }
 
-    public static function CheckProductionStock(Model $toCheck)
+    public static function CheckProductionStock(Model $toCheck, Model $production)
     {
-        $product = $toCheck->product()->first();
-        if ($toCheck->qty >= $product->inStock())
+        if ($toCheck->qty > $production->stock)
             return false;
         else
             return true;

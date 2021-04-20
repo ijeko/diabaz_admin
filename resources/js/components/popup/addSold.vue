@@ -1,51 +1,69 @@
 <template>
-    <div class="body">
-        <div @click="closeSold">&times;</div>
-        <div class="container">
-            <div class="mt-1">
-                <div class="text-center"><h3>Отгружено:</h3></div>
-                <div v-if="message" class="alert alert-danger" role="alert">
-                    {{ message }}
+    <div class="modal fade" id="sold" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Ввод отгруженной продкции</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div v-if="message" class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
                 </div>
-                <form class="" action="">
-                    <label for="date">Дата:</label>
-                    <input v-model="inputDate" type="date" class="form-control" id="date">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                               value="product"
-                               v-model="productionType"
-                               checked>
-                        <label class="form-check-label" for="exampleRadios1">
-                            Продукция
-                        </label>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="date">Дата:</label>
+                        <input v-model="inputDate" type="date" class="form-control" id="date">
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
-                               value="material"
-                               v-model="productionType">
-                        <label class="form-check-label" for="exampleRadios2">
-                            Материалы
-                        </label>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                                   value="0"
+                                   v-model="isMaterial"
+                                   checked>
+                            <label class="form-check-label" for="exampleRadios1">
+                                Продукция
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                                   value="1"
+                                   v-model="isMaterial">
+                            <label class="form-check-label" for="exampleRadios2">
+                                Материалы
+                            </label>
+                        </div>
                     </div>
-                    <select  v-model="selectedProduct" name="product" id="product" class="form-control">
-<!--                        <option value="asd" disabled>Продукция</option>-->
-                        <option
-                            :value="index"
-                            v-for="(product, index) in selectProduction"
-                           >{{product.title}}</option>
-                    </select>
-                    <label for="qty">Количество, {{selectProduction[selectedProduct].unit}}</label>
-                    <input v-model="qty" class="form-control" type="number" id="qty">
-                    <label for="soldTo">Кому:</label>
-                    <input v-model="soldTo" class="form-control" type="text" id="soldTo">
-                </form>
-            </div>
-
-            <div class="mt-3">
-                <button class="btn btn-outline-dark mt-30" @click="sendSold">Сохранить</button>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-outline-danger mt-30" @click="closeSold">Закрыть</button>
+                    <div class="form-group">
+                        <label for="product">Отгружаемая продукция:</label>
+                        <select v-model="toSold" name="product" id="product" class="form-control">
+                            <option value="" disabled>...</option>
+                            <option
+                                :value="product"
+                                v-for="(product, index) in selectProduction"
+                            >{{ product.title }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="qty">Количество, {{ toSold.unit }}</label>
+                        <input v-model="qty" class="form-control" type="number" id="qty">
+                    </div>
+                    <div class="form-group">
+                        <label for="soldTo">Кому:</label>
+                        <input v-model="soldTo" class="form-control" type="text" id="soldTo">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                            @click="sendSold"
+                            data-dismiss="modal"
+                            :disabled="!isSelectedAndNoZero"
+                    >Сохранить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
             </div>
         </div>
     </div>
@@ -53,65 +71,62 @@
 
 <script>
 import {mapGetters} from 'vuex'
+
 export default {
     name: "popup",
     props: {
-        // products: {
-        //     type: Array,
-        //     default: [],
-        // },
         user: {}
 
     },
     methods: {
-        closeSold () {
+        closeSold() {
             this.$emit('closeSold')
         },
-        sendSold () {
+        sendSold() {
             if (this.qty <= 0) {
                 this.message = 'Количество должно быть больше 0'
                 return false
             }
-            var data = {product_id: this.selectProduction[this.selectedProduct].id,
+            var data = {
+                product_id: this.toSold.id,
                 qty: this.qty,
                 date: this.inputDate,
                 user_id: this.user.id,
                 soldTo: this.soldTo,
-                model: this.productionType}
+                isMaterial: this.isMaterial
+            }
             this.$emit('sendSold', data)
             this.closeSold()
         },
 
     },
     computed: {
-      ...mapGetters([
-          'PRODUCTS',
-          'MATERIALS'
-      ]),
-        selectProduction ()
-        {
-            if (this.productionType === 'product') {
+        ...mapGetters([
+            'PRODUCTS',
+            'MATERIALS'
+        ]),
+        selectProduction() {
+            if (this.isMaterial === '0') {
                 return this.PRODUCTS
             }
-            if (this.productionType === 'material') {
+            if (this.isMaterial === '1') {
                 return this.MATERIALS
             }
+        },
+        isSelectedAndNoZero() {
+            return !!(this.toSold && this.qty > 0);
         }
     },
-    data () {
+    data() {
         return {
-            production: this.selectProduction,
             qty: 0,
             soldTo: '',
-            selectedProduct: 0,
-            inputDate: new Date().toISOString().slice(0,10),
+            toSold: {},
+            inputDate: new Date().toISOString().slice(0, 10),
             message: '',
-            productionType: 'product'
+            isMaterial: '0'
         }
     },
-    beforeMount() {
-        this.production = this.PRODUCTS
-    }
 }
 </script>
 
@@ -127,6 +142,7 @@ export default {
     z-index: 1;
     border-radius: 5px;
 }
+
 .btn {
     width: 100%;
 }

@@ -4,34 +4,38 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\BuilderManager;
+use App\Builders\ProductBuilder;
+use App\Models\Product;
+
 class ReportsService extends Service
 {
-    public function MonthlyProductionReport($targetMonth, $targetYear, $daysCount, $products)
+    public function MonthlyProductionReport()
     {
+        $builder = new ProductBuilder();
+        $manager = new BuilderManager();
+        $manager->SetBuilder($builder);
 
-        $dayProductionReport = [];
-        foreach ($products->all() as $product) {
-            $daily = [];
-            $monthly = $product->produced()
-                ->whereYear('date', $targetYear)
-                ->whereMonth('date', $targetMonth)
-                ->sum('qty');
-            for ($day = 1; $daysCount >= $day; $day++) {
-                array_push($daily, $product->produced()
-                    ->whereYear('date', $targetYear)
-                    ->whereMonth('date', $targetMonth)
-                    ->whereDay('date', $day)->sum('qty'),
-                );
-            }
-            array_push($dayProductionReport, [
-                'id' => $product->id,
-                'title' => $product->title,
-                'unit' => $product->unit,
-                'daily' => $daily,
-                'monthly' => $monthly,
-            ]);
+        $monthlyProductionReport = collect();
+        foreach (Product::all() as $product) {
+            $manager->MakeProductForMonthlyProductionReport($product);
+            $monthlyProductionReport->push($product);
+
+//            $daily = [];
+//            $monthly = $product->produced()
+//                ->whereYear('date', $targetYear)
+//                ->whereMonth('date', $targetMonth)
+//                ->sum('qty');
+//            array_push($dayProductionReport, [
+//                'id' => $product->id,
+//                'title' => $product->title,
+//                'unit' => $product->unit,
+//                'daily' => $daily,
+//                'monthly' => $monthly,
+//            ]);
         }
-        return $dayProductionReport;
+//        dd($monthlyProductionReport);
+        return $monthlyProductionReport;
     }
 
     public function MonthlyUploadReport($targetMonth, $targetYear, $upload)

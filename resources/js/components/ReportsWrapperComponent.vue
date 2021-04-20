@@ -1,11 +1,10 @@
 <template>
     <div class="test">
-        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control" disabled></div>
+<!--        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control" disabled></div>-->
+        <month-selector-component></month-selector-component>
         <div class="row justify-content-between">
             <div class="col-md-2">
-                <div
-                    class="mt-4"
-                >
+                <div class="mt-4">
                     <div class="btn-group dropright">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -57,12 +56,10 @@
             </div>
             <div class="col-md-10">
                 <router-view
-                    :commonDate="date"
-                    :dateFormated="dateFormated"
-                    @setDate="setDate"
+                    :commonDate="DATE"
+                    :dateFormated="FORMATED_DATE"
                 ></router-view>
             </div>
-
         </div>
     </div>
 </template>
@@ -70,6 +67,7 @@
 <script>
 import AdminMaterials from "./admin/materials";
 import AdminMachines from "./admin/machines";
+import {mapGetters} from 'vuex'
 
 export default {
     name: "AdminWrapperComponent",
@@ -86,21 +84,25 @@ export default {
 
     },
     computed: {
-        dateFormated() {
-            const dateSplit = this.date.split('-')
-            const day = dateSplit[2]
-            const mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
-            const ofMnths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
-            const month = mnths[parseInt(dateSplit[1]) - 1]
-            const ofMonth = ofMnths[parseInt(dateSplit[1]) - 1]
-            const year = dateSplit[0]
-            return {day: day, month: month, ofMonth: ofMonth, year: year}
-        }
+        ...mapGetters([
+            'DATE',
+            'FORMATED_DATE'
+        ])
+        // dateFormated() {
+        //     const dateSplit = this.date.split('-')
+        //     const day = dateSplit[2]
+        //     const mnths = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+        //     const ofMnths = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
+        //     const month = mnths[parseInt(dateSplit[1]) - 1]
+        //     const ofMonth = ofMnths[parseInt(dateSplit[1]) - 1]
+        //     const year = dateSplit[0]
+        //     return {day: day, month: month, ofMonth: ofMonth, year: year}
+        // }
     },
     methods: {
-        setDate(newDate) {
-            this.date = newDate
-        }
+        // setDate(newDate) {
+        //     this.date = newDate
+        // }
 
     }
 }

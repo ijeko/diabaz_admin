@@ -48,12 +48,13 @@ class MaterialsController extends Controller
         return $this->materialService->GetMonthlyMaterialIncome();
     }
 
-    public function GetMaterialIncomesPerMonth(Request $request)
-    {
-        $material = $request->id;
-        $date = $request->date;
-        return $this->materialService->IncomesPerMonthOf($material, $date);
-    }
+    //TODO Удалить метод если не используется
+//    public function GetMaterialIncomesPerMonth(Request $request)
+//    {
+//        $material = $request->id;
+//        $date = $request->date;
+//        return $this->materialService->IncomesPerMonthOf($material, $date);
+//    }
 
     public function AddNewMaterialIncome(Request $request)
     {

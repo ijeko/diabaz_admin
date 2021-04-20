@@ -7,7 +7,6 @@ namespace App\Builders;
 use App\Http\Sevices\DateParser;
 use App\Models\Material;
 use App\Models\Produced;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class MaterialBuilder implements Builder
@@ -88,16 +87,6 @@ class MaterialBuilder implements Builder
         $this->material->dailyUsed = $dayUsed;
     }
 
-    public function BuildMonthlySpoil()
-    {
-        $this->material->monthlySpoil = 'Not available';
-    }
-
-    public function BuildDailySpoil()
-    {
-        $this->material->dailySpoil = 'Not available';
-    }
-
     public function BuildStock()
     {
         $income = $this->material->incomes()->sum('qty');
@@ -115,26 +104,15 @@ class MaterialBuilder implements Builder
         $this->material->stock = round($inStock, 2);
     }
 
-    public function BuildProductWithMaterialNorms()
+    public function BuildDailySpoil()
     {
-        $usedMaterials = $this->product->materialNorm();
-        $materialsAndNorms = collect();
-        foreach ($usedMaterials->get() as $usedMaterial) {
-            $materialsAndNorms->push([
-                'id' => $usedMaterial->id,
-                'title' => $usedMaterial->material()->first()->title,
-                'product_id' => $this->product->id,
-                'material_id' => $usedMaterial->material()->first()->id,
-                'norma' => $usedMaterial->norma,
-                'unit' => $usedMaterial->material()->first()->unit
-            ]);
-        }
-        $this->product->materialsNorms = $materialsAndNorms;
+        // TODO: Implement BuildMonthlySpoil() method.
+
     }
 
-    public function BuildProductWithUsedMaterials()
+    public function BuildMonthlySpoil()
     {
-        $this->material->usedMaterials = 'Not available';
+        // TODO: Implement BuildMonthlySpoil() method.
     }
 
     public function reset(): void

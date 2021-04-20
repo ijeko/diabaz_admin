@@ -4,20 +4,34 @@
 namespace App\Http\Sevices;
 
 
+use App\Builders\MaterialBuilder;
+use App\Builders\ProductBuilder;
 use App\Factories\SoldFactory;
+use App\Models\Material;
+use App\Models\Product;
 use App\Models\Sold;
-use Illuminate\Database\Eloquent\Model;
 
 class SoldService extends Service
 {
-
-    public function AddSold(Model $model, $data)
+    public function AddSold($production)
     {
-        $Factory = new SoldFactory();
-        $sold = $Factory->make(Sold::class, $data);
-        $sold->isMaterial = $model->isMaterial;
-        if (CheckerService::CheckProductionStock($sold)) $sold->save();
-        else   return \response(['error' => 'Не хватает: ' . $model->title]);
+        if ($production['isMaterial']) {
+            $builder = new MaterialBuilder();
+            $object = Material::find($production['product_id']);
+        } else {
+            $builder = new ProductBuilder();
+            $object = Product::find($production['product_id']);
+        }
+
+        $sold = new Sold();
+        $sold->fill($production);
+
+        $builder->InitiateExisting($object);
+        $builder->BuildStock();
+        $soldProduction = $builder->GetProduct();
+        if (CheckerService::CheckProductionStock($sold, $soldProduction))
+            Sold::create($production);
+        else   return \response(['error' => 'Не хватает: ' . $soldProduction->title]);
     }
 
     public function GetPerMonth($date, $id)

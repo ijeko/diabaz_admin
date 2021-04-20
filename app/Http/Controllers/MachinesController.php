@@ -36,7 +36,6 @@ class MachinesController extends Controller
         return $this->machineService->SaveMachineWith($newAttributes);
     }
 
-
     public function Remove(Request $request)
     {
         $machine = $request->data;

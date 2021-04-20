@@ -42,7 +42,7 @@ Route::middleware(['apiAccess:admin|office'])->group(function () {
     Route::post('/machines/admin', [App\Http\Controllers\MachinesController::class, 'AddNewMachine']);
     Route::post('/incomes/add', [App\Http\Controllers\MaterialsController::class, 'AddNewMaterialIncome']);
     Route::get('/admin/users', [App\Http\Controllers\UserController::class, 'GetList']);
-    Route::post('/products/sold', [App\Http\Controllers\SoldController::class, 'AddSold']);
+    Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
 });
 
 Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
@@ -54,7 +54,7 @@ Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'GetMaterialsNormsForProduct']);
     Route::post('/motohours', [App\Http\Controllers\MachinesController::class, 'AddUsage']);
     Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetMonthlyMaterialIncome']);
-    Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyReport']);
+    Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyProductionReport']);
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
     Route::get('/workdate', function (Request $request) {
         session(['currentDate' => $request->currentDate]);

@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function __construct()
-    {
-        $this->reports = new ReportsService();
-        $this->material = new Material();
+    protected $reportsService;
 
+    public function __construct(ReportsService $reportsService)
+    {
+        $this->reportsService = $reportsService;
     }
 
     public function index()
@@ -22,16 +22,16 @@ class ReportsController extends Controller
         return view('reports');
     }
 
-    public function MonthlyReport(Request $request)
+    public function MonthlyProductionReport()
     {
-        $time = strtotime($request->date);
-        $targetMonth = date('m', $time);
-        $targetYear = date('Y', $time);
-        $daysCount = $request->days;
-        return $this->reports->MonthlyProductionReport($targetMonth, $targetYear, $daysCount, new Product());
+//        $time = strtotime($request->date);
+//        $targetMonth = date('m', $time);
+//        $targetYear = date('Y', $time);
+//        $daysCount = $request->days;
+        return $this->reportsService->MonthlyProductionReport();
     }
 
-    public function UploadReport(Request $request)
+    public function MonthlyUploadReport(Request $request)
     {
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);

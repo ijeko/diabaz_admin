@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface Builder
 {
-    public  function InitiateExisting (Model $object);
+    public function InitiateExisting (Model $object);
 
     public function BuildMonthlyIn ();
 
@@ -22,11 +22,8 @@ interface Builder
 
     public function BuildDailySpoil ();
 
-    public function BuildProductWithMaterialNorms ();
-
-    public function BuildProductWithUsedMaterials();
-
-
     public function BuildStock ();
+
+    public function GetProduct();
 
 }

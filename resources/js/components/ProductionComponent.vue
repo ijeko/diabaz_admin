@@ -37,7 +37,6 @@
     <enter-produced
         v-if="isEnterVisible"
         class="popup"
-        :products="PRODUCTS"
         :user="user"
         @closePopup="closePopup"
         @sendProduced="sendProduced"
@@ -46,7 +45,6 @@
     <enter-sold
         v-if="isSoldVisible"
         class="popup"
-        :products="PRODUCTS"
         :user="user"
         @closeSold="closeSold"
         @sendSold="sendSold"
@@ -60,6 +58,8 @@
       >Добавить производство</button>
       <button v-if="user.role != 'gorny'"
               class="btn btn-outline-primary"
+              data-toggle="modal"
+              data-target="#sold"
               @click="showSold"
       >Добавить отгрузку</button>
     </div>

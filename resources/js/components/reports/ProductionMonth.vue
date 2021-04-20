@@ -1,24 +1,9 @@
 <template>
     <div>
         <div class="card mt-4">
-            {{localDate}}1
             <div class="card-header">
                 <!--            {{ Date.parse(localDate) }}-->
-                Произведено продукции за месяц:
-                <div class="btn-group mr-2" role="group" aria-label="Second group">
-                    <button type="button" class="btn btn-secondary"
-                            @click="decreaseMonth"
-                    > <
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary monthBtn"
-                            @click="resetMonth"
-                    >{{ dateFormated.ofMonth }}
-                    </button>
-                    <button type="button" class="btn btn-secondary"
-                            @click="increaseMonth"
-                    > >
-                    </button>
-                </div>
+                Произведено продукции за {{dateFormated.ofMonth}} {{dateFormated.year}}
             </div>
             <div class="card-body">
                 <component-loader v-if="isLoading"></component-loader>
@@ -38,17 +23,18 @@
                         <tbody>
                         <tr v-for="(product, index) in reportData"
                             :key="index"
-                            v-if="product.daily.reduce(function(sum, elem) {
-                                                return sum + elem
-                                                 }, 0)>0">
+                        >
+<!--                            v-if="product.dailyProduction.qty.reduce(function(sum, elem) {-->
+<!--                            return sum + elem-->
+<!--                            }, 0)>0"-->
                             <td class="title">
                                 {{ product.title }} ({{ product.unit }})
                             </td>
                             <td class="cells"
-                                v-for="(dayProduced, index) in product.daily"
+                                v-for="(dayProduced, index) in product.dailyProduction"
                                 :key="index"
                                 :class="{ 'bg-success produced': dayProduced, 'text-secondary': !dayProduced }"
-                            >{{ dayProduced }}
+                            >{{ dayProduced.qty }}
                             </td>
                         </tr>
                         </tbody>
@@ -67,16 +53,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(product, index) in reportData"
+                    <tr v-for="(product, index) of reportData"
                         :key="index"
-                        v-if="product.daily.reduce(function(sum, elem) {
-                                            return sum + elem
-                                            }, 0)>0">
+                    v-if="product.monthlyProduction">
                         <td class="title">
                             {{ product.title }}
                         </td>
                         <td>
-                            {{ product.monthly }} {{ product.unit }}
+                            {{ product.monthlyProduction }} {{ product.unit }}
                         </td>
                     </tr>
                     </tbody>
@@ -101,37 +85,17 @@ export default {
     },
     props: {
         commonDate: '',
-        dateFormated: ''
+        dateFormated: {}
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS'
         ]),
         isWeekend (day) {
-            let currentDate = new Date(Date.parse(this.localDate))
+            let currentDate = new Date(Date.parse(this.commonDate))
             currentDate.setDate(day);
-            var isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
+            let isWeekend = (currentDate.getDay() === 6) || (currentDate.getDay() === 0);    // 6 = Saturday, 0 = Sunday
             return isWeekend
-        },
-        decreaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        increaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        resetMonth() {
-            this.localDate = new Date().toISOString().slice(0, 10)
-            this.$emit('setDate', this.localDate)
         },
         daysInMonth() {
             let date = new Date(Date.parse(this.localDate))
@@ -141,10 +105,9 @@ export default {
         },
         getReport() {
             this.isLoading = true
-            let data = {date: this.localDate, days: this.daysInMonth()}
             axios.get('/api/reports/monthly', {
                 headers: {'Content-Type': 'application/json'},
-                params: data
+                // params: data
             })
                 .then(response => {
                     this.reportData = response.data
@@ -159,18 +122,18 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS'
+            'PRODUCTS',
         ]),
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
-        localDate: function (newLocalDate, oldCLocalDate) {
+        commonDate: function (newLocalDate, oldCLocalDate) {
             this.getReport()
         }
     },
     mounted() {
         this.getReport()
-        this.isWeekend
+        this.isWeekend()
     }
 }
 </script>

@@ -4,11 +4,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Builders\MaterialBuilder;
 use App\Http\Sevices\ProducedService;
-use App\Models\Material;
 use App\Models\Produced;
-use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 
 

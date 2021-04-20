@@ -17,15 +17,15 @@
             <label for="product">Продукция</label>
             <select v-model="selectedProduct" name="product" id="product" class="form-control">
               <option
-                  :value="index"
-                  v-for="(product, index) in products"
+                  v-for="(product, index) in PRODUCTS"
+                  :value="product"
               >{{ product.title }}
               </option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="qty">Количество, {{ products[selectedProduct].unit }}</label>
+            <label for="qty">Количество, {{ selectedProduct.unit }}</label>
             <input v-model="qty" class="form-control" type="number" id="qty">
           </div>
           <div class="form-group">
@@ -42,11 +42,13 @@
                   v-if="!spoilCheck"
                   @click="sendProduced"
                   data-dismiss="modal"
+                  :disabled="!isSelectedAndNoZero"
             >Добавить</button>
           <button type="button" class="btn btn-primary"
                   v-else
                   @click="sendProduced"
                   data-dismiss="modal"
+                  :disabled="!isSelectedAndNoZero"
           >Списать</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 
@@ -59,16 +61,11 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: "popup",
   props: {
-    products: {
-      type: Array,
-      default: [],
-    },
     user: {}
-
   },
   methods: {
     closePopup() {
@@ -80,7 +77,7 @@ export default {
         return false
       }
       var data = {
-        product_id: this.products[this.selectedProduct].id,
+        product_id: this.selectedProduct.id,
         qty: this.qty,
         date: this.inputDate,
         user_id: this.user.id
@@ -91,10 +88,18 @@ export default {
         this.$emit('sendProduced', data)
     }
   },
+    computed: {
+      ...mapGetters([
+          'PRODUCTS'
+      ]),
+        isSelectedAndNoZero() {
+            return !!(this.selectedProduct && this.qty > 0);
+        }
+    },
   data() {
     return {
       qty: 0,
-      selectedProduct: 0,
+      selectedProduct: {},
       inputDate: new Date().toISOString().slice(0, 10),
       message: '',
       spoilCheck: ''

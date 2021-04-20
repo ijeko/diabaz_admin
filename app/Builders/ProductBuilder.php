@@ -85,7 +85,6 @@ class ProductBuilder implements Builder
             ->whereYear('date', $date['year'])
             ->whereMonth('date', $date['month'])
             ->get(['id', 'date', 'qty']);
-//        dd($dailySpoiled);
         $this->product->dailySpoiled = $dailySpoiled;
     }
 
@@ -115,10 +114,11 @@ class ProductBuilder implements Builder
         $this->product->materialsNorms = $materialsAndNorms;
     }
 
-    public function BuildProductWithUsedMaterials()
-    {
-        $this->product->usedMaterials = 'Not available';
-    }
+    //TODO Добавить метод создания обхекта продукта с используемыми материалами (на единицу продукции)
+//    public function BuildProductWithUsedMaterials()
+//    {
+//
+//    }
 
     public function reset(): void
     {

@@ -56,7 +56,7 @@ class ProducedService extends Service
 //            'date' => $data->date,
 //            'qty' => $data->qty
 //        ]);
-        $check = CheckerService::CheckMaterials($product, $data['qty']);
+        $check = CheckerService::CheckMaterialsForProduction($product, $data['qty']);
         if ($check)
             return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
 //        else $item->save();

@@ -74,12 +74,17 @@ class ProductService extends Service
 
     public function AddSpoiled($attributes)
     {
-        $Factory = new ModelFactory();
-        $spoiled = $Factory->make(Spoiled::class, $attributes);
-        if (CheckerService::CheckProductionStock($spoiled)) {
+        $spoiled = new Spoiled();
+        $spoiled->fill($attributes);
+
+        $builder = new ProductBuilder();
+        $builder->InitiateExisting(Product::find($attributes['product_id']));
+        $builder->BuildStock();
+        $production = $builder->GetProduct();
+        if (CheckerService::CheckProductionStock($spoiled, $production)) {
             $spoiled->save();
         } else
-            return \response(['error' => 'Не хватает: ' . $spoiled->title]);
+            return \response(['error' => 'Не хватает: ' . $production->title]);
     }
 
     public function GetProducedSoldSpoiled($product)

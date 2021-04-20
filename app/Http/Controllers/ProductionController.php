@@ -4,10 +4,10 @@
 namespace App\Http\Controllers;
 
 
-use App\Factories\Factory;
-use App\Factories\ModelFactory;
 use App\Factories\ProductFactory;
+use App\Http\Sevices\ProducedService;
 use App\Http\Sevices\ProductService;
+use App\Http\Sevices\SoldService;
 use App\Models\Materialnorm;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -20,10 +20,18 @@ class ProductionController extends Controller
      */
     private $factory;
     private $product;
+    private $soldService;
+    private $procucedService;
 
-    public function __construct(ProductService $productService, Product $product, ProductFactory $productFactory)
+    public function __construct(ProductService $productService,
+                                Product $product,
+                                ProductFactory $productFactory,
+                                SoldService $soldService,
+                                ProducedService $producedService)
     {
         $this->productService = $productService;
+        $this->soldService = $soldService;
+        $this->procucedService = $producedService;
         $this->product = $product;
         $this->factory = $productFactory;
     }
@@ -77,9 +85,24 @@ class ProductionController extends Controller
         return $this->productService->AddSpoiled($product);
     }
 
-    public function GetProductForAdminDashboard (Request $request)
+    public function AddProduced(Request $request)
+    {
+        // TODO Исправить метод проверки количества материалов для работы с билдерами.
+        $data = $request->data;
+        return $this->procucedService->save($data);
+    }
+
+    public function AddSold(Request $request)
+    {
+        $production = json_decode($request->data, 1);
+        return $this->soldService->AddSold($production);
+    }
+
+    public function GetProductForAdminDashboard(Request $request)
     {
         $product_id = $request->product;
         return $this->productService->GetProducedSoldSpoiled($product_id);
     }
+
+
 }

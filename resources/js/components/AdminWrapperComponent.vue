@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <month-selector-component></month-selector-component>
-<!--        <div class="bg-light text-center"><input v-model="date" type="date" class="form-control"></div>-->
         <div class="editButtons">
             <admin-edit-inputs-component
                 :user="user"
