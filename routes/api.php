@@ -50,12 +50,12 @@ Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/materials', [App\Http\Controllers\MaterialsController::class, 'GetMaterials']);
     Route::get('/machines', [App\Http\Controllers\MachinesController::class, 'GetMachineListWithMonthUsage']);
     Route::get('/produced/get', [App\Http\Controllers\ProducedController::class, 'index']);
-    Route::post('/produced/add', [App\Http\Controllers\ProducedController::class, 'add']);
+    Route::post('/produced/add', [App\Http\Controllers\ProductionController::class, 'AddProduced']);
     Route::get('/matnorm/get', [App\Http\Controllers\ProductionController::class, 'GetMaterialsNormsForProduct']);
     Route::post('/motohours', [App\Http\Controllers\MachinesController::class, 'AddUsage']);
     Route::get('/incomes/get', [App\Http\Controllers\MaterialsController::class, 'GetMonthlyMaterialIncome']);
     Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyProductionReport']);
-    Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'UploadReport']);
+    Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'MonthlyUploadReport']);
     Route::get('/workdate', function (Request $request) {
         session(['currentDate' => $request->currentDate]);
     });

@@ -94,7 +94,6 @@ export default {
     }
   },
   props: {
-    dateFormated: '',
     user: {},
     date: ''
   },

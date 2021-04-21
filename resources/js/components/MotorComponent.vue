@@ -1,7 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Использование техники за {{ dateFormated.day }} {{ dateFormated.month }}
-            {{ dateFormated.year }}
+        <div class="card-header">Использование техники за {{ FORMATED_DATE.ofMonth }} {{ FORMATED_DATE.year }}
         </div>
         <div class="card-body">
             <table>
@@ -58,16 +57,14 @@ export default {
         user: {
             default: {}
         },
-        dateFormated: {
-            type: Object,
-            default: ''
-        },
         date: ''
 
     },
     computed: {
         ...mapGetters([
             'MACHINES',
+            'DATE',
+            'FORMATED_DATE'
         ]),
         currentDate() {
             var date = {date: this.date}

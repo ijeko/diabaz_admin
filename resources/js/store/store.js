@@ -11,7 +11,8 @@ export default {
         sold: [],
         stock: [],
         date: new Date().toISOString().slice(0, 10),
-        formatedDate: ''
+        formatedDate: '',
+        updateKey: ''
 
     },
     getters: {    // Fetch the total number of items in the cart
@@ -50,6 +51,9 @@ export default {
         },
         FORMATED_DATE: state => {
             return state.formatedDate
+        },
+        UPDATE: state => {
+            return state.updateKey
         }
 
     },
@@ -89,23 +93,16 @@ export default {
         },
         SET_FORMATED_DATE: (state, date) => {
             state.formatedDate = date
+        },
+        SET_UPDATE_KEY: (state) => {
+            state.updateKey = Math.random(1, 1000)
         }
 
     },
     actions: {
-        // GET_MATERIALS: ({commit}) => {
-        //     axios.get('/api/materials/get', {
-        //         headers: {'Content-Type': 'application/json'}
-        //     })
-        //         .then(function (response) {
-        //             commit('SET_MATERIALS', response.data);
-        //             return response.data
-        //         })
-        //         .catch(function (error) {
-        //             // handle error
-        //             console.log(error);
-        //         })
-        // },
+        UPDATE_KEY: ({commit}) => {
+          commit('SET_UPDATE_KEY')
+        },
         GET_MATERIALS: ({commit}) => {
             return axios.get('/api/materials', {
                 headers: {'Content-Type': 'application/json'}

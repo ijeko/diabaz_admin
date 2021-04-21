@@ -20,21 +20,7 @@ class ReportsService extends Service
         foreach (Product::all() as $product) {
             $manager->MakeProductForMonthlyProductionReport($product);
             $monthlyProductionReport->push($product);
-
-//            $daily = [];
-//            $monthly = $product->produced()
-//                ->whereYear('date', $targetYear)
-//                ->whereMonth('date', $targetMonth)
-//                ->sum('qty');
-//            array_push($dayProductionReport, [
-//                'id' => $product->id,
-//                'title' => $product->title,
-//                'unit' => $product->unit,
-//                'daily' => $daily,
-//                'monthly' => $monthly,
-//            ]);
         }
-//        dd($monthlyProductionReport);
         return $monthlyProductionReport;
     }
 

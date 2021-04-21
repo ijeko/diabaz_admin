@@ -24,10 +24,6 @@ class ReportsController extends Controller
 
     public function MonthlyProductionReport()
     {
-//        $time = strtotime($request->date);
-//        $targetMonth = date('m', $time);
-//        $targetYear = date('Y', $time);
-//        $daysCount = $request->days;
         return $this->reportsService->MonthlyProductionReport();
     }
 
@@ -36,6 +32,6 @@ class ReportsController extends Controller
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
-        return $this->reports->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
+        return $this->reportsService->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
     }
 }

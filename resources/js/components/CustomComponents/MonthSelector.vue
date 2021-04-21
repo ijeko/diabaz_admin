@@ -1,14 +1,14 @@
 <template>
     <div class="btn-group mr-2" role="group" aria-label="Second group">
-        <button type="button" class="btn btn-secondary"
+        <button type="button" class="btn btn-link text-secondary"
                 @click="decreaseMonth"
         > <
         </button>
-        <button type="button" class="btn btn-outline-secondary monthBtn w-75"
+        <button type="button" class="btn btn-link text-secondary month-name"
                 @click="resetMonth"
         >{{ dateFormated.ofMonth }}
         </button>
-        <button type="button" class="btn btn-secondary"
+        <button type="button" class="btn btn-link text-secondary"
                 @click="increaseMonth"
         > >
         </button>
@@ -79,7 +79,11 @@ export default {
 
 <style scoped>
 
-.monthBtn {
-  width: 100px;
+.btn-link {
+    text-decoration: none !important;
+    font-weight: bold;
+}
+.month-name {
+    width: 100px!important;
 }
 </style>
