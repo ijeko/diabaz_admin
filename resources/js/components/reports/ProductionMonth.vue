@@ -17,7 +17,7 @@
                    :key="product.id"
                    v-if="product.monthlyProduction"
               >
-                <div class="col">{{ product.title }}</div>
+                <div class="col">{{ product.title }}, {{product.unit}}</div>
               </div>
             </div>
             <div class="col-9 horizontal-scrollable ">
@@ -27,7 +27,7 @@
                      :key="index">
                   <div class="data-cell m-0 p-0 text-center bg-light"
                        :class="{'text-danger': isWeekend(days.day) }"
-                  >{{ days.dayName }}<br>{{ days.day }}
+                  >{{ days.day }}<br>{{ days.dayName }}
                   </div>
                 </div>
               </div>
