@@ -2,7 +2,6 @@
     <div>
         <div class="card mt-4">
             <div class="card-header">
-                <!--        {{ daysInMonth() }}-->
                 Произведено продукции за {{ dateFormated.ofMonth }} {{ dateFormated.year }}
             </div>
             <div class="card-body">
@@ -36,57 +35,22 @@
                                  v-if="product.monthlyProduction"
                                  v-for="product in reportData"
                                  :key="product.id"
-
                             >
                                 <div class="col m-0 p-0"
                                      v-for="(days, index) in daysInMonth()"
                                      :key="index">
                                     <div
-                                        class="data-cell  m-0 p-0 text-center"
-                                        v-if="zeroFills(days.day, product)">
+                                        class="data-cell  m-0 p-0 text-center">
+<!--                                        v-if="zeroFills(days.day, product)"-->
+<!--                                    >-->
                                         {{ zeroFills(days.day, product) }}
                                     </div>
-                                    <div class="data-cell  m-0 p-0 text-center text-secondary" v-else>-</div>
+<!--                                    <div class="data-cell  m-0 p-0 text-center text-secondary" v-else>-</div>-->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-                <!--        <div class="table-responsive text-nowrap">-->
-                <!--          <table class="table table-striped">-->
-                <!--            <thead>-->
-                <!--            <tr>-->
-                <!--              <th class="title">Продукция</th>-->
-                <!--              <th class="cells text-dark"-->
-                <!--                  v-for="day in daysInMonth()"-->
-                <!--                  :key="day"-->
-                <!--                  :class="{'bg-warning': isWeekend(day) }">-->
-                <!--                {{ day }}-->
-                <!--              </th>-->
-                <!--            </tr>-->
-                <!--            </thead>-->
-                <!--            <tbody>-->
-                <!--            <tr v-for="(product, index) in reportData"-->
-                <!--                :key="index"-->
-                <!--            >-->
-                <!--              &lt;!&ndash;                            v-if="product.dailyProduction.qty.reduce(function(sum, elem) {&ndash;&gt;-->
-                <!--              &lt;!&ndash;                            return sum + elem&ndash;&gt;-->
-                <!--              &lt;!&ndash;                            }, 0)>0"&ndash;&gt;-->
-                <!--              <td class="title">-->
-                <!--                {{ product.title }} ({{ product.unit }})-->
-                <!--              </td>-->
-                <!--              <td class="cells"-->
-                <!--                  v-for="(dayProduced, index) in product.dailyProduction"-->
-                <!--                  :key="index"-->
-                <!--                  :class="{ 'bg-success produced': dayProduced, 'text-secondary': !dayProduced }"-->
-                <!--              >{{ zeroFilledDays(product) }}-->
-                <!--              </td>-->
-                <!--            </tr>-->
-                <!--            </tbody>-->
-                <!--          </table>-->
-                <!--        </div>-->
             </div>
         </div>
         <div class="card mt-4">
@@ -139,15 +103,15 @@ export default {
             'GET_PRODUCTS'
         ]),
         zeroFills(day, product) {
-            var result = '1'
+            var result = []
             for (var production of product.dailyProduction) {
                 product.dailyProduction.splice(day, -1)
                 if (day !== new Date(production.date).getDate()) {
-                    result = 0
-                } else return production.qty
+                    result.push([0])
+                } else result.push([production.qty])
+                console.log(result)
+                return result
             }
-            // return product.dailyProduction
-
         },
         isWeekend(day) {
             let currentDate = new Date(Date.parse(this.commonDate))
@@ -196,13 +160,6 @@ export default {
             'PRODUCTS',
             'DATE'
         ]),
-        zf(day, product) {
-            for (var production of product.dailyProduction) {
-                if (day === new Date(production.date).getDate()) {
-                    return production.date
-                } else return 0
-            }
-        }
     },
     watch: {
         // эта функция запускается при любом изменении вопроса
@@ -212,7 +169,7 @@ export default {
     },
     mounted() {
         this.getReport()
-        this.isWeekend()
+        // this.isWeekend()
     }
 }
 </script>
