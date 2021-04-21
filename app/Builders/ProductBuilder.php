@@ -5,6 +5,8 @@ namespace App\Builders;
 
 
 use App\Http\Sevices\DateParser;
+use App\Models\Material;
+use App\Models\Produced;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
@@ -93,7 +95,7 @@ class ProductBuilder implements Builder
         $produced = $this->product->produced()->sum('qty');
         $sold = $this->product->sold()->where('isMaterial', 0)->sum('qty');
         $spoiled = $this->product->Spoiled()->sum('qty');
-        $inStock = $produced - $sold - $spoiled;
+        $inStock = $produced - $sold - $spoiled - $this->asMaterial();
         $this->product->stock = round($inStock, 2);
     }
 
@@ -131,5 +133,20 @@ class ProductBuilder implements Builder
         $this->reset();
 
         return $result;
+    }
+
+    private function asMaterial ()
+    {
+        if (Material::where('name', $this->product->name)->exists()) {
+            $material = Material::where('name', $this->product->name)->first();
+            $asMaterial = 0;
+            foreach ($material->norma()->get() as $norma)
+            {
+                $produced1 = Produced::where('product_id', $norma->product_id)->sum('qty');
+                $asMaterial = $asMaterial + $norma->norma * $produced1;
+            }
+            return $asMaterial;
+        }
+        else return 0;
     }
 }
