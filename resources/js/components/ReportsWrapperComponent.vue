@@ -79,7 +79,7 @@ export default {
     computed: {
         ...mapGetters([
             'DATE',
-            'FORMATED_DATE'
+            'FORMATED_DATE',
         ])
     },
     methods: {

@@ -12,7 +12,8 @@ export default {
         stock: [],
         date: new Date().toISOString().slice(0, 10),
         formatedDate: '',
-        updateKey: ''
+        updateKey: '',
+        readyStatus: true,
 
     },
     getters: {    // Fetch the total number of items in the cart
@@ -54,6 +55,9 @@ export default {
         },
         UPDATE: state => {
             return state.updateKey
+        },
+        IS_READY: state => {
+            return state.readyStatus
         }
 
     },
@@ -96,10 +100,17 @@ export default {
         },
         SET_UPDATE_KEY: (state) => {
             state.updateKey = Math.random(1, 1000)
+        },
+        SET_PROMISE_READY: (state, status) => {
+            state.readyStatus = status
         }
 
     },
     actions: {
+        SET_PROMISE_READY: ({commit}, status) => {
+           commit('SET_PROMISE_READY', status)
+            return status
+        } ,
         UPDATE_KEY: ({commit}) => {
           commit('SET_UPDATE_KEY')
         },
@@ -115,7 +126,6 @@ export default {
                     // handle error
                     console.log(error);
                 })
-
         },
         GET_PRODUCTS: ({commit}, data) => {
             return axios.get('/api/products', {

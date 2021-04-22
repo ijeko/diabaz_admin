@@ -116,7 +116,8 @@ export default {
             'GET_MATERIAL_QTY',
             'ADD_SOLD',
             'ADD_PRODUCED',
-            'UPDATE_KEY'
+            'UPDATE_KEY',
+            'SET_PROMISE_READY'
         ]),
         showPopup() {
             this.isEnterVisible = true
@@ -132,11 +133,13 @@ export default {
         },
         action() {
             this.isLoading = true
+            this.SET_PROMISE_READY(false)
             this.closePopup()
             this.closeSold()
             this.UPDATE_KEY()
             return this.GET_PRODUCTS({date: this.DATE}).then(res => {
                 this.isLoading = false
+                this.SET_PROMISE_READY(true)
             })
         },
         sendProduced(data) {

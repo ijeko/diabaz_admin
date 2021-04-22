@@ -2,14 +2,17 @@
     <div class="btn-group mr-2" role="group" aria-label="Second group">
         <button type="button" class="btn btn-link text-secondary"
                 @click="decreaseMonth"
+                :disabled="!IS_READY"
         > <
         </button>
         <button type="button" class="btn btn-link text-secondary month-name"
                 @click="resetMonth"
+                :disabled="!IS_READY"
         >{{ dateFormated.ofMonth }}
         </button>
         <button type="button" class="btn btn-link text-secondary"
                 @click="increaseMonth"
+                :disabled="!IS_READY"
         > >
         </button>
     </div>
@@ -27,7 +30,8 @@ export default {
     },
     computed: {
         ...mapGetters([
-            `DATE`
+            `DATE`,
+            'IS_READY'
         ]),
         dateFormated() {
             const dateSplit = this.DATE.split('-')
