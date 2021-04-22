@@ -60,7 +60,7 @@ class ProducedService extends Service
         if ($check)
             return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
         else {
-            Produced::create($data);
+            Produced::updateOrCreate(['product_id' => $data['product_id'], 'date' => $data['date']], $data);
             return \response('Data saved', '200');
         }
 
