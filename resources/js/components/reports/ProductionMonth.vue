@@ -167,7 +167,7 @@ export default {
   },
   watch: {
     // эта функция запускается при любом изменении вопроса
-    commonDate: function (newLocalDate, oldCLocalDate) {
+    DATE: function (newLocalDate, oldCLocalDate) {
       this.getReport()
     }
   },
