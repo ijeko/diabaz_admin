@@ -8,7 +8,7 @@
                 <component-loader v-if="isLoading"></component-loader>
                 <div class="container flex-fill">
                     <div class="row">
-                        <div class="col-3 production-title bg-light">
+                        <div class="col-6 production-title bg-light col-md-3 col-sm-5 ">
                             <div class="row bg-light table-header">
                                 <div class="col text-center">Продукция</div>
                             </div>
@@ -20,7 +20,7 @@
                                 <div class="col">{{ product.title }}, {{ product.unit }}</div>
                             </div>
                         </div>
-                        <div class="col-9 horizontal-scrollable ">
+                        <div class="col-6 col-md-9 col-sm-7 horizontal-scrollable ">
                             <div class="row flex-nowrap table-header">
                                 <div class="col m-0 p-0"
                                      v-for="(days, index) in daysInMonth()"
@@ -154,6 +154,10 @@ export default {
                     this.isLoading = false
                     this.SET_PROMISE_READY(true)
                     return response.data
+                })
+                .then(response => {
+                    // console.log(response)
+                    return response
                 })
                 .catch(function (error) {
                     console.log(error);
