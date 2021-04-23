@@ -25,7 +25,6 @@ class SoldService extends Service
 
         $sold = new Sold();
         $sold->fill($production);
-        dd($production);
         $builder->InitiateExisting($object);
         $builder->BuildStock();
         $soldProduction = $builder->GetProduct();
