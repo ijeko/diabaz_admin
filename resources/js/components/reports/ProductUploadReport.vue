@@ -2,21 +2,8 @@
     <div>
         <component-loader v-if="isLoading"></component-loader>
         <div class="card mt-4">
-            <div class="card-header">Отгрузки за месяц:
-                <div class="btn-group mr-2" role="group" aria-label="Second group">
-                    <button type="button" class="btn btn-secondary"
-                            @click="decreaseMonth"
-                    > <
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary monthBtn"
-                            @click="resetMonth"
-                    >{{ dateFormated.ofMonth }}
-                    </button>
-                    <button type="button" class="btn btn-secondary"
-                            @click="increaseMonth"
-                    > >
-                    </button>
-                </div>
+            <div class="card-header">Отгрузки за {{ FORMATED_DATE.ofMonth }} {{FORMATED_DATE.year}}
+                {{reportData}}
             </div>
             <div class="card-body">
                 <div class="container result-table">
@@ -30,7 +17,7 @@
                     >
                         <div class="col date">
                             <div class="row date-line"
-                                 v-for="(upload, index) in reportData.uploads"
+                                 v-for="(upload, index) in reportData.dailySolds"
                                  :key="index"
                             >
                                 <div class="col-3 date-block">
@@ -68,11 +55,9 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -113,7 +98,7 @@ export default {
         return {
             date: new Date(),
             reportData: [],
-            localDate: this.commonDate,
+            localDate: '',
             clientsUpload: [],
             lineToggle: 0,
             light: '',
@@ -151,35 +136,15 @@ export default {
             this.lightUpClient = item
 
         },
-        decreaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        increaseMonth() {
-            let currentDate = new Date(Date.parse(this.localDate))
-            currentDate.setDate(1);
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            this.localDate = currentDate.toISOString().slice(0, 10)
-            this.$emit('setDate', currentDate.toISOString().slice(0, 10))
-            // console.log(currentDate.toISOString().slice(0, 10))
-        },
-        resetMonth() {
-            this.localDate = new Date().toISOString().slice(0, 10)
-            this.$emit('setDate', this.localDate)
-        },
         daysInMonth() {
-            let date = new Date(Date.parse(this.localDate))
+            let date = new Date(Date.parse(this.DATE))
             return new Date(date.getFullYear(),
                 date.getMonth() + 1,
                 0).getDate();
         },
         getReport() {
             this.isLoading = true
-            let data = {date: this.localDate, days: this.daysInMonth()}
+            let data = {date: this.DATE, days: this.daysInMonth()}
             axios.get('/api/reports/upload', {
                 headers: {'Content-Type': 'application/json'},
                 params: data
@@ -197,7 +162,9 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'PRODUCTS'
+            'PRODUCTS',
+            'DATE',
+            'FORMATED_DATE'
         ]),
         colorToggle() {
             return this.lineToggle + 1

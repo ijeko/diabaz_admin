@@ -64,8 +64,12 @@ class ProductBuilder implements Builder
             ->whereYear('date', $date['year'])
             ->whereMonth('date', $date['month'])
             ->where('isMaterial', 0)
-            ->get(['id', 'date', 'qty']);
-        $this->product->dailySold = $dailySold;
+            ->get(['id', 'product_id', 'soldTo', 'date', 'qty']);
+        $this->product->dailySold = $dailySold->each(function ($item, $key)
+        {
+            $item->title = $this->product->title;
+            $item->unit = $this->product->unit;
+        });
     }
 
     public function BuildMonthlySpoil()

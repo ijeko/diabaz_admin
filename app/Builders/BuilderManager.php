@@ -36,4 +36,12 @@ class BuilderManager
         $this->builder->BuildMonthlyIn();
         $this->builder->BuildMonthlySpoil();
     }
+
+    public function MakeProductionForMonthlyUploadReport($product)
+    {
+        $this->builder->InitiateExisting($product);
+        $this->builder->BuildDailyOut();
+        $this->builder->BuildMonthlyOut();
+
+    }
 }
