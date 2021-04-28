@@ -170,12 +170,6 @@ export default {
             'DATE'
         ]),
     },
-    watch: {
-        // эта функция запускается при любом изменении вопроса
-        DATE: function (newLocalDate, oldCLocalDate) {
-            this.getReport()
-        }
-    },
     mounted() {
         this.getReport()
         // this.isWeekend()

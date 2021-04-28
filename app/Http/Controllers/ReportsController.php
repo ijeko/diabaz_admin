@@ -32,6 +32,8 @@ class ReportsController extends Controller
         $time = strtotime($request->date);
         $targetMonth = date('m', $time);
         $targetYear = date('Y', $time);
-        return $this->reportsService->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
+//        return $this->reportsService->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
+        return $this->reportsService->YearProductionInTons();
+
     }
 }

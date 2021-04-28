@@ -120,6 +120,7 @@ class ProductBuilder implements Builder
         $this->product->materialsNorms = $materialsAndNorms;
     }
 
+
     //TODO Добавить метод создания обхекта продукта с используемыми материалами (на единицу продукции)
 //    public function BuildProductWithUsedMaterials()
 //    {

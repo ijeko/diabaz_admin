@@ -7,6 +7,7 @@ namespace App\Http\Sevices;
 use App\Builders\BuilderManager;
 use App\Builders\ProductBuilder;
 use App\Models\Product;
+use Carbon\Carbon;
 
 class ReportsService extends Service
 {
@@ -30,17 +31,18 @@ class ReportsService extends Service
         $manager = new BuilderManager();
         $manager->SetBuilder($builder);
 
-        $monthlyUploadReport = collect(['products' => []]);
+        $monthlyUploadReport = collect();
+        $products = collect();
         foreach (Product::all() as $product) {
             $manager->MakeProductionForMonthlyUploadReport($product);
-            $monthlyUploadReport->push($builder->GetProduct());
+         $products->push($builder->GetProduct());
         }
-dd(__METHOD__, $monthlyUploadReport);
-        return $monthlyUploadReport;
-//            ->merge(['dailySolds' => $monthlyUploadReport->products
-//                ->pluck('dailySold')
-//                ->flatten()
-//                ->groupBy('soldTo', false)]);
+        $monthlyUploadReport->put('products', $products);
+        return $monthlyUploadReport
+            ->merge(['dailySolds' => $monthlyUploadReport['products']
+                ->pluck('dailySold')
+                ->flatten()
+                ->groupBy('date', false)]);
 
 
 
@@ -74,6 +76,34 @@ dd(__METHOD__, $monthlyUploadReport);
 //        $uploadsData = collect($uploadsData)->sortBy('date', 0, true)->groupBy('date', false);
 //        $totalSold = collect($totalSold)->sortBy('client')->keyBy('title');
 //        return ['uploads' => $uploadsData, 'total' => $totalSold];
+    }
+
+    public function YearProductionInTons () {
+        $date = Carbon::now();
+        $year = $date->format('Y');
+        $month = $date->format('m');
+        $monthProduced = [];
+        for ($i=1; $i<=$month; $i++)
+        {
+            $producedQty = 0;
+            $monthly = 0;
+            foreach (Product::all() as $product) {
+                $produced = $product->produced()
+                    ->where('product_id', $product->id);
+                $producedQty= $produced
+                    ->whereYear('date', $year)
+                    ->whereMonth('date', $i)
+                    ->sum('qty');
+                if (isset( $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma))
+                {
+                    $mkrNorm = $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma;
+                    $monthly = $monthly + $producedQty * $mkrNorm;
+                }
+            }
+            array_push($monthProduced, $monthly);
+        }
+        dd($monthProduced);
+
     }
 
 

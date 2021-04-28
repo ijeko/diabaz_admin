@@ -8,6 +8,8 @@ import VueRouter from "vue-router";
 require('./bootstrap');
 
 import router from "./router/index";
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 window.Vue = require('vue').default;
 
@@ -69,5 +71,5 @@ Vue.use(VueRouter)
 const app = new Vue({
     el: '#app',
     store: new Vuex.Store(store),
-    router
+    router,
 });

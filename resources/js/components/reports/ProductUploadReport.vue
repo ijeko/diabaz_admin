@@ -3,7 +3,6 @@
         <component-loader v-if="isLoading"></component-loader>
         <div class="card mt-4">
             <div class="card-header">Отгрузки за {{ FORMATED_DATE.ofMonth }} {{FORMATED_DATE.year}}
-                {{reportData}}
             </div>
             <div class="card-body">
                 <div class="container result-table">
@@ -72,14 +71,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(product, index) in reportData.total"
+                    <tr v-for="(product, index) in reportData.products"
                         :key="index"
+                        v-if="product.monthlySold"
                     >
                         <td class="title">
-                            {{ index }}
+                            {{ product.title }}
                         </td>
                         <td>
-                            {{ product.totalSold }} {{ product.unit }}
+                            {{ product.monthlySold }} {{ product.unit }}
                         </td>
                     </tr>
                     </tbody>
@@ -113,19 +113,7 @@ export default {
         ...mapActions([
             'GET_PRODUCTS'
         ]),
-        uploadDay() {
-            let dates = []
-            for (let product of this.reportData) {
-                for (let upload of product.upload) {
-                    if (upload) {
-                        console.log(upload.date)
-                        dates.push(upload.date)
-                    }
-                }
 
-            }
-            return dates
-        },
         lightUp (item) {
             this.light = item
 
@@ -136,18 +124,10 @@ export default {
             this.lightUpClient = item
 
         },
-        daysInMonth() {
-            let date = new Date(Date.parse(this.DATE))
-            return new Date(date.getFullYear(),
-                date.getMonth() + 1,
-                0).getDate();
-        },
         getReport() {
             this.isLoading = true
-            let data = {date: this.DATE, days: this.daysInMonth()}
             axios.get('/api/reports/upload', {
                 headers: {'Content-Type': 'application/json'},
-                params: data
             })
                 .then(response => {
                     this.reportData = response.data
@@ -170,15 +150,8 @@ export default {
             return this.lineToggle + 1
         }
     },
-    watch: {
-        // эта функция запускается при любом изменении вопроса
-        localDate: function (newLocalDate, oldCLocalDate) {
-            this.getReport()
-        }
-    },
     mounted() {
         this.getReport()
-        this.isWeekend
     }
 }
 </script>

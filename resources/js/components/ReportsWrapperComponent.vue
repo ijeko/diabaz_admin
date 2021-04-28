@@ -53,6 +53,7 @@
                 <router-view
                     :commonDate="DATE"
                     :dateFormated="FORMATED_DATE"
+                    :key="DATE"
                 ></router-view>
             </div>
         </div>
