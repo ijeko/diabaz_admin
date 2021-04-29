@@ -34,7 +34,7 @@ class ProductBuilder implements Builder
 //            ->whereMonth('date', $date['month'])
 //            ->sum('qty');
 //        $this->product->monthlyProduction = round($monthlyProduction, 2);
-        $this->product->monthlyProduction = session('currentDate');
+        $this->product->monthlyProduction = rand(0, 100);
     }
 
     public function BuildDailyIn()
