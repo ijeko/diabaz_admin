@@ -18,6 +18,7 @@ class ProductBuilder implements Builder
     public function __construct()
     {
         $this->reset();
+        $this->date = '';
         $this->date = session('currentDate');
     }
 
@@ -129,6 +130,7 @@ class ProductBuilder implements Builder
 
     public function reset(): void
     {
+//        $this->date = '';
         $this->product = new Product();
     }
 

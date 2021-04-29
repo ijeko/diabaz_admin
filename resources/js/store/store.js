@@ -99,7 +99,8 @@ export default {
             state.formatedDate = date
         },
         SET_UPDATE_KEY: (state) => {
-            state.updateKey = Math.random(1, 1000)
+            state.updateKey = Math.floor(Math.random() * 10);
+            // Math.random(1, 1000)
         },
         SET_PROMISE_READY: (state, status) => {
             state.readyStatus = status
