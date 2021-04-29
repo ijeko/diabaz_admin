@@ -20,6 +20,7 @@ class ProductBuilder implements Builder
     {
         $this->reset();
         $this->date = Session::get('currentDate');
+        Session::forget('currentDate');
     }
 
     public function InitiateExisting(Model $object)
