@@ -19,7 +19,7 @@ class apiAccess
         $roles = is_array($role)
             ? $role
             : explode('|', $role);
-
+        session(['currentDate' => $request->currentDate]);
         if (auth()->user()->checkRole($roles)) {
             return $next($request);
         }
