@@ -30,13 +30,12 @@ class ProductBuilder implements Builder
 
     public function BuildMonthlyIn()
     {
-//        $date = DateParser::Parse($this->date);
-//        $monthlyProduction = $this->product->produced()
-//            ->whereYear('date', $date['year'])
-//            ->whereMonth('date', $date['month'])
-//            ->sum('qty');
-//        $this->product->monthlyProduction = round($monthlyProduction, 2);
-        $this->product->monthlyProduction = $this->date;
+        $date = DateParser::Parse($this->date);
+        $monthlyProduction = $this->product->produced()
+            ->whereYear('date', $date['year'])
+            ->whereMonth('date', $date['month'])
+            ->sum('qty');
+        $this->product->monthlyProduction = round($monthlyProduction, 2);
     }
 
     public function BuildDailyIn()
