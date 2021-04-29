@@ -78,11 +78,12 @@ export default {
     name: 'ProductionComponent',
     components: {},
     mounted() {
+      // alert('a')
         // this.GET_SOLD(this.date)
-        // this.action()
-      this.GET_PRODUCTS().then(res => {
-        this.isLoading = false
-      })
+        this.action()
+      // this.GET_PRODUCTS().then(res => {
+      //   this.isLoading = false
+      // })
     },
     data: function () {
         return {
@@ -141,7 +142,7 @@ export default {
             this.closePopup()
             this.closeSold()
             this.UPDATE_KEY()
-            return this.GET_PRODUCTS({date: this.DATE}).then(res => {
+            return this.GET_PRODUCTS().then(res => {
                 this.isLoading = false
                 this.SET_PROMISE_READY(true)
             })
