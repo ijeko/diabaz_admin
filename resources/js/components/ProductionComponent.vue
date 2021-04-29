@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">Произведенная продукция за {{ FORMATED_DATE.ofMonth }}
-            {{ FORMATED_DATE.year }}
+            {{ FORMATED_DATE.year }} --- {{ UPDATE }}
         </div>
         <div v-if="message" class="alert alert-danger" role="alert">
             {{ message.error }}
@@ -110,7 +110,8 @@ export default {
         ...mapGetters([
             `PRODUCTS`,
             `DATE`,
-            'FORMATED_DATE'
+            'FORMATED_DATE',
+            'UPDATE'
         ]),
     },
     methods: {
