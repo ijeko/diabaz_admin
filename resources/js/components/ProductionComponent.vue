@@ -78,6 +78,7 @@ export default {
   name: 'ProductionComponent',
   components: {},
   mounted() {
+    this.products = ''
     // alert('a')
     // this.GET_SOLD(this.date)
     // this.action()
