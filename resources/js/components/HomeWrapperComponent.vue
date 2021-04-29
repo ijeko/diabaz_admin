@@ -15,11 +15,13 @@
                     class="mt-4"
                     :user="user"
                     :date="date"
+                    :key="UPDATE"
                 ></production-component>
                 <motor-component
                     class="mt-4"
                     :user="user"
                     :date="date"
+                    :key="UPDATE"
                 ></motor-component>
             </div>
         </div>

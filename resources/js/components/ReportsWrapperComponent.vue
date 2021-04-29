@@ -53,7 +53,7 @@
                 <router-view
                     :commonDate="DATE"
                     :dateFormated="FORMATED_DATE"
-                    :key="DATE"
+                    :key="UPDATE"
                 ></router-view>
             </div>
         </div>
@@ -80,6 +80,7 @@ export default {
     computed: {
         ...mapGetters([
             'DATE',
+            'UPDATE',
             'FORMATED_DATE',
         ])
     },
