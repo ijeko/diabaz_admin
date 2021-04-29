@@ -9,6 +9,7 @@ use App\Models\Material;
 use App\Models\Produced;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class ProductBuilder implements Builder
 {
@@ -18,7 +19,7 @@ class ProductBuilder implements Builder
     public function __construct()
     {
         $this->reset();
-        $this->date = session('currentDate');
+        $this->date = Session::get('currentDate');
     }
 
     public function InitiateExisting(Model $object)
@@ -34,7 +35,7 @@ class ProductBuilder implements Builder
 //            ->whereMonth('date', $date['month'])
 //            ->sum('qty');
 //        $this->product->monthlyProduction = round($monthlyProduction, 2);
-        $this->product->monthlyProduction = rand(0, 100);
+        $this->product->monthlyProduction = $this->date;
     }
 
     public function BuildDailyIn()

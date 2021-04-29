@@ -58,6 +58,7 @@ Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'MonthlyUploadReport']);
     Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'YearlyProductionInTonsReport']);
     Route::get('/workdate', function (Request $request) {
-        session(['currentDate' => $request->currentDate]);
+        \Illuminate\Support\Facades\Session::put('currentDate', $request->currentDate);
+//        session(['currentDate' => $request->currentDate]);
     });
 });
