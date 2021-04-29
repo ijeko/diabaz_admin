@@ -79,7 +79,10 @@ export default {
     components: {},
     mounted() {
         // this.GET_SOLD(this.date)
-        this.action()
+        // this.action()
+      this.GET_PRODUCTS().then(res => {
+        this.isLoading = false
+      })
     },
     data: function () {
         return {
@@ -90,12 +93,12 @@ export default {
             isLoading: true
         }
     },
-    watch: {
-        // эта функция запускается при любом изменении вопроса
-        DATE: function (newcurrentDate, oldcurrentDate) {
-            this.action()
-        }
-    },
+    // watch: {
+    //     // эта функция запускается при любом изменении вопроса
+    //     DATE: function (newcurrentDate, oldcurrentDate) {
+    //         this.action()
+    //     }
+    // },
     props: {
         user: {
             default: {}

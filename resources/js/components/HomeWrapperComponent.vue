@@ -7,7 +7,6 @@
                     class="mt-4"
                     :user="user"
                     :date="date"
-                    :key="UPDATE"
                 ></materials-component>
             </div>
             <div class="col-md-6">
@@ -21,7 +20,6 @@
                     class="mt-4"
                     :user="user"
                     :date="date"
-                    :key="UPDATE"
                 ></motor-component>
             </div>
         </div>

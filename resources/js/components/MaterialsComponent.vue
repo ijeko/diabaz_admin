@@ -88,11 +88,11 @@ export default {
       isLoading: true
     }
   },
-  watch: {
-    DATE(newDATE, oldDATE) {
-      this.GET_INCOMES()
-    }
-  },
+  // watch: {
+  //   DATE(newDATE, oldDATE) {
+  //     this.GET_INCOMES()
+  //   }
+  // },
   props: {
     user: {},
     date: ''
