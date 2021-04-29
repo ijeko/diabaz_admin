@@ -17,6 +17,7 @@ class DateSetter
      */
     public function handle(Request $request, Closure $next)
     {
+//        dd($request->all());
         Session::put('currentDate', $request->currentDate);
         return $next($request);
     }

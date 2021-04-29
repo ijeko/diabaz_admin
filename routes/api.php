@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::middleware(['dateSetter'])->get('/workdate', function (Request $request) {
-//        session(['currentDate' => $request->currentDate]);
-    return $request->currentDate;
-});
+//Route::middleware(['dateSetter'])->get('/workdate', function (Request $request) {
+////        session(['currentDate' => $request->currentDate]);
+//    return $request->currentDate;
+//});
 Route::middleware(['apiAccess:admin'])->group(function () {
     Route::delete('/products/admin', [App\Http\Controllers\ProductionController::class, 'Remove']);
     Route::delete('/products/operations', [App\Http\Controllers\ProductionController::class, 'Remove']);
@@ -48,7 +48,7 @@ Route::middleware(['apiAccess:admin|office'])->group(function () {
     Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
 });
 
-Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
+Route::middleware(['dateSetter', 'apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/products', [App\Http\Controllers\ProductionController::class, 'GetProducts']);
     Route::get('/materials', [App\Http\Controllers\MaterialsController::class, 'GetMaterials']);
     Route::get('/machines', [App\Http\Controllers\MachinesController::class, 'GetMachineListWithMonthUsage']);

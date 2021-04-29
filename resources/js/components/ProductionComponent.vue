@@ -149,7 +149,8 @@ export default {
     },
     getProducts() {
       axios.get('/api/products', {
-        headers: {'Content-Type': 'application/json'}
+        headers: {'Content-Type': 'application/json'},
+        params: {currentDate: this.DATE}
       })
           .then(response => {
             this.products = response.data
