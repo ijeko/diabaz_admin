@@ -35,7 +35,7 @@ class ReportsService extends Service
         $products = collect();
         foreach (Product::all() as $product) {
             $manager->MakeProductionForMonthlyUploadReport($product);
-         $products->push($builder->GetProduct());
+            $products->push($builder->GetProduct());
         }
         $monthlyUploadReport->put('products', $products);
 //        dd($monthlyUploadReport
@@ -47,8 +47,9 @@ class ReportsService extends Service
             ->merge(['dailySolds' => $monthlyUploadReport['products']
                 ->pluck('dailySold')
                 ->flatten()
-                ->groupBy('date', false)]);
-
+                ->sortBy('date', 0, true)
+                ->groupBy('date', false)
+                ]);
 
 
 //
@@ -83,17 +84,18 @@ class ReportsService extends Service
 //        return ['uploads' => $uploadsData, 'total' => $totalSold];
     }
 
-    public function YearProductionInTons () {
+    public function YearProductionInTons()
+    {
         $date = Carbon::now();
         $year = $date->format('Y');
         $month = $date->format('m');
-        return ['produced' => $this->ProducedInTons($year, $month), 'sold'=> $this->SoldInTons($year, $month)];
+        return ['produced' => $this->ProducedInTons($year, $month), 'sold' => $this->SoldInTons($year, $month)];
     }
+
     private function ProducedInTons($year, $month)
     {
         $monthProducedInTons = [];
-        for ($i=1; $i<=$month; $i++)
-        {
+        for ($i = 1; $i <= $month; $i++) {
             $monthly = 0;
             foreach (Product::all() as $product) {
                 $produced = $product->produced()
@@ -102,8 +104,7 @@ class ReportsService extends Service
                     ->whereYear('date', $year)
                     ->whereMonth('date', $i)
                     ->sum('qty');
-                if (isset( $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma))
-                {
+                if (isset($product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma)) {
                     $mkrNorm = $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma;
                     $monthly = $monthly + $producedQty * $mkrNorm;
                 }
@@ -112,11 +113,11 @@ class ReportsService extends Service
         }
         return $monthProducedInTons;
     }
+
     private function SoldInTons($year, $month)
     {
         $monthSoldInTons = [];
-        for ($i=1; $i<=$month; $i++)
-        {
+        for ($i = 1; $i <= $month; $i++) {
             $monthly = 0;
             foreach (Product::all() as $product) {
                 $sold = $product->sold()
@@ -125,8 +126,7 @@ class ReportsService extends Service
                     ->whereYear('date', $year)
                     ->whereMonth('date', $i)
                     ->sum('qty');
-                if (isset( $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma))
-                {
+                if (isset($product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma)) {
                     $mkrNorm = $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma;
                     $monthly = $monthly + $soldQty * $mkrNorm;
                 }
