@@ -45,8 +45,7 @@ Route::middleware(['apiAccess:admin|office'])->group(function () {
     Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
 });
 
-Route::middleware(['apiAccess:admin|office|gorny'])->group(function (Request $request) {
-    session(['currentDate' => $request->currentDate]);
+Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/products', [App\Http\Controllers\ProductionController::class, 'GetProducts']);
     Route::get('/materials', [App\Http\Controllers\MaterialsController::class, 'GetMaterials']);
     Route::get('/machines', [App\Http\Controllers\MachinesController::class, 'GetMachineListWithMonthUsage']);
