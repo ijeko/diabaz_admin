@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::middleware(['dateSetter'])->get('/workdate', function (Request $request) {
+//        session(['currentDate' => $request->currentDate]);
+    return $request->currentDate;
+});
 Route::middleware(['apiAccess:admin'])->group(function () {
     Route::delete('/products/admin', [App\Http\Controllers\ProductionController::class, 'Remove']);
     Route::delete('/products/operations', [App\Http\Controllers\ProductionController::class, 'Remove']);
@@ -57,8 +60,5 @@ Route::middleware(['apiAccess:admin|office|gorny'])->group(function () {
     Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyProductionReport']);
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'MonthlyUploadReport']);
     Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'YearlyProductionInTonsReport']);
-    Route::get('/workdate', function (Request $request) {
-        \Illuminate\Support\Facades\Session::put('currentDate', $request->currentDate);
-//        session(['currentDate' => $request->currentDate]);
-    });
+
 });
