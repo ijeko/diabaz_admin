@@ -81,15 +81,11 @@ export default {
     // alert('a')
     // this.GET_SOLD(this.date)
     // this.action()
-    this.GET_PRODUCTS().then(res => {
-      this.isLoading = false
-      this.products = this.PRODUCTS
-
-    })
+    this.getProducts()
   },
   data: function () {
     return {
-      products: this.PRODUCTS,
+      products: '',
       isEnterVisible: '',
       isSoldVisible: false,
       message: '',
@@ -149,6 +145,20 @@ export default {
         this.isLoading = false
         this.SET_PROMISE_READY(true)
       })
+    },
+    getProducts() {
+      axios.get('/api/products', {
+        headers: {'Content-Type': 'application/json'}
+      })
+          .then(response => {
+            this.products = response.data
+            this.isLoading = false
+            return response.status
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
     },
     sendProduced(data) {
       // data = JSON.stringify(data)
