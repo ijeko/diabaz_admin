@@ -25,7 +25,7 @@ class ReportsService extends Service
         return $monthlyProductionReport;
     }
 
-    public function MonthlyUploadReport($targetMonth, $targetYear, $upload)
+    public function MonthlyUploadReport()
     {
         $builder = new ProductBuilder();
         $manager = new BuilderManager();
@@ -38,6 +38,11 @@ class ReportsService extends Service
          $products->push($builder->GetProduct());
         }
         $monthlyUploadReport->put('products', $products);
+//        dd($monthlyUploadReport
+//            ->merge(['dailySolds' => $monthlyUploadReport['products']
+//                ->pluck('dailySold')
+//                ->flatten()
+//                ->groupBy('date', false)]));
         return $monthlyUploadReport
             ->merge(['dailySolds' => $monthlyUploadReport['products']
                 ->pluck('dailySold')
@@ -82,15 +87,18 @@ class ReportsService extends Service
         $date = Carbon::now();
         $year = $date->format('Y');
         $month = $date->format('m');
-        $monthProduced = [];
+        return ['produced' => $this->ProducedInTons($year, $month), 'sold'=> $this->SoldInTons($year, $month)];
+    }
+    private function ProducedInTons($year, $month)
+    {
+        $monthProducedInTons = [];
         for ($i=1; $i<=$month; $i++)
         {
-            $producedQty = 0;
             $monthly = 0;
             foreach (Product::all() as $product) {
                 $produced = $product->produced()
                     ->where('product_id', $product->id);
-                $producedQty= $produced
+                $producedQty = $produced
                     ->whereYear('date', $year)
                     ->whereMonth('date', $i)
                     ->sum('qty');
@@ -100,11 +108,32 @@ class ReportsService extends Service
                     $monthly = $monthly + $producedQty * $mkrNorm;
                 }
             }
-            array_push($monthProduced, $monthly);
+            array_push($monthProducedInTons, $monthly);
         }
-        dd($monthProduced);
-
+        return $monthProducedInTons;
     }
-
+    private function SoldInTons($year, $month)
+    {
+        $monthSoldInTons = [];
+        for ($i=1; $i<=$month; $i++)
+        {
+            $monthly = 0;
+            foreach (Product::all() as $product) {
+                $sold = $product->sold()
+                    ->where('product_id', $product->id);
+                $soldQty = $sold
+                    ->whereYear('date', $year)
+                    ->whereMonth('date', $i)
+                    ->sum('qty');
+                if (isset( $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma))
+                {
+                    $mkrNorm = $product->materialNorm()->where('product_id', $product->id)->where('material_id', 18)->first()->norma;
+                    $monthly = $monthly + $soldQty * $mkrNorm;
+                }
+            }
+            array_push($monthSoldInTons, $monthly);
+        }
+        return $monthSoldInTons;
+    }
 
 }

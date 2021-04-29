@@ -1,63 +1,101 @@
 <template>
-    <div>
-        <canvas id="myChart" width="400" height="200"></canvas>
-
-    </div>
+  <div>
+    <canvas id="myChart" width="400" height="200"></canvas>
+  </div>
 </template>
 
 <script>
-import { Chart, registerables } from 'chart.js';
+import {Chart, registerables} from 'chart.js';
+import {mapActions} from 'vuex';
+
 Chart.register(...registerables);
+
 export default {
-    name: "ReportsPage",
-    data() {
-        return {
-        }
-    },
-    computed: {
-        ctx() {
-            return document.getElementById("myChart").getContext("2d")
-        },
-        myChart() {
-           return new Chart(this.ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [1,2,3,4,5,6,7,8,9,10,11,12],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            })
-        }
-    },
-    mounted() {
-        this.myChart
+  name: "ReportsPage",
+  data() {
+    return {
+      isLoading: false
     }
+  },
+  methods: {
+    ...mapActions([
+      'SET_PROMISE_READY'
+    ]),
+    myChart(produced, sold) {
+      return new Chart(this.ctx, {
+        type: 'bar',
+        data: {
+          labels: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+          datasets: [{
+            label: 'Произведено продукции, т',
+            data: produced,
+            backgroundColor: [
+              'rgba(31,113,241, 0.2)',
+            ],
+            borderColor: [
+              'rgb(31,113,241)',
+
+            ],
+            borderWidth: 1
+          },
+            {
+              label: 'Отгружено продукции, т',
+              data: sold,
+              backgroundColor: [
+                'rgba(69,163,4,0.2)',
+              ],
+              borderColor: [
+                'rgb(69,163,4)',
+
+              ],
+              borderWidth: 1
+            }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      })
+    },
+    getReport() {
+      this.isLoading = true
+      this.SET_PROMISE_READY(false)
+      axios.get('/api/reports', {
+        headers: {'Content-Type': 'application/json'},
+      })
+          .then(response => {
+            let arr = []
+            for (let item in response.data) {
+              arr.push(response.data[item])
+            }
+            this.isLoading = false
+            this.SET_PROMISE_READY(true)
+            this.myChart(response.data.produced, response.data.sold)
+          })
+          .then(response => {
+            return response
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    }
+  },
+  computed: {
+    data() {
+      return this.report
+    },
+    ctx() {
+      return document.getElementById("myChart").getContext("2d")
+    },
+
+  },
+  mounted() {
+    this.getReport()
+    this.myChart
+  }
 }
 </script>
 

@@ -27,13 +27,14 @@ class ReportsController extends Controller
         return $this->reportsService->MonthlyProductionReport();
     }
 
-    public function MonthlyUploadReport(Request $request)
+    public function MonthlyUploadReport()
     {
-        $time = strtotime($request->date);
-        $targetMonth = date('m', $time);
-        $targetYear = date('Y', $time);
-//        return $this->reportsService->MonthlyUploadReport($targetMonth, $targetYear, new Sold());
-        return $this->reportsService->YearProductionInTons();
+        return $this->reportsService->MonthlyUploadReport();
+    }
 
+    public function YearlyProductionInTonsReport ()
+    {
+        $response =  $this->reportsService->YearProductionInTons();
+        return $response;
     }
 }

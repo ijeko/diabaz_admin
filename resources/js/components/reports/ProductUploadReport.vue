@@ -38,9 +38,9 @@
                                                 <div class="col-4">
                                                     <div class="row">
                                                         <div class="col lightable"
-                                                             @click="lightUp (product.client)"
-                                                             :class="{'bg-info' : light===product.client}"
-                                                        >{{ product.client }}</div>
+                                                             @click="lightUp (product.soldTo)"
+                                                             :class="{'bg-info' : light===product.soldTo}"
+                                                        >{{ product.soldTo }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -152,6 +152,7 @@ export default {
     },
     mounted() {
         this.getReport()
+        console.log(this.reportData)
     }
 }
 </script>

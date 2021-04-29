@@ -267,7 +267,6 @@ export default {
                 })
                 .then(function (response) {
                     commit('SET_PRODUCT_MATERIAL_NORMS', response.data);
-                    console.log(response.data)
                     return response.data
                 })
                 .catch(function (error) {
