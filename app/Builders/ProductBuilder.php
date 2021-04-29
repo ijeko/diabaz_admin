@@ -18,9 +18,9 @@ class ProductBuilder implements Builder
 
     public function __construct()
     {
-        $this->reset();
         $this->date = Session::get('currentDate');
-        Session::forget('currentDate');
+        $this->reset();
+
     }
 
     public function InitiateExisting(Model $object)
