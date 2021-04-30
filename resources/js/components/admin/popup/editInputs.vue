@@ -290,7 +290,7 @@ export default {
             this.selectedProduct = ''
         },
         getProductWithPayload() {
-            let data = {product: this.selectedProduct}
+            let data = {product: this.selectedProduct, currentDate: this.DATE}
             let $url = '/api/admin/product'
             axios.get($url, {
                 headers: {'Content-Type': 'application/json'},
@@ -343,7 +343,8 @@ export default {
     computed: {
         ...mapGetters([
             'PRODUCTS',
-            'PRODUCT_MATERIAL_NORMS'
+            'PRODUCT_MATERIAL_NORMS',
+            'DATE'
         ]),
         productPayload ()
         {
@@ -355,7 +356,6 @@ export default {
         }
     },
     mounted() {
-        this.GET_PRODUCTS()
     }
 }
 </script>

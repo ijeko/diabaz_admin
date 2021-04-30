@@ -148,6 +148,7 @@ export default {
             this.SET_PROMISE_READY(false)
             axios.get('/api/reports/monthly', {
                 headers: {'Content-Type': 'application/json'},
+                params: {currentDate: this.DATE}
             })
                 .then(response => {
                     this.reportData = response.data

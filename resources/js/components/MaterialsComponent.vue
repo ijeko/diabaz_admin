@@ -72,7 +72,7 @@ export default {
     this.GET_MATERIALS().then(res => {
       this.isLoading = false
     })
-    this.GET_INCOMES().then(res => {
+    this.GET_INCOMES(this.DATE).then(res => {
       this.isLoading = false
     })
   },
@@ -103,7 +103,6 @@ export default {
       'INCOMES',
       'DATE',
       'FORMATED_DATE'
-      // 'MATERIAL_QTY'
     ]),
     stockIncomesText() {
       if (!this.stockIncomes)

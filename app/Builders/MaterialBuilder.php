@@ -8,6 +8,7 @@ use App\Http\Sevices\DateParser;
 use App\Models\Material;
 use App\Models\Produced;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class MaterialBuilder implements Builder
 {
@@ -17,8 +18,9 @@ class MaterialBuilder implements Builder
     public function __construct()
     {
         $this->reset();
-        $this->date = session('currentDate');
+        $this->date = Session::get('currentDate');
         $this->date = DateParser::Parse($this->date);
+
     }
 
     public function InitiateExisting(Model $object)

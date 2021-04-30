@@ -72,7 +72,7 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'FORMATED_DATE'
+            'FORMATED_DATE',
         ]),
         dateFormated() {
             const dateSplit = this.date.split('-')

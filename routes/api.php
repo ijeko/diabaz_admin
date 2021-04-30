@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 ////        session(['currentDate' => $request->currentDate]);
 //    return $request->currentDate;
 //});
-Route::middleware(['apiAccess:admin'])->group(function () {
+Route::middleware(['dateSetter', 'apiAccess:admin'])->group(function () {
     Route::delete('/products/admin', [App\Http\Controllers\ProductionController::class, 'Remove']);
     Route::delete('/products/operations', [App\Http\Controllers\ProductionController::class, 'Remove']);
     Route::delete('/materials/admin', [App\Http\Controllers\MaterialsController::class, 'RemoveMaterial']);
@@ -34,7 +34,7 @@ Route::middleware(['apiAccess:admin'])->group(function () {
     Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'DeleteUser']);
 });
 
-Route::middleware(['apiAccess:admin|office'])->group(function () {
+Route::middleware(['dateSetter', 'apiAccess:admin|office'])->group(function () {
     Route::put('/products/admin', [App\Http\Controllers\ProductionController::class, 'EditProduct']);
     Route::post('/products/admin', [App\Http\Controllers\ProductionController::class, 'AddNewProduct']);
     Route::post('/products/spoiled', [App\Http\Controllers\ProductionController::class, 'AddSpoiledProduct']);
@@ -60,5 +60,4 @@ Route::middleware(['dateSetter', 'apiAccess:admin|office|gorny'])->group(functio
     Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyProductionReport']);
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'MonthlyUploadReport']);
     Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'YearlyProductionInTonsReport']);
-
 });

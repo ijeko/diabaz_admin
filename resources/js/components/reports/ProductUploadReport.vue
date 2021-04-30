@@ -128,6 +128,7 @@ export default {
             this.isLoading = true
             axios.get('/api/reports/upload', {
                 headers: {'Content-Type': 'application/json'},
+                params: {currentDate: this.DATE}
             })
                 .then(response => {
                     this.reportData = response.data

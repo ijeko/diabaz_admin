@@ -117,7 +117,7 @@ export default {
         },
         GET_MATERIALS: ({commit}) => {
             return axios.get('/api/materials', {
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
             })
                 .then(response => {
                     commit('SET_MATERIALS', response.data);
@@ -289,11 +289,11 @@ export default {
                     console.log(error);
                 })
         },
-        GET_INCOMES: ({commit}, data) => {
+        GET_INCOMES: ({commit},data) => {
             axios.get('/api/incomes/get',
                 {
                     headers: {'Content-Type': 'application/json'},
-                    params: data
+                    params: {currentDate: data}
                 })
                 .then(function (response) {
                     commit('SET_INCOMES', response.data);
