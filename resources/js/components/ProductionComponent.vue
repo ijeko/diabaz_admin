@@ -3,8 +3,12 @@
         <div class="card-header">Произведенная продукция за {{ FORMATED_DATE.ofMonth }}
             {{ FORMATED_DATE.year }} года
         </div>
-        <div v-if="this.message" class="alert alert-danger" role="alert">
-            {{ message.error }}
+        <div v-if="message"
+             class="alert alert-danger"
+             role="alert"
+             @click="message => {this.message=''}"
+        >
+            {{ message.error}}
             <div v-for="(item, index) in message.data"
                  :key="index"
             >
@@ -80,8 +84,9 @@ export default {
     mounted() {
         this.GET_PRODUCTS({currentDate: this.DATE})
             .then(response => {
-                    this.isLoading = false
-                    return true
+                this.SET_PROMISE_READY(true)
+                this.isLoading = false
+                return response
             })
     },
     data: function () {
@@ -106,13 +111,11 @@ export default {
             `PRODUCTS`,
             `DATE`,
             'FORMATED_DATE',
-            'UPDATE'
         ]),
     },
     methods: {
         ...mapActions([
             'GET_PRODUCTS',
-            'GET_MATERIAL_QTY',
             'ADD_SOLD',
             'ADD_PRODUCED',
             'UPDATE_KEY',
@@ -136,10 +139,6 @@ export default {
             this.closePopup()
             this.closeSold()
             this.UPDATE_KEY()
-            return this.GET_PRODUCTS().then(res => {
-                this.isLoading = false
-                this.SET_PROMISE_READY(true)
-            })
         },
         sendProduced(data) {
             axios.post('/api/produced/add',
@@ -148,12 +147,11 @@ export default {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(response => {
-                  this.message = response.data
-                  this.action()
-                  return response.data
+                    this.action()
+                    return response.data
                 })
                 .catch(error => {
-                    return error
+                    this.message = error.response.data
                 })
 
         },
@@ -166,15 +164,13 @@ export default {
                 })
                 .then(response => {
                     // commit('SET_PRODUCED', response.data)
-                    this.message = response.data
                     this.action()
+                    this.message = response.data
                     return response.data
                 })
                 .catch(error => {
-                    if (error.response) {
-                        this.message = error.response.data.errors
-                    }
-                    return error
+                    this.message = error.response.data
+
                 })
 
         },
@@ -191,10 +187,7 @@ export default {
                     return response.data
                 })
                 .catch(error => {
-                    if (error.response) {
-                        this.message = error.response.data.errors
-                    }
-                    return error
+                    this.message = error.response.data
                 })
         }
     }

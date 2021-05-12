@@ -6,6 +6,7 @@ namespace App\Http\Sevices;
 
 use App\Builders\MaterialBuilder;
 use App\Builders\ProductBuilder;
+use App\Exceptions\OutOfStockException;
 use App\Factories\SoldFactory;
 use App\Models\Material;
 use App\Models\Product;
@@ -31,7 +32,12 @@ class SoldService extends Service
         if (CheckerService::CheckProductionStock($sold, $soldProduction))
 
             Sold::create($production);
-        else   return \response(['error' => 'Не хватает: ' . $soldProduction->title]);
+        else
+        {
+            $errorData = json_encode(['error' => 'Не хватает: ' . $soldProduction->title]);
+            Throw new OutOfStockException($errorData);
+        }
+
     }
 
     public function GetPerMonth($date, $id)

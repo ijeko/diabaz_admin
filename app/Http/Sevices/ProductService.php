@@ -6,6 +6,7 @@ namespace App\Http\Sevices;
 
 use App\Builders\BuilderManager;
 use App\Builders\ProductBuilder;
+use App\Exceptions\OutOfStockException;
 use App\Factories\MaterialFactory;
 use App\Factories\ModelFactory;
 use App\Factories\ProductFactory;
@@ -84,7 +85,10 @@ class ProductService extends Service
         if (CheckerService::CheckProductionStock($spoiled, $production)) {
             $spoiled->save();
         } else
-            return \response(['error' => 'Не хватает: ' . $production->title]);
+        {
+            $errorData = json_encode(['error' => 'Не хватает: ' . $production->title]);
+            Throw new OutOfStockException($errorData);
+        }
     }
 
     public function GetProducedSoldSpoiled($product)

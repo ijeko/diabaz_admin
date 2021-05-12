@@ -6,6 +6,7 @@ namespace App\Http\Sevices;
 
 use App\Builders\MaterialBuilder;
 use App\Builders\ProductBuilder;
+use App\Exceptions\OutOfStockException;
 use App\Factories\ProducedFactory;
 use App\Models\Produced;
 use App\Models\Product;
@@ -58,8 +59,12 @@ class ProducedService extends Service
 //        ]);
         $check = CheckerService::CheckMaterialsForProduction($product, $data['qty']);
         if ($check)
-            return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
-//             Throw new \Exception(['error' => 'Не достаточно материалов', 'data' => $check]);
+//             Throw new \Exception(json_encode(['error' => 'Не достаточно материалов', 'data' => $check]), 400);
+        {
+            $errorData = json_encode(['error' => 'Не достаточно материалов', 'data' => $check]);
+            Throw new OutOfStockException($errorData);
+        }
+
         else {
             Produced::updateOrCreate(['product_id' => $data['product_id'], 'date' => $data['date']], $data);
             return \response('Data saved', '200');
