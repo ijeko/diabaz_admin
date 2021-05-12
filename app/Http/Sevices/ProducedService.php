@@ -59,6 +59,7 @@ class ProducedService extends Service
         $check = CheckerService::CheckMaterialsForProduction($product, $data['qty']);
         if ($check)
             return \response(['error' => 'Не достаточно материалов', 'data' => $check]);
+//             Throw new \Exception(['error' => 'Не достаточно материалов', 'data' => $check]);
         else {
             Produced::updateOrCreate(['product_id' => $data['product_id'], 'date' => $data['date']], $data);
             return \response('Data saved', '200');

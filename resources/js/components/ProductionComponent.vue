@@ -1,9 +1,9 @@
 <template>
     <div class="card">
         <div class="card-header">Произведенная продукция за {{ FORMATED_DATE.ofMonth }}
-            {{ FORMATED_DATE.year }} --- {{ UPDATE }}
+            {{ FORMATED_DATE.year }} года
         </div>
-        <div v-if="message" class="alert alert-danger" role="alert">
+        <div v-if="this.message" class="alert alert-danger" role="alert">
             {{ message.error }}
             <div v-for="(item, index) in message.data"
                  :key="index"
@@ -94,12 +94,6 @@ export default {
             isLoading: true
         }
     },
-    // watch: {
-    //     // эта функция запускается при любом изменении вопроса
-    //     DATE: function (newcurrentDate, oldcurrentDate) {
-    //         this.action()
-    //     }
-    // },
     props: {
         user: {
             default: {}
@@ -147,38 +141,18 @@ export default {
                 this.SET_PROMISE_READY(true)
             })
         },
-        // getProducts() {
-        //   axios.get('/api/products', {
-        //     headers: {'Content-Type': 'application/json'},
-        //     params: {currentDate: this.DATE}
-        //   })
-        //       .then(response => {
-        //         this.products = response.data
-        //         this.isLoading = false
-        //         return response.status
-        //       })
-        //       .catch(function (error) {
-        //         // handle error
-        //         console.log(error);
-        //       })
-        // },
         sendProduced(data) {
-            // data = JSON.stringify(data)
             axios.post('/api/produced/add',
                 {data},
                 {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(response => {
-                    // commit('SET_PRODUCED', response.data)
-                    // this.message = response.data
-                    this.action()
-                    return response.data
+                  this.message = response.data
+                  this.action()
+                  return response.data
                 })
                 .catch(error => {
-                    if (error.response) {
-                        this.message = error.response.data.errors
-                    }
                     return error
                 })
 
@@ -227,23 +201,6 @@ export default {
 }
 </script>
 <style scoped>
-/*table {*/
-/*    width: 100%;*/
-/*}*/
-
-/*tr {*/
-/*    !*display: flex;*!*/
-/*    !*justify-content: space-between;*!*/
-/*    border-bottom: 1px dotted silver;*/
-/*}*/
-
-/*td {*/
-/*    width: 25%;*/
-/*}*/
-
-/*td {*/
-/*    width: 25%;*/
-/*}*/
 .mat {
     height: 400px;
 }
