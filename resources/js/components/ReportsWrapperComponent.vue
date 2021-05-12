@@ -65,7 +65,7 @@ import AdminMachines from "./admin/machines";
 import {mapGetters} from 'vuex'
 
 export default {
-    name: "AdminWrapperComponent",
+    name: "ReportWrapperComponent",
     components: {AdminMachines, AdminMaterials},
     data: function () {
         return {

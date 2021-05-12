@@ -319,12 +319,12 @@ export default {
                 })
         },
         SET_DATE: ({commit}, date) => {
-            axios.get('/api/workdate',
-                {
-                    headers: {'Content-Type': 'application/json'},
-                    params: {currentDate: date}
-                })
-            console.log(date)
+            // axios.get('/api/workdate',
+            //     {
+            //         headers: {'Content-Type': 'application/json'},
+            //         params: {currentDate: date}
+            //     })
+            // console.log(date)
             commit('SET_DATE', date);
         },
         SET_FORMATED_DATE: ({commit}, date) => {

@@ -87,7 +87,6 @@ class ProductionController extends Controller
 
     public function AddProduced(Request $request)
     {
-        // TODO Исправить метод проверки количества материалов для работы с билдерами.
         $data = $request->data;
         return $this->procucedService->save($data);
     }

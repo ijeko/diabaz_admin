@@ -28,6 +28,8 @@ window.Vue = require('vue').default;
 Vue.component('home-wrapper-component', require('./components/HomeWrapperComponent.vue').default);
 Vue.component('admin-wrapper-component', require('./components/AdminWrapperComponent.vue').default);
 Vue.component('reports-wrapper-component', require('./components/ReportsWrapperComponent.vue').default);
+Vue.component('plan-wrapper-component', require('./components/PlanWrapperComponent.vue').default);
+
 
 //inputdata
 Vue.component('materials-component', require('./components/MaterialsComponent.vue').default);
@@ -57,8 +59,8 @@ Vue.component('admin-new-user-component', require('./components/admin/popup/newU
 Vue.component('component-loader', require('./components/loaders/componentLoader').default);
 
 //reports
-Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);
-Vue.component('product-upload-component', require('./components/reports/ProductUploadReport.vue').default);
+// Vue.component('production-month-component', require('./components/reports/ProductionMonth.vue').default);
+// Vue.component('product-upload-component', require('./components/reports/ProductUploadReport.vue').default);
 
 //CustomComponents
 Vue.component('month-selector-component', require('./components/CustomComponents/MonthSelector.vue').default);

@@ -28,7 +28,7 @@ class ProducedController extends Controller
 
     public function add(Request $request)
     {
-        // TODO Исправить метод проверки количества материалов для работы с билдерами.
+        // TODO Удалить этот метод, если используется продукт контроллер
         $data = $request->data;
       return $this->producedService->save($data);
 

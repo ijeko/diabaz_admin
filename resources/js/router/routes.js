@@ -1,7 +1,7 @@
 const routes = [
 
     {
-        path: '/reports/',
+        path: '/reports',
         component: () => import('../components/reports/ReportsPage'),
         name: 'reportsPage'
     },
@@ -15,11 +15,11 @@ const routes = [
         component: () => import('../components/reports/ProductUploadReport'),
         name: 'productUpload'
     },
-    // {
-    //     path: 'produced/year',
-    //     component: () => import(),
-    //     name: 'producedYear'
-    // },
+    {
+        path: '/plans',
+        component: () => import('../components/plans/SoldPlanComponent'),
+        name: 'soldPlans'
+    },
 ]
 
 export default routes;
