@@ -4,6 +4,8 @@
 namespace App\Builders;
 
 
+use App\Builders\BuilderInterfaces\Builder;
+
 class BuilderManager
 {
     protected $builder;

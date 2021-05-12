@@ -20,6 +20,11 @@ const routes = [
         component: () => import('../components/plans/SoldPlanComponent'),
         name: 'soldPlans'
     },
+    {
+        path: '/plans/orders',
+        component: () => import('../components/plans/OrdersComponent'),
+        name: 'orders'
+    },
 ]
 
 export default routes;

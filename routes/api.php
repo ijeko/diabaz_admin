@@ -60,4 +60,5 @@ Route::middleware(['dateSetter', 'apiAccess:admin|office|gorny'])->group(functio
     Route::get('/reports/monthly', [App\Http\Controllers\ReportsController::class, 'MonthlyProductionReport']);
     Route::get('/reports/upload', [App\Http\Controllers\ReportsController::class, 'MonthlyUploadReport']);
     Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'YearlyProductionInTonsReport']);
+    Route::get('/plans/orders', [\App\Http\Controllers\OrderController::class, 'showOrders']);
 });

@@ -4,6 +4,7 @@
 namespace App\Builders;
 
 
+use App\Builders\BuilderInterfaces\Builder;
 use App\Http\Sevices\DateParser;
 use App\Models\Material;
 use App\Models\Produced;
