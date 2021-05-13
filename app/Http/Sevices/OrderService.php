@@ -22,4 +22,13 @@ class OrderService extends Service
         }
         return $orders;
     }
+
+    public function AddNewOrderWith($params)
+    {
+        $builder = new OrderBuilder();
+        $order = $builder->GetOrder();
+        $order->fill($params);
+//        dd($order, $params);
+        return $order->save();
+    }
 }

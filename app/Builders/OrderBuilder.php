@@ -6,6 +6,7 @@ namespace App\Builders;
 
 use App\Http\Sevices\DateParser;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class OrderBuilder implements BuilderInterfaces\OrderBuilderInterface
@@ -32,13 +33,13 @@ class OrderBuilder implements BuilderInterfaces\OrderBuilderInterface
     {
         $orderProduct = $this->order->product()->first()->title;
         $unit = $this->order->product()->first()->unit;
-
         $this->order->product = $orderProduct;
         $this->order->unit = $unit;
     }
 
     public function GetOrder()
     {
+
         $result = $this->order;
         $this->reset();
 
@@ -48,5 +49,6 @@ class OrderBuilder implements BuilderInterfaces\OrderBuilderInterface
     public function reset(): void
     {
         $this->order = new Order();
+        $this->order->user_id = Auth::id();
     }
 }

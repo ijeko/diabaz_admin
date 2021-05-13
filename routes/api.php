@@ -46,6 +46,7 @@ Route::middleware(['dateSetter', 'apiAccess:admin|office'])->group(function () {
     Route::post('/incomes/add', [App\Http\Controllers\MaterialsController::class, 'AddNewMaterialIncome']);
     Route::get('/admin/users', [App\Http\Controllers\UserController::class, 'GetList']);
     Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
+    Route::post('/plans/orders', [\App\Http\Controllers\OrderController::class, 'createOrder']);
 });
 
 Route::middleware(['dateSetter', 'apiAccess:admin|office|gorny'])->group(function () {

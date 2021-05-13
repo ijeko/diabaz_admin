@@ -16,8 +16,9 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
     }
-    public function createOrder()
+    public function createOrder(Request $request)
     {
+        return $this->orderService->AddNewOrderWith($request->data);
         // TODO получить данные в виде сущности плана, передать их в сервис для обработки и записи в БД
     }
 
