@@ -44,6 +44,11 @@
                     :date="date"
                 ></admin-user-component>
             </div>
+            <div class="col-md-6">
+                <order-statuses-component
+                    class="mt-4"
+                ></order-statuses-component>
+            </div>
         </div>
 
     </div>
@@ -53,10 +58,11 @@
 import AdminMaterials from "./admin/materials";
 import AdminMachines from "./admin/machines";
 import {mapGetters} from 'vuex'
+import OrderStatusesComponent from "./admin/OrderStatusesComponent";
 
 export default {
     name: "AdminWrapperComponent",
-    components: {AdminMachines, AdminMaterials},
+    components: {OrderStatusesComponent, AdminMachines, AdminMaterials},
     data: function () {
         return {
             date: new Date().toISOString().slice(0, 10),

@@ -50,16 +50,8 @@ class ProducedService extends Service
         $productBuilder->BuildProductWithMaterialNorms();
         $product = $productBuilder->GetProduct();
 
-//        $Factory = new ProducedFactory();
-//        $item = $Factory->makeProduction(Produced::class, [
-//            'user_id' => $data->user_id,
-//            'product_id' => $data->product_id,
-//            'date' => $data->date,
-//            'qty' => $data->qty
-//        ]);
         $check = CheckerService::CheckMaterialsForProduction($product, $data['qty']);
         if ($check)
-//             Throw new \Exception(json_encode(['error' => 'Не достаточно материалов', 'data' => $check]), 400);
         {
             $errorData = json_encode(['error' => 'Не достаточно материалов', 'data' => $check]);
             Throw new OutOfStockException($errorData);

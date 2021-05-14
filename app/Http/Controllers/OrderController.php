@@ -48,4 +48,19 @@ class OrderController extends Controller
 
         // TODO удалить заявку
     }
+
+    public function AddNewStatus (Request $request)
+    {
+        return $this->orderService->SaveNewStatus($request->data);
+    }
+
+    public function GetStatuses ()
+    {
+        return $this->orderService->GetStatuses();
+    }
+
+    public function RemoveStatus (Request $request)
+    {
+        return $this->orderService->Remove('OrderStatus', $request->id);
+    }
 }

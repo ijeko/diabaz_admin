@@ -16,7 +16,7 @@ abstract class Service
     {
     }
 
-    public function Remove($model, $id)
+    public function Remove(string $model, int $id)
     {
         $record = 'App\Models\\'.$model;
        $record::destroy($id);

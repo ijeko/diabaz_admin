@@ -11,8 +11,6 @@ interface OrderBuilderInterface
 {
     public function InitiateExisting (Order $order);
 
-    public function BuildFullOrder();
-
     public function reset();
 
     public function GetOrder();
