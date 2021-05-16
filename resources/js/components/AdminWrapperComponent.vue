@@ -47,6 +47,7 @@
             <div class="col-md-6">
                 <order-statuses-component
                     class="mt-4"
+                    :key="UPDATE"
                 ></order-statuses-component>
             </div>
         </div>
@@ -79,6 +80,7 @@ export default {
     computed: {
         ...mapGetters([
             'FORMATED_DATE',
+            'UPDATE'
         ]),
         dateFormated() {
             const dateSplit = this.date.split('-')

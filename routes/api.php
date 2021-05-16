@@ -29,6 +29,9 @@ Route::middleware(['dateSetter', 'apiAccess:admin'])->group(function () {
     Route::post('/admin/users', [App\Http\Controllers\UserController::class, 'AddUser']);
     Route::delete('/admin/users', [App\Http\Controllers\UserController::class, 'DeleteUser']);
     Route::post('/admin/status', [\App\Http\Controllers\OrderController::class, 'AddNewStatus']);
+    Route::put('/admin/status', [\App\Http\Controllers\OrderController::class, 'EditStatus']);
+    Route::delete('/admin/status', [\App\Http\Controllers\OrderController::class, 'RemoveStatus']);
+
 });
 
 Route::middleware(['dateSetter', 'apiAccess:admin|office'])->group(function () {

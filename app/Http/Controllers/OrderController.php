@@ -63,4 +63,9 @@ class OrderController extends Controller
     {
         return $this->orderService->Remove('OrderStatus', $request->id);
     }
+
+    public function EditStatus (Request $request)
+    {
+        return $this->orderService->EditStatus($request->data);
+    }
 }

@@ -43,6 +43,12 @@ class OrderService extends Service
         $validatedStatus = $this->ValidateInput($status)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
     }
+    
+    public function EditStatus($params)
+    {
+        $validatedParams = $this->ValidateInput($params)->validated();
+        return OrderStatus::find($params['id'])->update($validatedParams);
+    }
 
     protected function ValidateInput(array $data)
     {

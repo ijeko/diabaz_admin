@@ -12,14 +12,14 @@ abstract class Service
 {
 
 
-    public function __construct ()
+    public function __construct()
     {
     }
 
     public function Remove(string $model, int $id)
     {
-        $record = 'App\Models\\'.$model;
-       $record::destroy($id);
+        $record = 'App\Models\\' . $model;
+        $record::destroy($id);
         return \response('Data deleted', '200');
     }
 
