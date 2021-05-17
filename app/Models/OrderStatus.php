@@ -9,4 +9,9 @@ class OrderStatus extends Model
 {
     protected $fillable = ['status'];
     use HasFactory;
+
+    public function order()
+    {
+        $this->belongsTo(Order::class, 'status', 'status');
+    }
 }

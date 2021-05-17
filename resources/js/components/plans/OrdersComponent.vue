@@ -17,13 +17,13 @@
                 <component-loader v-if="isLoading"></component-loader>
                 <div class="list-group">
                     <div
-                       @click="EditOrder(order)"
-                       data-toggle="modal"
-                       data-target="#editOrderModal"
-                       class="list-group-item list-group-item-action"
-                       v-for="(order, index) in orders"
-                       :key="index"
-                       :class="{'list-group-item-success' : order.isConfirmed }"
+                        @click="EditOrder(order)"
+                        data-toggle="modal"
+                        data-target="#editOrderModal"
+                        class="list-group-item list-group-item-action"
+                        v-for="(order, index) in orders"
+                        :key="index"
+                        :class="[{'list-group-item-secondary' : order.isConfirmed}, order.color]"
                     >
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ order.product }}</h5>
@@ -39,10 +39,10 @@
             </div>
         </div>
         <add-new-order-component
-        @sendOrder="addOrder"
+            @sendOrder="addOrder"
         />
         <edit-order-component
-        :order = "selectedOrder"
+            :order="selectedOrder"
         />
     </div>
 </template>
@@ -51,6 +51,7 @@
 import {mapActions, mapGetters} from 'vuex'
 import AddNewOrderComponent from "../popup/AddNewOrder";
 import EditOrderComponent from "../popup/EditOrderComponent";
+
 export default {
     name: "OrdersComponent",
     components: {EditOrderComponent, AddNewOrderComponent},
@@ -110,7 +111,7 @@ export default {
                     this.message = error.response.data
                 })
         },
-        editOrder () {
+        editOrder() {
             alert('asd')
         },
         action() {

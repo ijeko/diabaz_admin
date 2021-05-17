@@ -17,8 +17,13 @@ class Order extends Model
         parent::__construct($attributes);
     }
 
-    public function product()
+    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function status(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(OrderStatus::class, 'id', 'status');
     }
 }

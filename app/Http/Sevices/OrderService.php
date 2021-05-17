@@ -5,6 +5,7 @@ namespace App\Http\Sevices;
 
 
 use App\Builders\OrderBuilder;
+use App\Decorators\OrderStatusColored;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +19,8 @@ class OrderService extends Service
         foreach (Order::all() as $order) {
             $builder->InitiateExisting($order);
             $builder->BuildFullOrder();
-            $orderItem = $builder->GetOrder();
+            $builderDecorator = new OrderStatusColored($builder);
+            $orderItem = $builderDecorator->GetOrder();
             $orders->push($orderItem);
         }
         return $orders;
@@ -43,7 +45,7 @@ class OrderService extends Service
         $validatedStatus = $this->ValidateInput($status)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
     }
-    
+
     public function EditStatus($params)
     {
         $validatedParams = $this->ValidateInput($params)->validated();
@@ -53,7 +55,7 @@ class OrderService extends Service
     protected function ValidateInput(array $data)
     {
         return Validator::make($data, [
-            'status' => ['required', 'string', 'regex:/(^([а-яА-Я]+)(\d+)?$)/u', 'min:2', 'max:10']
+            'status' => ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30']
         ]);
     }
 }

@@ -68,4 +68,9 @@ class OrderController extends Controller
     {
         return $this->orderService->EditStatus($request->data);
     }
+
+    public function setStatus()
+    {
+        //TODO реализовать функционал
+    }
 }
