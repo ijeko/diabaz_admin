@@ -20,10 +20,10 @@
                         @click="EditOrder(order)"
                         data-toggle="modal"
                         data-target="#editOrderModal"
-                        class="list-group-item list-group-item-action"
+                        class="list-group-item-action"
                         v-for="(order, index) in orders"
                         :key="index"
-                        :class="[{'list-group-item-secondary' : order.isConfirmed}, order.color]"
+                        :class="order.color"
                     >
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ order.product }}</h5>
@@ -33,7 +33,16 @@
                             <p class="mb-1">{{ order.client }}</p>
                             <small>{{ order.shippingDate }}</small>
                         </div>
-                        <small>{{ order.comment }}</small>
+                        <div class="list-group w-50">
+                            <a href="#" class="list-group-item list-group-item-action active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">order.comment.username</h5>
+                                    <small>order.comment.date</small>
+                                </div>
+                                <p class="mb-1">{{order.comment}}</p>
+                                <small>And some small print.</small>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

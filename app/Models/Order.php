@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id', 'shippingDate', 'client', 'qty', 'comment','isConfirmed', 'isSuccess'];
+    protected $fillable = ['product_id', 'shippingDate', 'client', 'qty', 'comment', 'status'];
     private $user_id;
 
     public function __construct(array $attributes = [])

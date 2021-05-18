@@ -5,6 +5,7 @@ namespace App\Http\Sevices;
 
 
 use App\Builders\OrderBuilder;
+use App\Decorators\OrderCommentsGetter;
 use App\Decorators\OrderStatusColored;
 use App\Models\Order;
 use App\Models\OrderStatus;
@@ -19,8 +20,10 @@ class OrderService extends Service
         foreach (Order::all() as $order) {
             $builder->InitiateExisting($order);
             $builder->BuildFullOrder();
-            $builderDecorator = new OrderStatusColored($builder);
-            $orderItem = $builderDecorator->GetOrder();
+            $statusDecorator = new OrderStatusColored($builder);
+//            dd($statusDecorator);
+            $commentsDecorator = new OrderCommentsGetter($statusDecorator);
+            $orderItem = $commentsDecorator->GetOrder();
             $orders->push($orderItem);
         }
         return $orders;
@@ -50,6 +53,11 @@ class OrderService extends Service
     {
         $validatedParams = $this->ValidateInput($params)->validated();
         return OrderStatus::find($params['id'])->update($validatedParams);
+    }
+
+    public function SetStatusTo($order)
+    {
+        return Order::find($order['id'])->update(['status' => $order['status']]);
     }
 
     protected function ValidateInput(array $data)

@@ -9,10 +9,6 @@ use App\Models\OrderStatus;
 
 class OrderStatusColored extends OrderDecorator
 {
-    public function __construct(OrderBuilder $builder)
-    {
-        parent::__construct($builder);
-    }
 
     public function GetOrder()
     {

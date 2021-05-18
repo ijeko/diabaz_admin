@@ -11,11 +11,11 @@ use App\Models\Order;
 class OrderDecorator implements OrderBuilderInterface
 {
 
-    protected $builder;
+    protected $orderBuilder;
 
-    public function __construct(OrderBuilder $builder)
+    public function __construct(OrderBuilder $orderBuilder)
     {
-        $this->builder = $builder;
+        $this->orderBuilder = $orderBuilder;
     }
 
 
@@ -31,6 +31,6 @@ class OrderDecorator implements OrderBuilderInterface
 
     public function GetOrder ()
     {
-        return $this->builder->GetOrder();
+        return $this->orderBuilder->GetOrder();
     }
 }
