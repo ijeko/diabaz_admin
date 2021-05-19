@@ -38,7 +38,7 @@ class OrderService extends Service
         return $order->save();
     }
 
-    public function GetStatuses ()
+    public function GetStatuses()
     {
         return OrderStatus::all();
     }
@@ -64,14 +64,23 @@ class OrderService extends Service
 
     public function AddCommentToOrder($comment)
     {
-        $params = [['required', 'string',  'min:2', 'max:500']];
-        $validatedData = $this->ValidateInput($comment, $params)->validated();
-        return OrderComment::firstOrCreate($validatedData);
+        $params = [['required', 'string', 'min:2', 'max:500']];
+        $validatedData = $this
+            ->ValidateInput($comment, $params)
+            ->validated();
+        $newComment = new OrderComment();
+        $newComment->fill($validatedData)->save();
     }
+
     protected function ValidateInput(array $data, array $params)
     {
-        return Validator::make($data, [
-            key($data) => $params
-        ]);
+        $dataArray =[];
+        $i=-1;
+        foreach ($data as $key)
+        {
+            $i++;
+            $dataArray = array_merge( $dataArray, [array_keys($data)[$i] => $params]);
+        }
+        return Validator::make($data, $dataArray);
     }
 }

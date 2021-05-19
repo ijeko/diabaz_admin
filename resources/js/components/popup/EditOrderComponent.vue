@@ -46,7 +46,7 @@
                                     @click="addComment()">ОК</button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-dark w-100" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-outline-dark w-100" data-dismiss="modal" @click="action()">Закрыть</button>
                 </div>
                 <!--                </div>-->
 
@@ -74,7 +74,12 @@ export default {
         order: {}
     },
     methods: {
-        ...mapActions([]),
+        ...mapActions([
+            'UPDATE_KEY'
+        ]),
+        action () {
+          this.UPDATE_KEY()
+        },
         getStatuses() {
             axios.get('/api/admin/status',
                 {
@@ -96,7 +101,7 @@ export default {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(response => {
-                    return response.data
+                  return response.data
                 })
                 .catch(error => {
                     this.message = error.response.data
@@ -114,6 +119,7 @@ export default {
                     headers: {'Content-Type': 'application/json'}
                 })
                 .then(response => {
+                    this.newComment = ''
                     return response.data
                 })
                 .catch(error => {

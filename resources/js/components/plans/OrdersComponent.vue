@@ -15,16 +15,17 @@
             </div>
             <div class="card-body">
                 <component-loader v-if="isLoading"></component-loader>
-                <div class="list-group">
+                <div class="list-group"
+                :key="UPDATE">
                     <div
-                        @click="EditOrder(order)"
-                        data-toggle="modal"
-                        data-target="#editOrderModal"
-                        class="list-group-item-action"
+                        class="list-group-item bg-light"
                         v-for="(order, index) in orders"
                         :key="index"
-                        :class="order.color"
                     >
+                      <div class="modalShow"
+                           @click="EditOrder(order)"
+                           :class="order.color"
+                      >
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ order.product }}</h5>
                             <span>{{ order.qty }} {{ order.unit }}</span>
@@ -33,19 +34,30 @@
                             <p class="mb-1">{{ order.client }}</p>
                             <small>{{ order.shippingDate }}</small>
                         </div>
-                        <div class="list-group w-50"
-                        v-if="order.comments">
-                            <a href="#" class="list-group-item list-group-item-action active"
-                            v-for="(comment, index) in order.comments"
-                            :key="index">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">{{comment.username}}</h5>
-                                    <small>{{comment.date}}</small>
-                                </div>
-                                <p class="mb-1">{{comment.comment}}</p>
-                              <hr>
-                            </a>
+                      </div>
+
+                      <div class="commentBtn">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#comments'+order.id" aria-expanded="false" :aria-controls="'comments'+order.id">
+                            <span >Комментарии </span>
+                            <span class="badge badge-primary"> {{order.comments.length}} </span>
+                        </button>
+                      </div>
+                      <div class="collapse" :id="'comments'+order.id">
+                        <div class="alert alert-primary"
+                        v-for="(comment, index) in order.comments"
+                        :key="index">
+                          <div class="d-flex w-100 justify-content-between">
+                            <small>{{ comment.username }}</small>
+                            <small>{{ comment.date }}</small>
+                          </div>
+
+
+
+                          <div>
+                            {{comment.comment}}
+                          </div>
                         </div>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -76,6 +88,11 @@ export default {
             selectedOrder: {}
         }
     },
+    computed: {
+      ...mapGetters([
+      'UPDATE'
+      ])
+    },
     methods: {
         ...mapActions([
             'SET_PROMISE_READY',
@@ -88,6 +105,9 @@ export default {
             this.isPopupVisible = false
         },
         EditOrder(order) {
+          $('#editOrderModal').modal('show')
+          // data-toggle="modal"
+          // data-target="#editOrderModal"
             this.selectedOrder = order
             this.isPEditOrderVisible = true
         },
@@ -123,9 +143,6 @@ export default {
                     this.message = error.response.data
                 })
         },
-        editOrder() {
-            alert('asd')
-        },
         action() {
             this.isLoading = true
             this.SET_PROMISE_READY(false)
@@ -140,5 +157,13 @@ export default {
 </script>
 
 <style scoped>
+.commentBtn {
+  display: block;
+  z-index: 2!important;
+  position: relative;
+}
+.modalShow:hover {
+  cursor: pointer;
 
+}
 </style>
