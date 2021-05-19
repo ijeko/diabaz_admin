@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderComment extends Model
 {
+    protected $
     use HasFactory;
+
+    public function order()
+    {
+        $this->belongsTo(Order::class);
+    }
 }

@@ -26,4 +26,9 @@ class Order extends Model
     {
         return $this->hasOne(OrderStatus::class, 'id', 'status');
     }
+
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(OrderComment::class, 'order_id');
+    }
 }

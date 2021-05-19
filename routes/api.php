@@ -48,6 +48,7 @@ Route::middleware(['dateSetter', 'apiAccess:admin|office'])->group(function () {
     Route::post('/products/sold', [App\Http\Controllers\ProductionController::class, 'AddSold']);
     Route::post('/plans/orders', [\App\Http\Controllers\OrderController::class, 'createOrder']);
     Route::put('/plans/orders', [\App\Http\Controllers\OrderController::class, 'setStatus']);
+    Route::post('/plans/orders/comment', [\App\Http\Controllers\OrderController::class, 'addComment']);
 
 });
 

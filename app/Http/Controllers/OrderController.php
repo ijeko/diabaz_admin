@@ -75,4 +75,10 @@ class OrderController extends Controller
         return $this->orderService->setStatusTo($order);
         //TODO реализовать функционал
     }
+
+    public function addComment(Request $request)
+    {
+        $comment = $request->data;
+        return $this->orderService->AddCommentToOrder($comment);
+    }
 }

@@ -21,7 +21,12 @@ class OrderDecorator implements OrderBuilderInterface
 
     public function InitiateExisting(Order $order)
     {
-        // TODO: Implement InitiateExisting() method.
+        $this->orderBuilder->InitiateExisting($order);
+    }
+
+    public function BuildFullOrder()
+    {
+        $this->orderBuilder->BuildFullOrder();
     }
 
     public function reset()
@@ -29,7 +34,7 @@ class OrderDecorator implements OrderBuilderInterface
         // TODO: Implement reset() method.
     }
 
-    public function GetOrder ()
+    public function GetOrder()
     {
         return $this->orderBuilder->GetOrder();
     }

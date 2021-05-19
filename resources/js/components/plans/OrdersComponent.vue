@@ -33,14 +33,17 @@
                             <p class="mb-1">{{ order.client }}</p>
                             <small>{{ order.shippingDate }}</small>
                         </div>
-                        <div class="list-group w-50">
-                            <a href="#" class="list-group-item list-group-item-action active">
+                        <div class="list-group w-50"
+                        v-if="order.comments">
+                            <a href="#" class="list-group-item list-group-item-action active"
+                            v-for="(comment, index) in order.comments"
+                            :key="index">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">order.comment.username</h5>
-                                    <small>order.comment.date</small>
+                                    <h5 class="mb-1">{{comment.username}}</h5>
+                                    <small>{{comment.date}}</small>
                                 </div>
-                                <p class="mb-1">{{order.comment}}</p>
-                                <small>And some small print.</small>
+                                <p class="mb-1">{{comment.comment}}</p>
+                              <hr>
                             </a>
                         </div>
                     </div>

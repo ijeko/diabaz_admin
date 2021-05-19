@@ -8,6 +8,7 @@ use App\Builders\OrderBuilder;
 use App\Decorators\OrderCommentsGetter;
 use App\Decorators\OrderStatusColored;
 use App\Models\Order;
+use App\Models\OrderComment;
 use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,15 +17,14 @@ class OrderService extends Service
     public function GetAllOrdersOfMonth()
     {
         $builder = new OrderBuilder();
+        $statusDecorator = new OrderStatusColored($builder);
+        $commentsDecorator = new OrderCommentsGetter($builder);
         $orders = collect();
         foreach (Order::all() as $order) {
-            $builder->InitiateExisting($order);
-            $builder->BuildFullOrder();
-            $statusDecorator = new OrderStatusColored($builder);
-//            dd($statusDecorator);
-            $commentsDecorator = new OrderCommentsGetter($statusDecorator);
-            $orderItem = $commentsDecorator->GetOrder();
-            $orders->push($orderItem);
+            $statusDecorator->InitiateExisting($order);
+            $statusDecorator->BuildFullOrder();
+            $commentsDecorator->InitiateExisting($statusDecorator->GetOrder());
+            $orders->push($commentsDecorator->GetOrder());
         }
         return $orders;
     }
@@ -43,15 +43,17 @@ class OrderService extends Service
         return OrderStatus::all();
     }
 
-    public function SaveNewStatus($status)
+    public function SaveNewStatus($data)
     {
-        $validatedStatus = $this->ValidateInput($status)->validated();
+        $params = ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30'];
+        $validatedStatus = $this->ValidateInput($data, $params)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
     }
 
-    public function EditStatus($params)
+    public function EditStatus($data)
     {
-        $validatedParams = $this->ValidateInput($params)->validated();
+        $params = ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30'];
+        $validatedParams = $this->ValidateInput($data, $params)->validated();
         return OrderStatus::find($params['id'])->update($validatedParams);
     }
 
@@ -60,10 +62,16 @@ class OrderService extends Service
         return Order::find($order['id'])->update(['status' => $order['status']]);
     }
 
-    protected function ValidateInput(array $data)
+    public function AddCommentToOrder($comment)
+    {
+        $params = [['required', 'string',  'min:2', 'max:500']];
+        $validatedData = $this->ValidateInput($comment, $params)->validated();
+        return OrderComment::firstOrCreate($validatedData);
+    }
+    protected function ValidateInput(array $data, array $params)
     {
         return Validator::make($data, [
-            'status' => ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30']
+            key($data) => $params
         ]);
     }
 }
