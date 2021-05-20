@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderStatus extends Model
 {
-    protected $fillable = ['status'];
+    protected $fillable = ['status', 'color'];
     use HasFactory;
 
     public function order()

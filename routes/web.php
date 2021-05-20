@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
 //Route::get('/reports/{any}', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports');
     Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin'])->name('admin')->middleware('admin:admin|office');
     Route::get('/reports', [\App\Http\Controllers\ReportsController::class, 'index']);
-    Route::get('/plans', [\App\Http\Controllers\PlansController::class, 'index']);
+    Route::get('/plans', [\App\Http\Controllers\PlansController::class, 'index'])->name('plans')->middleware('admin:admin|office');
 
 });
 

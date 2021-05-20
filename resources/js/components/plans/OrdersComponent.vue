@@ -16,48 +16,49 @@
             <div class="card-body">
                 <component-loader v-if="isLoading"></component-loader>
                 <div class="list-group"
-                :key="UPDATE">
+                     :key="UPDATE">
                     <div
                         class="list-group-item bg-light"
                         v-for="(order, index) in orders"
                         :key="index"
                     >
-                      <div class="modalShow"
-                           @click="EditOrder(order)"
-                           :class="order.color"
-                      >
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ order.product }}</h5>
-                            <span>{{ order.qty }} {{ order.unit }}</span>
+                        <div class="modalShow"
+                             @click="EditOrder(order)"
+                             :class="order.color"
+                             data-toggle="modal"
+                             data-target="#editOrderModal"
+                        >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ order.product }}</h5>
+                                <span>{{ order.qty }} {{ order.unit }}</span>
+                            </div>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1">{{ order.client }}</p>
+                                <small>{{ order.shippingDate }}</small>
+                            </div>
                         </div>
-                        <div class="d-flex w-100 justify-content-between">
-                            <p class="mb-1">{{ order.client }}</p>
-                            <small>{{ order.shippingDate }}</small>
+
+                        <div class="commentBtn">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    :data-target="'#comments'+order.id" aria-expanded="false"
+                                    :aria-controls="'comments'+order.id">
+                                <span>Комментарии </span>
+                                <span class="badge badge-primary"> {{ order.comments.length }} </span>
+                            </button>
                         </div>
-                      </div>
-
-                      <div class="commentBtn">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#comments'+order.id" aria-expanded="false" :aria-controls="'comments'+order.id">
-                            <span >Комментарии </span>
-                            <span class="badge badge-primary"> {{order.comments.length}} </span>
-                        </button>
-                      </div>
-                      <div class="collapse" :id="'comments'+order.id">
-                        <div class="alert alert-primary"
-                        v-for="(comment, index) in order.comments"
-                        :key="index">
-                          <div class="d-flex w-100 justify-content-between">
-                            <small>{{ comment.username }}</small>
-                            <small>{{ comment.date }}</small>
-                          </div>
-
-
-
-                          <div>
-                            {{comment.comment}}
-                          </div>
+                        <div class="collapse" :id="'comments'+order.id">
+                            <div class="alert alert-primary"
+                                 v-for="(comment, index) in order.comments"
+                                 :key="index">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <small>{{ comment.username }}</small>
+                                    <small>{{ comment.date }}</small>
+                                </div>
+                                <div>
+                                    {{ comment.comment }}
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
             </div>
@@ -66,7 +67,9 @@
             @sendOrder="addOrder"
         />
         <edit-order-component
+            v-if="isEditOrderVisible"
             :order="selectedOrder"
+            @closeEditOrder="closeEditOrder"
         />
     </div>
 </template>
@@ -89,9 +92,9 @@ export default {
         }
     },
     computed: {
-      ...mapGetters([
-      'UPDATE'
-      ])
+        ...mapGetters([
+            'UPDATE'
+        ])
     },
     methods: {
         ...mapActions([
@@ -105,13 +108,14 @@ export default {
             this.isPopupVisible = false
         },
         EditOrder(order) {
-          $('#editOrderModal').modal('show')
-          // data-toggle="modal"
-          // data-target="#editOrderModal"
+            // $('#editOrderModal').modal('show')
+            // data-toggle="modal"
+            // data-target="#editOrderModal"
             this.selectedOrder = order
-            this.isPEditOrderVisible = true
+            this.isEditOrderVisible = true
         },
         closeEditOrder() {
+            this.selectedOrder={}
             this.isEditOrderVisible = false
         },
         getOrders() {
@@ -158,12 +162,13 @@ export default {
 
 <style scoped>
 .commentBtn {
-  display: block;
-  z-index: 2!important;
-  position: relative;
+    display: block;
+    z-index: 2 !important;
+    position: relative;
 }
+
 .modalShow:hover {
-  cursor: pointer;
+    cursor: pointer;
 
 }
 </style>

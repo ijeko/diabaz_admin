@@ -14,13 +14,24 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderService extends Service
 {
+    protected $textRus;
+    protected $texEng;
+    protected $textRusEng;
+
+    public function __construct()
+    {
+        $this->textRus = ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30'];
+        $this->textRusEng = ['required', 'string', 'min:2', 'max:500'];
+    }
+
     public function GetAllOrdersOfMonth()
     {
         $builder = new OrderBuilder();
         $statusDecorator = new OrderStatusColored($builder);
         $commentsDecorator = new OrderCommentsGetter($builder);
         $orders = collect();
-        foreach (Order::all() as $order) {
+        $orderModels = new Order();
+        foreach ($orderModels->latest()->get() as $order) {
             $statusDecorator->InitiateExisting($order);
             $statusDecorator->BuildFullOrder();
             $commentsDecorator->InitiateExisting($statusDecorator->GetOrder());
@@ -34,7 +45,7 @@ class OrderService extends Service
         $builder = new OrderBuilder();
         $order = $builder->GetOrder();
         $order->fill($params);
-//        dd($order, $params);
+        $order->status = OrderStatus::first()->id;
         return $order->save();
     }
 
@@ -45,16 +56,18 @@ class OrderService extends Service
 
     public function SaveNewStatus($data)
     {
-        $params = ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30'];
-        $validatedStatus = $this->ValidateInput($data, $params)->validated();
+        $dataArray=['status'=> $data['status']];
+        $params = [$this->textRus];
+        $validatedStatus = $this->ValidateInput($dataArray, $params)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
     }
 
     public function EditStatus($data)
     {
-        $params = ['required', 'string', 'regex:/(^([а-яА-Я ]+)(\d+)?$)/u', 'min:2', 'max:30'];
-        $validatedParams = $this->ValidateInput($data, $params)->validated();
-        return OrderStatus::find($params['id'])->update($validatedParams);
+        $dataArray=['status'=> $data['status'], 'color'=> $data['color']];
+        $params = [$this->textRus, $this->textRusEng];
+        $validatedParams = $this->ValidateInput($dataArray, $params)->validated();
+        return OrderStatus::find($data['id'])->update($validatedParams);
     }
 
     public function SetStatusTo($order)
@@ -64,9 +77,10 @@ class OrderService extends Service
 
     public function AddCommentToOrder($comment)
     {
+        $dataArray=['comment'=> $comment['comment']];
         $params = [['required', 'string', 'min:2', 'max:500']];
         $validatedData = $this
-            ->ValidateInput($comment, $params)
+            ->ValidateInput($dataArray, $params)
             ->validated();
         $newComment = new OrderComment();
         $newComment->fill($validatedData)->save();
@@ -79,7 +93,7 @@ class OrderService extends Service
         foreach ($data as $key)
         {
             $i++;
-            $dataArray = array_merge( $dataArray, [array_keys($data)[$i] => $params]);
+            $dataArray = array_merge( $dataArray, [array_keys($data)[$i] => $params[$i]]);
         }
         return Validator::make($data, $dataArray);
     }

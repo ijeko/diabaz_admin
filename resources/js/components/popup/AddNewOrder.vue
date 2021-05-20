@@ -35,19 +35,19 @@
                         <input v-model="shippingDate" type="date" class="form-control" id="date">
                     </div>
 
-                    <div class="form-group">
-                        <label for="comment">Комментарии</label>
-                        <textarea v-model="comment" type="text" name="client" id="comment" class="form-control">&nbsp;</textarea>
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="comment">Комментарии</label>-->
+<!--                        <textarea v-model="comment" type="text" name="client" id="comment" class="form-control">&nbsp;</textarea>-->
+<!--                    </div>-->
 
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="check" id="confirmation" v-model="isConfirmed">
-                            <label class="form-check-label" for="confirmation">
-                                Подтверждено
-                            </label>
-                        </div>
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <div class="form-check">-->
+<!--                            <input class="form-check-input" type="checkbox" value="check" id="confirmation" v-model="isConfirmed">-->
+<!--                            <label class="form-check-label" for="confirmation">-->
+<!--                                Подтверждено-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"

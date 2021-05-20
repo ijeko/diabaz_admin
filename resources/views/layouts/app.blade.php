@@ -43,6 +43,9 @@
                             <a class="nav-link" href="{{ route('admin') }}">{{ __('Администрирование') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('plans') }}">{{ __('Планирование') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/reports">{{ __('Отчеты') }}</a>
                         </li>
                     @endif

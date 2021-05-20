@@ -9,7 +9,8 @@
           <th class="text-center">Действие</th>
         </tr>
         <tr v-for="(status, index) in statuses"
-            :key="index">
+            :key="index"
+        :class="status.color">
           <td class="text-left"><span>{{ status.status }}</span></td>
           <td class="text-center"><span class="btn btn-link"
                                         @click="editStatus(status)"
@@ -32,6 +33,7 @@
     <edit-status-component
         v-if="isEditVisible"
         :statusName="this.selectedStatus.status"
+        :statusColor="this.selectedStatus.color"
         :id="this.selectedStatus.id"
         @closeEdit="closePopup"
     ></edit-status-component>
