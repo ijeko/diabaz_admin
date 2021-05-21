@@ -89,7 +89,6 @@ export default {
                 qty: this.qty,
                 shippingDate: this.shippingDate,
                 client: this.client,
-                comment: this.comment,
                 isConfirmed: this.isConfirmed,
                 isSuccess: 0
             }
