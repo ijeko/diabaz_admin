@@ -20,7 +20,6 @@ class Orders extends Migration
         $table->float('qty');
         $table->integer('user_id');
         $table->string('client');
-        $table->text('comment')->default(' ');
         $table->boolean('isPaid')->default(0);
         $table->timestamps();
         });

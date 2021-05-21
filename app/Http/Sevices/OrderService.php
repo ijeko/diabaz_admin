@@ -77,8 +77,10 @@ class OrderService extends Service
 
     public function AddCommentToOrder($comment)
     {
-        $dataArray=['comment'=> $comment['comment']];
-        $params = [['required', 'string', 'min:2', 'max:500']];
+        $dataArray=['comment'=> $comment['comment'],
+            'order_id' => $comment['order_id']];
+        $params = [['required', 'string', 'min:2', 'max:500'],
+            ['required']];
         $validatedData = $this
             ->ValidateInput($dataArray, $params)
             ->validated();
