@@ -76,6 +76,12 @@ class OrderController extends Controller
         //TODO реализовать функционал
     }
 
+    public function SetPaymentStatus(Request $request)
+    {
+        $order = $request->data;
+        $this->orderService->SetPaymentTo($order);
+    }
+
     public function addComment(Request $request)
     {
         $comment = $request->data;

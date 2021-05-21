@@ -86,6 +86,14 @@ class OrderService extends Service
         $newComment->fill($validatedData)->save();
     }
 
+    public function SetPaymentTo($order)
+    {
+        return Order::updateOrCreate(
+            ['id' => $order['id']],
+            ['isPaid' => $order['isPaid']]
+        );
+    }
+
     protected function ValidateInput(array $data, array $params)
     {
         $dataArray =[];

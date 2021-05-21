@@ -50,6 +50,5 @@ class OrderBuilder implements BuilderInterfaces\OrderBuilderInterface
     public function reset(): void
     {
         $this->order = new Order();
-        $this->order->user_id = Auth::id();
     }
 }

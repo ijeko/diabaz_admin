@@ -21,8 +21,7 @@ class Orders extends Migration
         $table->integer('user_id');
         $table->string('client');
         $table->text('comment')->default(' ');
-        $table->boolean('isConfirmed')->default(0);
-        $table->boolean('isSuccess')->default(0);
+        $table->boolean('isPaid')->default(0);
         $table->timestamps();
         });
     }

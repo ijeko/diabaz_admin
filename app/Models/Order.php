@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id', 'shippingDate', 'client', 'qty', 'comment', 'status'];
+    protected $fillable = ['product_id', 'shippingDate', 'client', 'qty', 'comment', 'status', 'isPaid'];
     private $user_id;
+    private $isPaid;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+        $this->attributes = ['user_id' => Auth::id(), 'isPaid' => 0];
     }
 
     public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo

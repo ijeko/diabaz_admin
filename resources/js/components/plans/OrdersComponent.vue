@@ -29,7 +29,7 @@
                              data-target="#editOrderModal"
                         >
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ order.product }}</h5>
+                                <h5 class="mb-1">{{ order.product }} <span class="badge badge-pill badge-success" v-if="order.isPaid">Оплачен</span></h5>
                                 <span>{{ order.qty }} {{ order.unit }}</span>
                             </div>
                             <div class="d-flex w-100 justify-content-between">
