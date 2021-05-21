@@ -27,9 +27,19 @@
                         <input type="checkbox"
                                class="form-check-input"
                                id="isPaid"
-                               v-model="checked"
-                               @change="setPayment">
+                               v-model="isPaid"
+                               value="true"
+                               @change="setPayShipStatus">
                         <label class="form-check-label" for="isPaid">Оплачено полностью</label>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="isShipped"
+                               v-model="isShipped"
+                               value="true"
+                               @change="setPayShipStatus">
+                        <label class="form-check-label" for="isShipped">Отгружено</label>
                     </div>
                     <hr>
                     <div class="input-group mb-3">
@@ -64,7 +74,8 @@ export default {
             statuses: [],
             newStatus: {},
             newComment: '',
-            checked: this.order.isPaid
+            isPaid: this.order.isPaid,
+            isShipped: this.order.isShipped
         }
     },
     props: {
@@ -112,8 +123,8 @@ export default {
             this.order.color = this.newStatus.color
             this.sendStatus()
         },
-        setPayment() {
-            let data = {id: this.order.id, isPaid: this.checked}
+        setPayShipStatus() {
+            let data = {id: this.order.id, isPaid: this.isPaid, isShipped: this.isShipped}
             axios.put('/api/plans/orders/payment',
                 {data},
                 {

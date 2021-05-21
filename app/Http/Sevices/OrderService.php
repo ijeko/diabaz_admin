@@ -56,7 +56,7 @@ class OrderService extends Service
 
     public function SaveNewStatus($data)
     {
-        $dataArray=['status'=> $data['status']];
+        $dataArray = ['status' => $data['status']];
         $params = [$this->textRus];
         $validatedStatus = $this->ValidateInput($dataArray, $params)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
@@ -64,7 +64,7 @@ class OrderService extends Service
 
     public function EditStatus($data)
     {
-        $dataArray=['status'=> $data['status'], 'color'=> $data['color']];
+        $dataArray = ['status' => $data['status'], 'color' => $data['color']];
         $params = [$this->textRus, $this->textRusEng];
         $validatedParams = $this->ValidateInput($dataArray, $params)->validated();
         return OrderStatus::find($data['id'])->update($validatedParams);
@@ -77,7 +77,7 @@ class OrderService extends Service
 
     public function AddCommentToOrder($comment)
     {
-        $dataArray=['comment'=> $comment['comment'],
+        $dataArray = ['comment' => $comment['comment'],
             'order_id' => $comment['order_id']];
         $params = [['required', 'string', 'min:2', 'max:500'],
             ['required']];
@@ -92,18 +92,20 @@ class OrderService extends Service
     {
         return Order::updateOrCreate(
             ['id' => $order['id']],
-            ['isPaid' => $order['isPaid']]
+            [
+                'isPaid' => $order['isPaid'],
+                'isShipped' => $order['isShipped']
+            ]
         );
     }
 
     protected function ValidateInput(array $data, array $params)
     {
-        $dataArray =[];
-        $i=-1;
-        foreach ($data as $key)
-        {
+        $dataArray = [];
+        $i = -1;
+        foreach ($data as $key) {
             $i++;
-            $dataArray = array_merge( $dataArray, [array_keys($data)[$i] => $params[$i]]);
+            $dataArray = array_merge($dataArray, [array_keys($data)[$i] => $params[$i]]);
         }
         return Validator::make($data, $dataArray);
     }
