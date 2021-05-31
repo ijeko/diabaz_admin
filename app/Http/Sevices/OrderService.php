@@ -26,6 +26,9 @@ class OrderService extends Service
 
     public function GetAllOrdersOfMonth()
     {
+        //TODO Удалить после теста
+        $api = new TransportTaxCalculator();
+        $api->GetTransportFromAti();
         $builder = new OrderBuilder();
         $statusDecorator = new OrderStatusColored($builder);
         $commentsDecorator = new OrderCommentsGetter($builder);

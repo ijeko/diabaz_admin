@@ -1,7 +1,10 @@
 <template>
   <div class="test">
-    <month-selector-component></month-selector-component>
-    <div class="row justify-content-between">
+      <div class="row justify-content-between">
+          <month-selector-component></month-selector-component>
+          <delivery-calculator-component/>
+      </div>
+      <div class="row justify-content-between">
       <div class="col-md-3">
         <div class="mt-4">
           <div class="btn-group-vertical">
