@@ -22,9 +22,10 @@ class OrderController extends Controller
         // TODO получить данные в виде сущности плана, передать их в сервис для обработки и записи в БД
     }
 
-    public function showOrders ()
+    public function showOrders (Request $request)
     {
-        return $this->orderService->GetAllOrdersOfMonth();
+        $status = $request->status;
+        return $this->orderService->ShowOrdersWith($status);
         // TODO вернуть массив заявок в требуемом виде
     }
 
@@ -77,7 +78,7 @@ class OrderController extends Controller
     }
 
     public function SetPaymentStatus(Request $request)
-    {
+    {;
         $order = $request->data;
         $this->orderService->SetPaymentTo($order);
     }

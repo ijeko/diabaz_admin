@@ -24,7 +24,12 @@ class OrderService extends Service
         $this->textRusEng = ['required', 'string', 'min:2', 'max:500'];
     }
 
-    public function GetAllOrdersOfMonth()
+    public function ShowOrdersWith($status)
+    {
+        return $this->FilterOrders($this->GetAllOrdersOfMonth(), $status);
+    }
+
+    private function GetAllOrdersOfMonth()
     {
         $builder = new OrderBuilder();
         $statusDecorator = new OrderStatusColored($builder);
@@ -40,6 +45,18 @@ class OrderService extends Service
         return $orders;
     }
 
+    private function FilterOrders($orders, $status)
+    {
+        if (isset($status)) {
+            $orders = $orders->map(function ($item, $key) use ($status) {
+                if ($item['status'] == $status)
+                    return $item;
+            });
+            return $orders->filter();
+        } else
+            return $orders;
+    }
+
     public function AddNewOrderWith($params)
     {
         $builder = new OrderBuilder();
@@ -51,13 +68,24 @@ class OrderService extends Service
 
     public function GetStatuses()
     {
-        return OrderStatus::all();
+        $statuses = new OrderStatus();
+        $statusesWithOrderNum = Collect();
+        foreach ($statuses->get() as $status)
+        {
+            $status->SetNumberOfOrders($this->OrdersOfStatus($status));
+            $statusesWithOrderNum->push($status);
+        }
+        return $statusesWithOrderNum;
+    }
+    private function AddPaidShippedStatuses()
+    {
+
     }
 
     public function SaveNewStatus($data)
     {
-        $dataArray = ['status' => $data['status']];
-        $params = [$this->textRus];
+        $dataArray = ['status' => $data['status'], 'color' => $data['color']];
+        $params = [$this->textRus, $this->textRusEng];
         $validatedStatus = $this->ValidateInput($dataArray, $params)->validated();
         return OrderStatus::firstOrCreate($validatedStatus);
     }
@@ -109,4 +137,12 @@ class OrderService extends Service
         }
         return Validator::make($data, $dataArray);
     }
+
+    protected function OrdersOfStatus(OrderStatus $status)
+    {
+        $orders = Order::all();
+        return $orders->where('status', $status->id)->count();
+    }
+
+
 }
