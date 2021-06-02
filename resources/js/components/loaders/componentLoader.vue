@@ -15,7 +15,7 @@ export default {
 <style scoped>
 .wrapper {
     /*background-color: #1f6fb2;*/
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
     z-index: 99;

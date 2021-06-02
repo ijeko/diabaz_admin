@@ -2,7 +2,8 @@
   <div class="wrapper">
     <div class="card mt-4">
       <div class="card-header">
-        Заявки и планирование отгрузок
+        Заявки и планирование отгрузок1
+          {{orders}}
       </div>
       <div class="card-body">
         <component-loader v-if="isLoading"></component-loader>
@@ -29,9 +30,14 @@ export default {
   name: "SoldPlanComponent",
   data() {
     return {
+        orders: {},
       isLoading: false,
     }
-  }
+  },
+    methods: {
+    },
+    mounted() {
+    }
 }
 </script>
 

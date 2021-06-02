@@ -64,6 +64,8 @@ Vue.component('component-loader', require('./components/loaders/componentLoader'
 
 //CustomComponents
 Vue.component('month-selector-component', require('./components/CustomComponents/MonthSelector.vue').default);
+Vue.component('delivery-calculator-component', require('./components/CustomComponents/DeliveryCalculatorModal.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
