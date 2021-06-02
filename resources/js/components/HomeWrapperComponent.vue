@@ -1,6 +1,9 @@
 <template>
     <div class="container">
-        <month-selector-component></month-selector-component>
+        <div class="row justify-content-between w-100">
+            <month-selector-component class="w-25"></month-selector-component>
+            <delivery-calculator-component class="w-25"/>
+        </div>
         <div class="row justify-content-between">
             <div class="col-md-6">
                 <materials-component

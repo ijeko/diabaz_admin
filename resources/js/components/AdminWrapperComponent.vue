@@ -1,6 +1,9 @@
 <template>
     <div class="container">
-        <month-selector-component></month-selector-component>
+        <div class="row justify-content-between">
+            <month-selector-component></month-selector-component>
+            <delivery-calculator-component/>
+        </div>
         <div class="editButtons">
             <admin-edit-inputs-component
                 :user="user"

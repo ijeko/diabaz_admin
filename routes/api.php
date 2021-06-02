@@ -67,4 +67,7 @@ Route::middleware(['dateSetter', 'apiAccess:admin|office|gorny'])->group(functio
     Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'YearlyProductionInTonsReport']);
     Route::get('/plans/orders', [\App\Http\Controllers\OrderController::class, 'showOrders']);
     Route::get('/admin/status', [\App\Http\Controllers\OrderController::class, 'GetStatuses']);
+    Route::post('/instrument/transport/city', [\App\Http\Controllers\TransportCalcController::class, 'GetCityFromAti']);
+    Route::post('/instrument/transport/tax', [\App\Http\Controllers\TransportCalcController::class, 'CalculateTexes']);
+
 });
