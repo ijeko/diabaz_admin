@@ -77,10 +77,6 @@ class OrderService extends Service
         }
         return $statusesWithOrderNum;
     }
-    private function AddPaidShippedStatuses()
-    {
-
-    }
 
     public function SaveNewStatus($data)
     {
