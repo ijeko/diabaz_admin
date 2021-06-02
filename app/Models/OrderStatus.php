@@ -7,11 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderStatus extends Model
 {
+
     protected $fillable = ['status', 'color'];
+    protected $orderNum;
+
     use HasFactory;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     public function order()
     {
-        $this->belongsTo(Order::class, 'status', 'status');
+    }
+
+    public function SetNumberOfOrders($orderNum)
+    {
+        $this->attributes = array_merge($this->attributes, ['orderNum' => $orderNum]);
     }
 }
