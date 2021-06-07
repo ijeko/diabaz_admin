@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Sevices\ReportsService;
+use App\Http\Services\ReportsService;
 use App\Models\Material;
 use App\Models\Product;
 use App\Models\Sold;

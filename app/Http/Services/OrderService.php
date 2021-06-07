@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Sevices;
+namespace App\Http\Services;
 
 
 use App\Builders\OrderBuilder;
@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\OrderComment;
 use App\Models\OrderStatus;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Serializer\Serializer;
 
 class OrderService extends Service
 {
@@ -42,6 +43,7 @@ class OrderService extends Service
             $commentsDecorator->InitiateExisting($statusDecorator->GetOrder());
             $orders->push($commentsDecorator->GetOrder());
         }
+
         return $orders;
     }
 

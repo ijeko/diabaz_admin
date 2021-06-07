@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Sevices;
+namespace App\Http\Services;
 
 
 use App\Models\Motohour;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Builders\MaterialBuilder;
-use App\Http\Sevices\MaterialService;
+use App\Http\Services\MaterialService;
 use App\Models\Material;
 use App\Models\MaterialIncome;
 use Illuminate\Http\Request;

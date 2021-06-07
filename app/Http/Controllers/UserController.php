@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Factories\UserFactory;
-use App\Http\Sevices\UserService;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Sevices\TransportServices;
+namespace App\Http\Services\TransportServices;
 
 
 interface TransportSource

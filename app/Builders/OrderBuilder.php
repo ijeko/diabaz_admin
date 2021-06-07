@@ -4,7 +4,7 @@
 namespace App\Builders;
 
 
-use App\Http\Sevices\DateParser;
+use App\Http\Services\DateParser;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;

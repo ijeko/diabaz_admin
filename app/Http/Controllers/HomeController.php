@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Sevices\MaterialService;
-use App\Http\Sevices\ProducedService;
-use App\Http\Sevices\ProductService;
+use App\Http\Services\MaterialService;
+use App\Http\Services\ProducedService;
+use App\Http\Services\ProductService;
 use App\Models\Material;
 use App\Models\Produced;
 use App\Models\Product;
@@ -21,9 +21,6 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->material = new MaterialService(new Material());
-        $this->produced = new ProducedService(new Produced());
-        $this->product = new ProductService(new Product());
     }
 
     /**

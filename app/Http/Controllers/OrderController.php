@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Sevices\OrderService;
+
+use App\Http\Services\OrderService;
+use App\Http\Services\Repositories\OrderRepository;
+use App\Http\Services\Repositories\RepositoryInterface;
+use App\Http\Services\Repositories\Requests\OrderRequest;
+use App\Http\Services\SerializerService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -11,10 +16,12 @@ class OrderController extends Controller
      * @var OrderService
      */
     private $orderService;
+    private $orderRepo;
 
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderService $orderService, RepositoryInterface $orderRepo)
     {
         $this->orderService = $orderService;
+        $this->orderRepo = $orderRepo;
     }
     public function createOrder(Request $request)
     {
@@ -24,7 +31,10 @@ class OrderController extends Controller
 
     public function showOrders (Request $request)
     {
-        $status = $request->status;
+        $status = $request->all();
+        $orderRequest = new OrderRequest(null, json_decode($request->data, true));
+        $repo = $this->orderRepo->getFiltered();
+        dd(__METHOD__, $repo->getFiltered());
         return $this->orderService->ShowOrdersWith($status);
         // TODO вернуть массив заявок в требуемом виде
     }

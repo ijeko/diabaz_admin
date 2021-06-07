@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 
 
 use App\Factories\ProductFactory;
-use App\Http\Sevices\ProducedService;
-use App\Http\Sevices\ProductService;
-use App\Http\Sevices\SoldService;
+use App\Http\Services\ProducedService;
+use App\Http\Services\ProductService;
+use App\Http\Services\SoldService;
 use App\Models\Materialnorm;
 use App\Models\Product;
 use Illuminate\Http\Request;

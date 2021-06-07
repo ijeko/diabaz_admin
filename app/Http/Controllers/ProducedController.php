@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Sevices\ProducedService;
+use App\Http\Services\ProducedService;
 use App\Models\Produced;
 use Illuminate\Http\Request;
 

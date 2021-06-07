@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Sevices\TransportTaxCalculator;
+use App\Http\Services\TransportTaxCalculator;
 use Illuminate\Http\Request;
 
 class TransportCalcController extends Controller

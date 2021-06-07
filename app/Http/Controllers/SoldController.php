@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Factories\ModelFactory;
-use App\Http\Sevices\SoldService;
+use App\Http\Services\SoldService;
 use App\Models\Sold;
 use Illuminate\Http\Request;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Sevices\MachinesService;
+use App\Http\Services\MachinesService;
 use App\Models\Machine;
 use App\Models\Motohour;
 use Illuminate\Http\Request;

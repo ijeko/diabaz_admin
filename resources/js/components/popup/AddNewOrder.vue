@@ -89,7 +89,7 @@ export default {
                 qty: this.qty,
                 shippingDate: this.shippingDate,
                 client: this.client,
-                isConfirmed: this.isConfirmed,
+                isConfirmed: false,
                 isSuccess: 0
             }
                 this.$emit('sendOrder', data)
