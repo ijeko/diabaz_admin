@@ -12,10 +12,15 @@ class OrderRepository implements RepositoryInterface
     protected $request;
     protected $order;
 
-    public function __construct(RequestInterface $request)
+    public function __construct()
+    {
+        $this->order = new Order();
+    }
+
+    public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
-        $this->order = new Order();
+        // TODO: Implement setRequest() method.
     }
 
     function getAll()

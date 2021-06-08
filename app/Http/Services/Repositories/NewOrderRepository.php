@@ -8,9 +8,10 @@ use App\Http\Services\Repositories\Requests\RequestInterface;
 
 class NewOrderRepository implements RepositoryInterface
 {
-
-    public function __construct(RequestInterface $request)
+    public function setRequest(RequestInterface $request)
     {
+        dd(__METHOD__, 'I am new!');
+        // TODO: Implement setRequest() method.
     }
 
     function getAll()

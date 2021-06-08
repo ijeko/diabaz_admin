@@ -1,23 +1,24 @@
 <?php
 
 
-namespace App\Http\Services;
+namespace App\Http\Sevices\Orders;
 
 
 use App\Builders\OrderBuilder;
 use App\Decorators\OrderCommentsGetter;
 use App\Decorators\OrderStatusColored;
+use App\Http\Sevices\Service;
 use App\Models\Order;
-use App\Models\OrderComment;
 use App\Models\OrderStatus;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\Serializer\Serializer;
+use App\Http\Sevices\Orders\StatusesService;
 
 class OrderService extends Service
 {
     protected $textRus;
     protected $texEng;
     protected $textRusEng;
+    public $statusesService;
+    public $commentService;
 
     public function __construct()
     {
@@ -33,18 +34,16 @@ class OrderService extends Service
     private function GetAllOrdersOfMonth()
     {
         $builder = new OrderBuilder();
-//        $statusDecorator = new OrderStatusColored($builder);
-//        $commentsDecorator = new OrderCommentsGetter($builder);
+        $statusDecorator = new OrderStatusColored($builder);
+        $commentsDecorator = new OrderCommentsGetter($builder);
         $orders = collect();
         $orderModels = new Order();
         foreach ($orderModels->latest()->get() as $order) {
-//            $statusDecorator->InitiateExisting($order);
-//            $statusDecorator->BuildFullOrder();
-//            $commentsDecorator->InitiateExisting($statusDecorator->GetOrder());
-            $extendedOrder = new OrderStatusColored(new OrderCommentsGetter($builder));
-            $orders->push($extendedOrder);
+            $statusDecorator->InitiateExisting($order);
+            $statusDecorator->BuildFullOrder();
+            $commentsDecorator->InitiateExisting($statusDecorator->GetOrder());
+            $orders->push($commentsDecorator->GetOrder());
         }
-dd(__METHOD__, $orders);
         return $orders;
     }
 
@@ -80,6 +79,10 @@ dd(__METHOD__, $orders);
         }
         return $statusesWithOrderNum;
     }
+    private function AddPaidShippedStatuses()
+    {
+
+    }
 
     public function SaveNewStatus($data)
     {
@@ -102,19 +105,6 @@ dd(__METHOD__, $orders);
         return Order::find($order['id'])->update(['status' => $order['status']]);
     }
 
-    public function AddCommentToOrder($comment)
-    {
-        $dataArray = ['comment' => $comment['comment'],
-            'order_id' => $comment['order_id']];
-        $params = [['required', 'string', 'min:2', 'max:500'],
-            ['required']];
-        $validatedData = $this
-            ->ValidateInput($dataArray, $params)
-            ->validated();
-        $newComment = new OrderComment();
-        $newComment->fill($validatedData)->save();
-    }
-
     public function SetPaymentTo($order)
     {
         return Order::updateOrCreate(
@@ -124,17 +114,6 @@ dd(__METHOD__, $orders);
                 'isShipped' => $order['isShipped']
             ]
         );
-    }
-
-    protected function ValidateInput(array $data, array $params)
-    {
-        $dataArray = [];
-        $i = -1;
-        foreach ($data as $key) {
-            $i++;
-            $dataArray = array_merge($dataArray, [array_keys($data)[$i] => $params[$i]]);
-        }
-        return Validator::make($data, $dataArray);
     }
 
     protected function OrdersOfStatus(OrderStatus $status)

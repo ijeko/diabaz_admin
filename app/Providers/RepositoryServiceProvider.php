@@ -18,7 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             RepositoryInterface::class,
-            NewOrderRepository::class
+            OrderRepository::class
         );
     }
 

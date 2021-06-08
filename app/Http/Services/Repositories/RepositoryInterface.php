@@ -8,7 +8,8 @@ use App\Http\Services\Repositories\Requests\RequestInterface;
 
 interface RepositoryInterface
 {
-    public function __construct(RequestInterface $request);
+
+    function setRequest(RequestInterface $request);
 
     function getAll();
 

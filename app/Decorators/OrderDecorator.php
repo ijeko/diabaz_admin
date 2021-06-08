@@ -8,12 +8,12 @@ use App\Builders\BuilderInterfaces\OrderBuilderInterface;
 use App\Builders\OrderBuilder;
 use App\Models\Order;
 
-class OrderDecorator implements OrderBuilderInterface
+abstract class OrderDecorator implements OrderBuilderInterface
 {
 
     protected $orderBuilder;
 
-    public function __construct(OrderBuilder $orderBuilder)
+    public function __construct(OrderBuilderInterface $orderBuilder)
     {
         $this->orderBuilder = $orderBuilder;
     }
@@ -34,8 +34,14 @@ class OrderDecorator implements OrderBuilderInterface
         // TODO: Implement reset() method.
     }
 
+    protected function modifyOrder()
+    {
+
+    }
+
     public function GetOrder()
     {
-        return $this->orderBuilder->GetOrder();
+        return $this->modifyOrder();
+
     }
 }

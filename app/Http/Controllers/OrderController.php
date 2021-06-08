@@ -16,12 +16,12 @@ class OrderController extends Controller
      * @var OrderService
      */
     private $orderService;
-    private $orderRepo;
+    private $repo;
 
-    public function __construct(OrderService $orderService, RepositoryInterface $orderRepo)
+    public function __construct(OrderService $orderService, RepositoryInterface $repo)
     {
         $this->orderService = $orderService;
-        $this->orderRepo = $orderRepo;
+        $this->repo = $repo;
     }
     public function createOrder(Request $request)
     {
@@ -33,8 +33,9 @@ class OrderController extends Controller
     {
         $status = $request->all();
         $orderRequest = new OrderRequest(null, json_decode($request->data, true));
-        $repo = $this->orderRepo->getFiltered();
-        dd(__METHOD__, $repo->getFiltered());
+//        dd($orderRequest);
+        $this->repo->setRequest($orderRequest);
+//        dd(__METHOD__, $this->repo->getFiltered());
         return $this->orderService->ShowOrdersWith($status);
         // TODO вернуть массив заявок в требуемом виде
     }
